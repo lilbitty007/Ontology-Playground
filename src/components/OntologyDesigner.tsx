@@ -143,7 +143,7 @@ export function OntologyDesigner({ route }: OntologyDesignerProps) {
       {/* Top bar */}
       <div className="designer-topbar">
         <button className="designer-back-btn" onClick={() => navigate({ page: 'home' })}>
-          <ArrowLeft size={16} /> Back
+          <ArrowLeft size={16} /> 返回
         </button>
         <div className="designer-meta-fields">
           <input
@@ -151,10 +151,10 @@ export function OntologyDesigner({ route }: OntologyDesignerProps) {
             type="text"
             value={ontology.name}
             onChange={(e) => setOntologyName(e.target.value)}
-            placeholder="Ontology name"
+            placeholder="本体名称"
             disabled={!canEditOntologyName}
             title={!canEditOntologyName
-              ? 'This value has no unambiguous RDF label mapping'
+              ? '此值没有明确对应的 RDF 标签，无法编辑'
               : undefined}
           />
           <input
@@ -162,10 +162,10 @@ export function OntologyDesigner({ route }: OntologyDesignerProps) {
             type="text"
             value={ontology.description}
             onChange={(e) => setOntologyDescription(e.target.value)}
-            placeholder="Description"
+            placeholder="描述"
             disabled={!canEditOntologyDescription}
             title={!canEditOntologyDescription
-              ? 'This value has no unambiguous RDF comment mapping'
+              ? '此值没有明确对应的 RDF 注释，无法编辑'
               : undefined}
           />
         </div>
@@ -178,20 +178,18 @@ export function OntologyDesigner({ route }: OntologyDesignerProps) {
       {mutationError && (
         <div role="alert" className="designer-import-error">
           {mutationError}{' '}
-          <button type="button" onClick={clearMutationError}>Dismiss</button>
+          <button type="button" onClick={clearMutationError}>关闭</button>
         </div>
       )}
       {rdfDocument && (
         <SourceFidelityNote className="designer-source-fidelity-note">
-          <strong>Complete RDF mode:</strong> The full source for{' '}
-          {editingCatalogueEntry?.name ?? ontology.name} remains authoritative.
-          Only unambiguous labels, comments, and direct subclass edges are
-          editable; all other RDF statements remain preserved and read-only.
-          {' '}Source SHA-256: <code>{rdfDocument.source.hash}</code>;
-          source statements: {rdfDocument.originalQuads.length.toLocaleString()};
-          current statements:{' '}
+          <strong>完整 RDF 模式：</strong> 完整源文件：
+          {editingCatalogueEntry?.name ?? ontology.name}。仅可编辑明确对应的标签、注释和直接子类关系；其他 RDF 语句会保留且只读。
+          {' '}源文件 SHA-256：<code>{rdfDocument.source.hash}</code>；
+          源语句数：{rdfDocument.originalQuads.length.toLocaleString()}；
+          当前语句数：{' '}
           {rdfDocumentStatementCount(rdfDocument).toLocaleString()};
-          patches: {rdfDocument.patches.length.toLocaleString()}.
+          补丁数：{rdfDocument.patches.length.toLocaleString()}。
         </SourceFidelityNote>
       )}
 

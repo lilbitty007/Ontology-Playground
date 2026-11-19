@@ -151,25 +151,25 @@ export function DesignerToolbar({
   return (
     <>
       <div className="designer-toolbar">
-        <button className="designer-toolbar-btn" onClick={undo} disabled={!canUndo} title="Undo (Ctrl+Z)">
+        <button className="designer-toolbar-btn" onClick={undo} disabled={!canUndo} title="撤销（Ctrl+Z）">
           <Undo2 size={14} />
         </button>
-        <button className="designer-toolbar-btn" onClick={redo} disabled={!canRedo} title="Redo (Ctrl+Shift+Z)">
+        <button className="designer-toolbar-btn" onClick={redo} disabled={!canRedo} title="重做（Ctrl+Shift+Z）">
           <Redo2 size={14} />
         </button>
         <div className="designer-toolbar-sep" />
-        <button className="designer-toolbar-btn" onClick={handleNewOntology} title="New ontology">
-          <FilePlus size={14} /> New
+        <button className="designer-toolbar-btn" onClick={handleNewOntology} title="新建本体">
+          <FilePlus size={14} /> 新建
         </button>
-        <button className="designer-toolbar-btn" onClick={handleValidate} title="Validate ontology">
-          <CheckCircle size={14} /> Validate
+        <button className="designer-toolbar-btn" onClick={handleValidate} title="校验本体">
+          <CheckCircle size={14} /> 校验
         </button>
         <div className="designer-toolbar-sep" />
         {!rdfDocument && (
           <select
-            aria-label="RDF export profile"
+            aria-label="RDF 导出配置"
             className="designer-toolbar-select"
-            title="RDF export profile"
+            title="RDF 导出配置"
             value={rdfExportProfile}
             onChange={(event) => {
               const profile = event.target.value;
@@ -178,13 +178,13 @@ export function DesignerToolbar({
               }
             }}
           >
-            <option value="playground">Playground round-trip</option>
-            <option value="standards">Standards-oriented OWL + SHACL</option>
+            <option value="playground">游乐场兼容模式</option>
+            <option value="standards">标准模式 OWL + SHACL</option>
           </select>
         )}
         {rdfDocument && (
           <label
-            title="Add explicit PROV derivation metadata to this export"
+            title="在导出文件中添加明确的 PROV 派生元数据"
             style={{ alignItems: 'center', display: 'flex', fontSize: 11, gap: 4 }}
           >
             <input
@@ -193,7 +193,7 @@ export function DesignerToolbar({
               onChange={(event) =>
                 setIncludeDerivationMetadata(event.target.checked)}
             />
-            Add provenance
+            添加来源信息
           </label>
         )}
         <button
@@ -201,32 +201,32 @@ export function DesignerToolbar({
           onClick={() => void handleExportRDF()}
           disabled={isExporting}
           title={rdfDocument
-            ? 'Export the complete RDF document'
-            : 'Export RDF'}
+            ? '导出完整 RDF 文档'
+            : '导出 RDF'}
         >
           <Download size={14} />
           {isExporting
-            ? 'Preparing…'
+            ? '正在准备…'
             : rdfDocument
               ? includeDerivationMetadata
-                ? 'Export derived RDF'
+                ? '导出派生 RDF'
                 : isRdfDocumentDirty(rdfDocument)
-                ? 'Export complete modified RDF'
-                : 'Export original RDF'
-              : 'Export RDF'}
+                ? '导出修改后的完整 RDF'
+                : '导出原始 RDF'
+              : '导出 RDF'}
         </button>
-        <button className="designer-toolbar-btn" onClick={handleLoadInPlayground} title="Load in Playground">
-          <Upload size={14} /> Load in Playground
+        <button className="designer-toolbar-btn" onClick={handleLoadInPlayground} title="在游乐场中加载">
+          <Upload size={14} /> 在游乐场中加载
         </button>
         <button
           className="designer-toolbar-btn submit"
           onClick={handleSubmitToCatalogue}
           disabled={Boolean(rdfDocument)}
           title={rdfDocument
-            ? 'Source-backed RDF submission is not supported'
-            : 'Submit to community catalogue'}
+            ? '暂不支持提交带源文件的 RDF'
+            : '提交到社区目录'}
         >
-          <Github size={14} /> Submit to Catalogue
+          <Github size={14} /> 提交到目录
         </button>
       </div>
 
@@ -237,13 +237,10 @@ export function DesignerToolbar({
       )}
       {lastRdfExport && (
         <div className="designer-import-error" role="status">
-          {lastRdfExport.kind} export: source{' '}
-          {lastRdfExport.sourceTripleCount.toLocaleString()} statements;
-          exported {lastRdfExport.exportedTripleCount.toLocaleString()};
-          patches {lastRdfExport.patchCount.toLocaleString()};
-          provenance {lastRdfExport.derivationMetadataIncluded
-            ? 'included'
-            : 'not included'}.
+          {lastRdfExport.kind} 导出：源语句 {lastRdfExport.sourceTripleCount.toLocaleString()} 条；
+          已导出 {lastRdfExport.exportedTripleCount.toLocaleString()} 条；
+          补丁 {lastRdfExport.patchCount.toLocaleString()} 条；
+          {lastRdfExport.derivationMetadataIncluded ? '已包含来源信息' : '未包含来源信息'}。
         </div>
       )}
 
@@ -277,7 +274,7 @@ export function DesignerValidation() {
     return (
       <div className="designer-validation-success">
         <div className="designer-validation-header" style={{ color: 'var(--ms-green, #16c60c)' }}>
-          <CheckCircle size={14} /> No issues found
+          <CheckCircle size={14} /> 未发现问题
         </div>
       </div>
     );
@@ -286,7 +283,7 @@ export function DesignerValidation() {
   return (
     <div className="designer-validation-errors">
       <div className="designer-validation-header">
-        <AlertTriangle size={14} /> {validationErrors.length} issue{validationErrors.length > 1 ? 's' : ''} to fix
+        <AlertTriangle size={14} /> 有 {validationErrors.length} 个问题需要修复
       </div>
       <ul>
         {validationErrors.map((err, i) => (

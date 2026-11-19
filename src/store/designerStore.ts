@@ -122,8 +122,8 @@ function mutationError(error: unknown): string {
 }
 
 function unsupportedSourceEdit(action: string): string {
-  return `${action} is not supported for source-backed RDF. `
-    + 'Only unambiguous labels, comments, and direct subclass edges can be edited.';
+  return `带源文件的 RDF 暂不支持${action}。`
+    + '仅可编辑明确对应的标签、注释和直接子类关系。';
 }
 
 function requireProjectionResource(

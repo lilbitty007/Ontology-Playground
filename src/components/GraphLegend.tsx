@@ -70,10 +70,10 @@ export function GraphLegend({
         aria-controls="graph-legend-body"
         // Keeps the visible "Entity Types" label inside the accessible name
         // (WCAG 2.5.3) while still saying what the button does.
-        aria-label={collapsed ? 'Show Entity Types legend' : 'Hide Entity Types legend'}
-        title={collapsed ? 'Show Entity Types legend' : 'Hide Entity Types legend'}
+        aria-label={collapsed ? '显示实体类型图例' : '隐藏实体类型图例'}
+        title={collapsed ? '显示实体类型图例' : '隐藏实体类型图例'}
       >
-        <span className="legend-title">Entity Types</span>
+        <span className="legend-title">实体类型</span>
         <span className="legend-count">{entityTypeCount}</span>
         {collapsed ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
       </button>
@@ -88,7 +88,7 @@ export function GraphLegend({
           ))}
           {hiddenCount > 0 && (
             <div className="legend-item legend-more">
-              + {hiddenCount.toLocaleString()} more visible in the graph
+              图谱中另有 {hiddenCount.toLocaleString()} 项
             </div>
           )}
         </div>

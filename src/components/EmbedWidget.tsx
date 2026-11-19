@@ -299,7 +299,7 @@ export function EmbedWidget({ config }: { config: EmbedConfig }) {
     return (
       <div style={containerStyle}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 1, color: theme.textSecondary, fontSize: 14 }}>
-          Loading ontology…
+          正在加载本体…
         </div>
       </div>
     );
@@ -402,17 +402,17 @@ function EmbedHeader({
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <span style={{ fontWeight: 600, fontSize: 14 }}>{ontology.name}</span>
         <span style={{ fontSize: 11, color: theme.textTertiary }}>
-          {ontology.entityTypes.length} entities · {ontology.relationships.length} relationships
+          {ontology.entityTypes.length} 个实体 · {ontology.relationships.length} 个关系
         </span>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-        <button style={tabStyle(tab === 'graph')} onClick={() => setTab('graph')}>Graph</button>
+        <button style={tabStyle(tab === 'graph')} onClick={() => setTab('graph')}>图谱</button>
         <button style={tabStyle(tab === 'rdf')} onClick={() => setTab('rdf')}>
           {hasCompleteSource
-            ? 'Complete RDF source'
+            ? '完整 RDF 源码'
             : sourceLoading
-              ? 'Loading complete RDF…'
-              : 'Generated RDF'}
+              ? '正在加载完整 RDF…'
+              : '生成的 RDF'}
         </button>
         {tab === 'rdf' && (
           <button
@@ -424,10 +424,10 @@ function EmbedHeader({
             }}
           >
             {copied
-              ? 'Copied!'
+              ? '已复制！'
               : hasCompleteSource
-                ? 'Copy complete RDF'
-                : 'Copy generated RDF'}
+                ? '复制完整 RDF'
+                : '复制生成的 RDF'}
           </button>
         )}
       </div>
@@ -878,13 +878,7 @@ function EmbedGraph({ ontology, theme, selected, setSelected }: EmbedGraphProps)
       {neighborActionPosition && selectedOverviewEntity && (
         <button
           type="button"
-          aria-label={`Expand ${selectedOverviewEntity.name} to show ${
-            selectedOverviewEntity.hiddenNeighborCount
-          } hidden ${
-            selectedOverviewEntity.hiddenNeighborCount === 1
-              ? 'neighbor'
-              : 'neighbors'
-          }`}
+          aria-label={`展开 ${selectedOverviewEntity.name} 并显示 ${selectedOverviewEntity.hiddenNeighborCount} 个隐藏邻居`}
           onClick={handleExpandSelectedEntity}
           style={{
             position: 'absolute',
@@ -908,10 +902,7 @@ function EmbedGraph({ ontology, theme, selected, setSelected }: EmbedGraphProps)
             whiteSpace: 'nowrap',
           }}
         >
-          Show {selectedOverviewEntity.hiddenNeighborCount.toLocaleString()}{' '}
-          {selectedOverviewEntity.hiddenNeighborCount === 1
-            ? 'neighbor'
-            : 'neighbors'}
+          显示 {selectedOverviewEntity.hiddenNeighborCount.toLocaleString()} 个邻居
         </button>
       )}
       {graphView.mode === 'bounded' && (
@@ -1017,7 +1008,7 @@ function EmbedLargeGraphControls({
 
   return (
     <section
-      aria-label="Large ontology controls"
+      aria-label="大型本体控制面板"
       style={{
         position: 'absolute',
         zIndex: 2,
@@ -1040,7 +1031,7 @@ function EmbedLargeGraphControls({
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
         <div>
-          <strong style={{ fontSize: 14 }}>Semantic overview</strong>
+          <strong style={{ fontSize: 14 }}>语义概览</strong>
           {!collapsed && (
             <div style={{
               marginTop: 2,
@@ -1048,8 +1039,8 @@ function EmbedLargeGraphControls({
               color: theme.textTertiary,
               lineHeight: 1.35,
             }}>
-              {graphView.visibleNodeCount} of {totalNodes} entities ·{' '}
-              {graphView.visibleEdgeCount} of {totalEdges} relationships
+              {totalNodes} 个实体中显示 {graphView.visibleNodeCount} 个 ·{' '}
+              {totalEdges} 个关系中显示 {graphView.visibleEdgeCount} 个
             </div>
           )}
         </div>
@@ -1059,7 +1050,7 @@ function EmbedLargeGraphControls({
           aria-expanded={!collapsed}
           onClick={() => setCollapsed((value) => !value)}
         >
-          {collapsed ? 'Open' : 'Hide'}
+          {collapsed ? '展开' : '收起'}
         </button>
       </div>
       {!collapsed && (
@@ -1067,13 +1058,13 @@ function EmbedLargeGraphControls({
           <form onSubmit={handleSubmit} style={{ display: 'flex', gap: 6, marginTop: 10 }}>
             <input
               type="search"
-              aria-label="Jump to an entity"
+              aria-label="跳转到实体"
               value={searchInput}
               onChange={(event) => onSearchInputChange(event.target.value)}
-              placeholder="Name, ID, or keyword"
+              placeholder="名称、ID 或关键词"
               style={{ ...inputStyle, flex: 1 }}
             />
-            <button type="submit" style={buttonStyle}>Find</button>
+            <button type="submit" style={buttonStyle}>查找</button>
           </form>
           <div style={{ marginTop: 8 }}>
             <div style={{
@@ -1087,9 +1078,9 @@ function EmbedLargeGraphControls({
                 htmlFor={depthSliderId}
                 style={{ color: theme.textSecondary, whiteSpace: 'nowrap' }}
               >
-                Detail: <strong>{depth} {depth === 1 ? 'hop' : 'hops'}</strong>
+                展开层级：<strong>{depth} 层</strong>
                 <span style={{ color: theme.textTertiary }}>
-                  {' '}· max {maxDepth}
+                  {' '}· 最多 {maxDepth} 层
                 </span>
               </label>
               <button
@@ -1101,7 +1092,7 @@ function EmbedLargeGraphControls({
                 }}
                 onClick={onOverview}
               >
-                Reset view
+                重置视图
               </button>
             </div>
             <SemanticDepthSlider
@@ -1110,8 +1101,8 @@ function EmbedLargeGraphControls({
               value={depth}
               disabled={maxDepth <= 1}
               onDepthChange={onDepthChange}
-              aria-label={`Detail: ${depth} ${depth === 1 ? 'hop' : 'hops'}`}
-              aria-valuetext={`${depth} ${depth === 1 ? 'hop' : 'hops'}`}
+              aria-label={`展开层级：${depth} 层`}
+              aria-valuetext={`${depth} 层`}
               style={{
                 display: 'block',
                 width: '100%',
@@ -1131,11 +1122,11 @@ function EmbedLargeGraphControls({
             {selectedEntity?.isExpanded ? (
               <button
                 type="button"
-                aria-label={`Hide shown neighbors for ${selectedEntity.name}`}
+                aria-label={`隐藏 ${selectedEntity.name} 的已显示邻居`}
                 style={{ ...buttonStyle, width: '100%' }}
                 onClick={onCollapseSelectedEntity}
               >
-                Hide shown neighbors
+                隐藏已显示的邻居
               </button>
             ) : selectedEntity
               && selectedEntity.hiddenNeighborCount > 0
@@ -1143,11 +1134,7 @@ function EmbedLargeGraphControls({
                 <button
                   type="button"
                   disabled={!selectedEntity.canExpand}
-                  aria-label={`Show ${selectedEntity.hiddenNeighborCount} hidden ${
-                    selectedEntity.hiddenNeighborCount === 1
-                      ? 'neighbor'
-                      : 'neighbors'
-                  } for ${selectedEntity.name}`}
+                  aria-label={`显示 ${selectedEntity.name} 的 ${selectedEntity.hiddenNeighborCount} 个隐藏邻居`}
                   style={{
                     ...buttonStyle,
                     width: '100%',
@@ -1157,10 +1144,7 @@ function EmbedLargeGraphControls({
                   }}
                   onClick={onExpandSelectedEntity}
                 >
-                  Show {selectedEntity.hiddenNeighborCount.toLocaleString()}{' '}
-                  hidden {selectedEntity.hiddenNeighborCount === 1
-                    ? 'neighbor'
-                    : 'neighbors'}
+                  显示 {selectedEntity.hiddenNeighborCount.toLocaleString()} 个隐藏邻居
                 </button>
               ) : (
                 <button
@@ -1174,8 +1158,8 @@ function EmbedLargeGraphControls({
                   }}
                 >
                   {!selectedEntity
-                    ? 'Select a +N entity to show neighbors'
-                    : 'No hidden neighbors for this entity'}
+                    ? '选择带 +N 标记的实体以显示邻居'
+                    : '此实体没有隐藏邻居'}
                 </button>
               )}
           </div>
@@ -1200,24 +1184,17 @@ function EmbedLargeGraphControls({
               && !selectedEntity.canExpand
               ? `${selectedEntity.hiddenNeighborCount.toLocaleString()} ${
                 selectedEntity.hiddenNeighborCount === 1
-                  ? 'neighbor remains'
-                  : 'neighbors remain'
-              } hidden because the ${
-                graphView.visibleNodeCount.toLocaleString()
-              }-entity view limit is full. Hide a shown neighborhood to make room.`
+                  ? '个邻居仍处于隐藏状态'
+                  : '个邻居仍处于隐藏状态'
+              }：当前视图已达到 ${graphView.visibleNodeCount.toLocaleString()} 个实体的上限。请隐藏已展开的邻居区域以腾出空间。`
               : appliedSearch
                 ? graphView.searchMatchCount === 0
-                  ? 'No match. Showing hierarchy roots.'
-                  : `${graphView.searchMatchCount} matching ${
-                    graphView.searchMatchCount === 1 ? 'entity' : 'entities'
-                  }.`
+                  ? '没有匹配项，当前显示层级根节点。'
+                  : `找到 ${graphView.searchMatchCount} 个匹配实体。`
                 : null}
           </div>
           <div style={{ marginTop: 8, color: theme.textTertiary, lineHeight: 1.35 }}>
-            Select a dashed “+N” entity to show its neighbor action beside the
-            {' '}node. Hide a shown neighborhood here, or select another “+N”
-            {' '}entity to continue. Selecting any entity also labels its visible
-            {' '}relationships.
+            选择带虚线边框的“+N”实体，可在节点旁显示邻居操作。也可以在此隐藏已展开区域，或选择其他“+N”实体继续浏览。选择实体后，也会显示其可见关系的名称。
           </div>
         </>
       )}
@@ -1258,8 +1235,7 @@ function EmbedRdfSource({
             padding: '8px 16px',
           }}
         >
-          This is the complete source RDF. Imports and referenced resources are
-          preserved as statements but are not fetched or executed.
+          这是完整 RDF 源码。导入项和引用资源会作为语句保留，但不会获取或执行。
         </div>
       )}
       {sourceLoading && (
@@ -1273,7 +1249,7 @@ function EmbedRdfSource({
             padding: '8px 16px',
           }}
         >
-          Loading the complete source. Generated RDF is available meanwhile.
+          正在加载完整源码。此期间仍可查看生成的 RDF。
         </div>
       )}
       {sourceError && (
@@ -1287,8 +1263,7 @@ function EmbedRdfSource({
             padding: '8px 16px',
           }}
         >
-          Complete RDF source is unavailable: {sourceError} Generated RDF is
-          shown instead.
+          无法获取完整 RDF 源码：{sourceError} 当前显示生成的 RDF。
         </div>
       )}
       <pre style={{

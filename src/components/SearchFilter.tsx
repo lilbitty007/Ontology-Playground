@@ -98,7 +98,7 @@ export function SearchFilter() {
       >
         <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <Filter size={14} />
-          Search & Filter
+          搜索与筛选
         </span>
         {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
       </div>
@@ -127,7 +127,7 @@ export function SearchFilter() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search entities, properties..."
+                  placeholder="搜索实体、属性…"
                   style={{
                     width: '100%',
                     padding: '8px 30px 8px 32px',
@@ -173,7 +173,7 @@ export function SearchFilter() {
                   color: showEntities ? 'white' : 'var(--text-secondary)'
                 }}
               >
-                Entities ({currentOntology.entityTypes.length})
+                实体（{currentOntology.entityTypes.length}）
               </button>
               <button
                 onClick={() => setShowRelationships(!showRelationships)}
@@ -187,12 +187,12 @@ export function SearchFilter() {
                   color: showRelationships ? 'white' : 'var(--text-secondary)'
                 }}
               >
-                Relationships ({currentOntology.relationships.length})
+                关系（{currentOntology.relationships.length}）
               </button>
             </div>
 
             {/* Results or Quick Access */}
-            <div style={{ maxHeight: 200, overflowY: 'auto' }} tabIndex={0} aria-label="Search results">
+            <div style={{ maxHeight: 200, overflowY: 'auto' }} tabIndex={0} aria-label="搜索结果">
               {hasQuery && !hasResults && (
                 <div style={{ 
                   padding: 12, 
@@ -200,7 +200,7 @@ export function SearchFilter() {
                   color: 'var(--text-tertiary)',
                   fontSize: 11
                 }}>
-                  No results for "{searchQuery}"
+              没有找到“{searchQuery}”的结果
                 </div>
               )}
 
@@ -211,7 +211,7 @@ export function SearchFilter() {
                   color: 'var(--text-tertiary)',
                   fontSize: 10,
                 }}>
-                  Showing the first {LARGE_ONTOLOGY_LIST_LIMIT} matches. Refine your search to narrow the list.
+                  仅显示前 {LARGE_ONTOLOGY_LIST_LIMIT} 项。请细化搜索以缩小范围。
                 </div>
               )}
 
@@ -244,7 +244,7 @@ export function SearchFilter() {
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 11, fontWeight: 500, color: 'var(--text-primary)' }}>{entity.name}</div>
                     <div style={{ fontSize: 9, color: 'var(--text-secondary)' }}>
-                      {entity.properties.length} properties
+                      {entity.properties.length} 个属性
                     </div>
                   </div>
                 </motion.div>

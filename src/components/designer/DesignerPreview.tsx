@@ -57,13 +57,13 @@ export function DesignerPreview({
           className={`designer-tab ${activeTab === 'graph' ? 'active' : ''}`}
           onClick={() => setActiveTab('graph')}
         >
-          Graph
+          图谱
         </button>
         <button
           className={`designer-tab ${activeTab === 'rdf' ? 'active' : ''}`}
           onClick={() => setActiveTab('rdf')}
         >
-          RDF
+          RDF 源码
         </button>
       </div>
 
@@ -468,10 +468,10 @@ export function RdfPreview({
                 )
               }
             >
-              {isImporting ? 'Loading…' : 'Load into Designer'}
+              {isImporting ? '正在加载…' : '加载到设计器'}
             </button>
             <button className="designer-add-btn small secondary" onClick={handleCancel}>
-              Cancel
+              取消
             </button>
           </>
         ) : (
@@ -492,7 +492,7 @@ export function RdfPreview({
                 setCopyError(null);
               }}
             >
-              Edit RDF
+              编辑 RDF
             </button>
             <button
               className="designer-add-btn small"
@@ -503,7 +503,7 @@ export function RdfPreview({
                 || !rdfOutput
               }
             >
-              {copied ? 'Copied!' : 'Copy RDF'}
+              {copied ? '已复制！' : '复制 RDF'}
             </button>
           </>
         )}
@@ -522,7 +522,7 @@ export function RdfPreview({
             setImportText(e.target.value);
             setImportError(null);
           }}
-          placeholder="Paste or edit RDF/XML content here…"
+          placeholder="在此粘贴或编辑 RDF/XML 内容…"
           disabled={isImporting}
           aria-busy={isImporting}
           autoFocus
@@ -530,7 +530,7 @@ export function RdfPreview({
         />
       ) : (
         <pre className="designer-rdf-source">
-          {isLoadingRdf ? 'Loading complete RDF…' : highlightedRdf}
+          {isLoadingRdf ? '正在加载完整 RDF…' : highlightedRdf}
         </pre>
       )}
     </div>

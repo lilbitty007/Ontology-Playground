@@ -1,10 +1,6 @@
 import type { Ontology } from '../data/ontology';
 import type { GraphView } from './graphView';
 
-function pluralize(count: number, noun: string): string {
-  return `${count} ${noun}${count === 1 ? '' : 's'}`;
-}
-
 /**
  * Accessible name for the graph canvas.
  *
@@ -19,11 +15,11 @@ export function describeOntologyGraph(
   view?: Pick<GraphView, 'mode' | 'visibleNodeCount' | 'visibleEdgeCount'>,
 ): string {
   const name = ontology.name?.trim();
-  const subject = name ? `${name} ontology graph` : 'Ontology graph';
-  const entityTypes = pluralize(ontology.entityTypes.length, 'entity type');
-  const relationships = pluralize(ontology.relationships.length, 'relationship');
+  const subject = name ? `${name} 本体图谱` : '本体图谱';
+  const entityTypes = `${ontology.entityTypes.length} 种实体类型`;
+  const relationships = `${ontology.relationships.length} 种关系`;
   const overview = view?.mode === 'bounded'
-    ? ` Semantic overview showing ${pluralize(view.visibleNodeCount, 'entity type')} and ${pluralize(view.visibleEdgeCount, 'relationship')}.`
+    ? ` 语义概览显示 ${view.visibleNodeCount} 种实体类型和 ${view.visibleEdgeCount} 种关系。`
     : '';
-  return `${subject}: ${entityTypes}, ${relationships}.${overview} Interactive diagram.`;
+  return `${subject}：${entityTypes}，${relationships}。${overview} 交互式图谱。`;
 }

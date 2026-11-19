@@ -52,12 +52,12 @@ export function LargeGraphControls({
   return (
     <section
       className={`large-graph-panel${collapsed ? ' large-graph-panel--collapsed' : ''}`}
-      aria-label="Large ontology controls"
+      aria-label="大型本体控件"
     >
       <div className="large-graph-header">
         <div>
-          <div className="large-graph-title">Semantic overview</div>
-          <div className="large-graph-tier">Focused hierarchy view</div>
+          <div className="large-graph-title">语义概览</div>
+          <div className="large-graph-tier">聚焦层级视图</div>
         </div>
         <button
           type="button"
@@ -65,39 +65,39 @@ export function LargeGraphControls({
           aria-expanded={!collapsed}
           onClick={() => setCollapsed((value) => !value)}
         >
-          {collapsed ? 'Open' : 'Hide'}
+          {collapsed ? '展开' : '收起'}
         </button>
       </div>
 
       {!collapsed && (
         <>
           <p className="large-graph-counts" aria-live="polite">
-            Showing {graphView.visibleNodeCount.toLocaleString()} of{' '}
-            {totalNodeCount.toLocaleString()} entities and{' '}
-            {graphView.visibleEdgeCount.toLocaleString()} of{' '}
-            {totalEdgeCount.toLocaleString()} relationships.
+            正在显示 {graphView.visibleNodeCount.toLocaleString()} /{' '}
+            {totalNodeCount.toLocaleString()} 个实体，以及{' '}
+            {graphView.visibleEdgeCount.toLocaleString()} /{' '}
+            {totalEdgeCount.toLocaleString()} 个关系。
           </p>
 
           <form className="large-graph-search" onSubmit={handleSubmit}>
-            <label htmlFor="large-graph-search">Jump to an entity</label>
+            <label htmlFor="large-graph-search">定位实体</label>
             <div>
               <input
                 id="large-graph-search"
                 type="search"
                 value={searchInput}
                 onChange={(event) => onSearchInputChange(event.target.value)}
-                placeholder="Name, ID, or keyword"
+                placeholder="名称、ID 或关键词"
               />
-              <button type="submit">Find</button>
+              <button type="submit">查找</button>
             </div>
           </form>
 
           <div className="large-graph-options">
             <div className="large-graph-detail-header">
               <label htmlFor="large-graph-depth">
-                Detail: <strong>{depth} {depth === 1 ? 'hop' : 'hops'}</strong>
+                详情：<strong>{depth} 跳</strong>
                 <span className="large-graph-depth-max">
-                  {' '}· max {maxDepth}
+                  {' '}· 最多 {maxDepth}
                 </span>
               </label>
               <button
@@ -105,7 +105,7 @@ export function LargeGraphControls({
                 disabled={!canReset}
                 onClick={onShowOverview}
               >
-                Reset view
+               重置视图
               </button>
             </div>
             <SemanticDepthSlider
@@ -114,8 +114,8 @@ export function LargeGraphControls({
               value={depth}
               disabled={maxDepth <= 1}
               onDepthChange={onDepthChange}
-              aria-label={`Detail: ${depth} ${depth === 1 ? 'hop' : 'hops'}`}
-              aria-valuetext={`${depth} ${depth === 1 ? 'hop' : 'hops'}`}
+              aria-label={`详情：${depth} 跳`}
+              aria-valuetext={`${depth} 跳`}
             />
           </div>
 
@@ -123,10 +123,10 @@ export function LargeGraphControls({
             {selectedEntity?.isExpanded ? (
               <button
                 type="button"
-                aria-label={`Hide shown neighbors for ${selectedEntity.name}`}
+                aria-label={`隐藏 ${selectedEntity.name} 已显示的邻居`}
                 onClick={onCollapseSelectedEntity}
               >
-                Hide shown neighbors
+               隐藏已显示的邻居
               </button>
             ) : selectedEntity
               && selectedEntity.hiddenNeighborCount > 0
@@ -134,23 +134,16 @@ export function LargeGraphControls({
                 <button
                   type="button"
                   disabled={!selectedEntity.canExpand}
-                  aria-label={`Show ${selectedEntity.hiddenNeighborCount} hidden ${
-                    selectedEntity.hiddenNeighborCount === 1
-                      ? 'neighbor'
-                      : 'neighbors'
-                  } for ${selectedEntity.name}`}
+                  aria-label={`显示 ${selectedEntity.name} 的 ${selectedEntity.hiddenNeighborCount} 个隐藏邻居`}
                   onClick={onExpandSelectedEntity}
                 >
-                  Show {selectedEntity.hiddenNeighborCount.toLocaleString()}{' '}
-                  hidden {selectedEntity.hiddenNeighborCount === 1
-                    ? 'neighbor'
-                    : 'neighbors'}
+                  显示 {selectedEntity.hiddenNeighborCount.toLocaleString()} 个隐藏邻居
                 </button>
               ) : (
                 <button type="button" disabled>
                   {!selectedEntity
-                    ? 'Select a +N entity to show neighbors'
-                    : 'No hidden neighbors for this entity'}
+                    ? '选择带 +N 标记的实体以显示邻居'
+                    : '此实体没有隐藏邻居'}
                 </button>
               )}
           </div>
@@ -161,28 +154,21 @@ export function LargeGraphControls({
                 <p className="large-graph-warning" role="status">
                   {selectedEntity.hiddenNeighborCount.toLocaleString()}{' '}
                   {selectedEntity.hiddenNeighborCount === 1
-                    ? 'neighbor remains'
-                    : 'neighbors remain'}{' '}
-                  hidden because the{' '}
-                  {graphView.visibleNodeCount.toLocaleString()}-entity view
-                  limit is full. Hide a shown neighborhood to make room.
+                    ? '个邻居仍被隐藏'
+                    : '个邻居仍被隐藏'}。当前已达到 {graphView.visibleNodeCount.toLocaleString()} 个实体的显示上限。请先收起一个已显示的邻居区域。
                 </p>
               ) : appliedSearch && graphView.searchMatchCount > 0 ? (
                 <p className="large-graph-result">
-                  {graphView.searchMatchCount.toLocaleString()} matching{' '}
-                  {graphView.searchMatchCount === 1 ? 'entity' : 'entities'}.
+                  找到 {graphView.searchMatchCount.toLocaleString()} 个匹配实体。
                 </p>
               ) : appliedSearch ? (
                 <p className="large-graph-warning" role="alert">
-                  No matching entity was found. Showing hierarchy roots instead.
+                  未找到匹配实体，当前显示层级根节点。
                 </p>
               ) : null}
           </div>
           <p className="large-graph-hint">
-            Select a dashed “+N” entity to show its neighbor action beside the
-            node. Hide a shown neighborhood here, or select another “+N” entity
-            to continue. Selecting any entity also labels its visible
-            relationships.
+            选择带虚线边框的“+N”实体，可在节点旁展开其邻居。你可以在此收起已显示的邻居区域，也可以选择其他“+N”实体继续浏览。选择实体后，其可见关系也会显示名称。
           </p>
         </>
       )}

@@ -20,11 +20,10 @@ export function SubmitCatalogueModal({ onClose }: SubmitCatalogueModalProps) {
         <div className="modal-content submit-catalogue-modal" onClick={(event) => event.stopPropagation()}>
           <button className="modal-close" onClick={onClose}><X size={18} /></button>
           <h2 className="modal-title">
-            <Github size={20} /> Submit to Catalogue
+            <Github size={20} /> 提交到目录
           </h2>
           <div role="alert" className="designer-import-error">
-            Source-backed RDF cannot be submitted through the projection-only
-            catalogue workflow. Export the complete RDF document instead.
+            带源文件的 RDF 无法通过仅投影数据的目录流程提交。请改为导出完整 RDF 文档。
           </div>
         </div>
       </div>
@@ -67,48 +66,47 @@ export function SubmitCatalogueModal({ onClose }: SubmitCatalogueModalProps) {
       <div className="modal-content submit-catalogue-modal" onClick={(e) => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}><X size={18} /></button>
         <h2 className="modal-title">
-          <Github size={20} /> Submit to Catalogue
+          <Github size={20} /> 提交到目录
         </h2>
 
         <div className="submit-step">
           <p className="submit-description">
-            Share your ontology with the community! Download the files below,
-            then open a pull request on the{' '}
+            与社区分享你的本体！下载下方文件，然后在{' '}
             <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
-              Ontology Playground repo <ExternalLink size={12} />
+              本体游乐场仓库 <ExternalLink size={12} />
             </a>.
           </p>
 
           <div className="submit-instructions">
-            <h3>How to submit</h3>
+            <h3>提交步骤</h3>
             <ol>
-              <li>Download your ontology RDF and metadata files below.</li>
+              <li>下载下方的本体 RDF 文件和元数据文件。</li>
               <li>
                 <a href={`${REPO_URL}/fork`} target="_blank" rel="noopener noreferrer">
-                  Fork the repository <ExternalLink size={12} />
+                  复刻此仓库 <ExternalLink size={12} />
                 </a>
               </li>
               <li>
-                Add the files under{' '}
+                将文件放入{' '}
                 <code>catalogue/community/your-username/</code>
               </li>
-              <li>Edit <code>metadata.json</code> — fill in your name, category, and tags.</li>
-              <li>Open a pull request against <code>main</code>.</li>
+              <li>编辑 <code>metadata.json</code>，填写姓名、类别和标签。</li>
+              <li>向 <code>main</code> 分支提交拉取请求。</li>
             </ol>
           </div>
 
           <div className="submit-download-actions">
             <button className="designer-action-btn primary" onClick={handleDownloadRdf}>
-              <Download size={14} /> Download RDF
+              <Download size={14} /> 下载 RDF
               {downloaded && <Check size={14} style={{ marginLeft: 4 }} />}
             </button>
             <button className="designer-action-btn secondary" onClick={handleDownloadMetadata}>
-              <Download size={14} /> Download metadata.json
+              <Download size={14} /> 下载 metadata.json
             </button>
           </div>
 
           <div className="submit-form-actions">
-            <button className="designer-action-btn secondary" onClick={onClose}>Close</button>
+            <button className="designer-action-btn secondary" onClick={onClose}>关闭</button>
           </div>
         </div>
       </div>

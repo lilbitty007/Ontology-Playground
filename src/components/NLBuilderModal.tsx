@@ -429,10 +429,10 @@ export function NLBuilderModal({ onClose }: NLBuilderModalProps) {
   };
 
   const examplePrompts = [
-    "I run a hospital with doctors, patients, and departments. Patients visit doctors for appointments.",
-    "An e-commerce platform with products, customers, orders, and reviews. Customers can return items.",
-    "A university with students, professors, courses, and departments. Students enroll in courses.",
-    "A restaurant chain with locations, employees, menu items, and customer orders with reservations.",
+    '我经营一家医院，包含医生、患者和科室。患者会预约并就诊。',
+    '一个电商平台，包含商品、客户、订单和评价，客户可以退货。',
+    '一所大学，包含学生、教授、课程和院系，学生可以选修课程。',
+    '一家连锁餐厅，包含门店、员工、菜单项目，以及顾客订单和预约。',
   ];
 
   return (
@@ -453,9 +453,9 @@ export function NLBuilderModal({ onClose }: NLBuilderModalProps) {
         <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Sparkles size={20} style={{ color: 'var(--accent)' }} />
-            <h2>Describe Your Ontology</h2>
+            <h2>描述你的本体</h2>
           </div>
-          <button className="modal-close" onClick={handleClose} aria-label="Close ontology builder">
+          <button className="modal-close" onClick={handleClose} aria-label="关闭本体生成器">
             <X size={20} />
           </button>
         </div>
@@ -463,42 +463,41 @@ export function NLBuilderModal({ onClose }: NLBuilderModalProps) {
             {step === 'input' && (
               <div className="nl-builder-content">
                 <p style={{ color: 'var(--text-secondary)', marginBottom: '16px' }}>
-                  Describe your business scenario in natural language or use voice input. 
-                  AI will extract entities, relationships, and properties to create an ontology.
+                  用自然语言描述你的业务场景，也可以使用语音输入。AI 会提取实体、关系和属性来创建本体。
                 </p>
 
                 {connector ? (
                   <div className="generation-connector-disclosure">
-                    <p>Selected generation connector: <strong>{connector.name}</strong></p>
-                    <p>Provider destination: <code>{connector.destination}</code></p>
+                    <p>当前生成连接器：<strong>{connector.name}</strong></p>
+                    <p>服务提供方地址：<code>{connector.destination}</code></p>
                     <label>
                       <input
                         type="checkbox"
                         checked={consent}
                         onChange={event => setConsent(event.target.checked)}
                       />
-                      I consent to send my description to {connector.name} at {connector.destination}.
+                      我同意将描述发送给位于 {connector.destination} 的 {connector.name}。
                     </label>
-                    <p>Your description is sent to this connector only when you choose Generate Ontology.</p>
+                    <p>只有点击“生成本体”后，描述才会发送到此连接器。</p>
                   </div>
                 ) : connectorError ? (
                   <div role="alert">
                     <p>{connectorError}</p>
-                    <button onClick={reloadConnector}>Reload connector</button>
+                    <button onClick={reloadConnector}>重新加载连接器</button>
                   </div>
                 ) : (
-                  <p role="status">Loading generation connector…</p>
+                  <p role="status">正在加载生成连接器…</p>
                 )}
                 {voiceSupported && (
-                  <p>Voice input uses your browser's speech service, which may process audio remotely, separately from the generation connector.</p>
+                  <p>语音输入使用浏览器的语音服务，音频可能会由该服务单独进行远程处理，与生成连接器无关。</p>
                 )}
                 
-                <p id="generation-description-warning">Do not include secrets or sensitive personal information.</p>
+                <p id="generation-description-warning">请勿输入密码、密钥或敏感个人信息。</p>
                 <div className="nl-input-wrapper">
                   <textarea
                     className="nl-input-textarea"
                     aria-describedby="generation-description-warning"
-                    placeholder="Describe your business scenario..."
+                    placeholder="描述你的业务场景…"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     rows={5}
@@ -507,7 +506,7 @@ export function NLBuilderModal({ onClose }: NLBuilderModalProps) {
                     <button
                       className={`voice-btn ${isRecording ? 'recording' : ''}`}
                       onClick={toggleRecording}
-                      title={isRecording ? 'Stop recording' : 'Start voice input'}
+                      title={isRecording ? '停止录音' : '开始语音输入'}
                       type="button"
                     >
                       {isRecording ? <MicOff size={20} /> : <Mic size={20} />}
@@ -515,16 +514,16 @@ export function NLBuilderModal({ onClose }: NLBuilderModalProps) {
                   )}
                 </div>
                 <p aria-live="polite">
-                  {description.length} / {MAX_DESCRIPTION_LENGTH} characters
+                  {description.length} / {MAX_DESCRIPTION_LENGTH} 个字符
                 </p>
                 {description.length > MAX_DESCRIPTION_LENGTH && (
-                  <p role="alert">Description must be at most {MAX_DESCRIPTION_LENGTH} characters, including voice input.</p>
+                  <p role="alert">描述最多可输入 {MAX_DESCRIPTION_LENGTH} 个字符，语音输入也计入其中。</p>
                 )}
                 
                 {isRecording && (
                   <div className="recording-indicator">
                     <span className="recording-dot" />
-                    Listening... Speak your ontology description
+                    正在聆听…请说出本体描述
                   </div>
                 )}
                 
@@ -535,7 +534,7 @@ export function NLBuilderModal({ onClose }: NLBuilderModalProps) {
                 )}
 
                 <div className="example-prompts">
-                  <span style={{ color: 'var(--text-tertiary)', fontSize: '12px' }}>Try an example:</span>
+                  <span style={{ color: 'var(--text-tertiary)', fontSize: '12px' }}>试试这些示例：</span>
                   <div className="example-chips">
                     {examplePrompts.map((prompt, i) => (
                       <button
@@ -555,7 +554,7 @@ export function NLBuilderModal({ onClose }: NLBuilderModalProps) {
                   disabled={!description.trim() || description.length > MAX_DESCRIPTION_LENGTH || !connector || !consent}
                 >
                   <Sparkles size={16} />
-                  Generate Ontology
+                  生成本体
                   <Send size={16} />
                 </button>
               </div>
@@ -564,15 +563,15 @@ export function NLBuilderModal({ onClose }: NLBuilderModalProps) {
             {step === 'loading' && (
               <div className="nl-builder-content nl-loading">
                 <Loader2 size={48} className="spin" style={{ color: 'var(--accent)' }} />
-                <p>Analyzing your description...</p>
+                <p>正在分析描述…</p>
                 <p style={{ color: 'var(--text-tertiary)', fontSize: '14px' }}>
-                  Extracting entities, relationships, and properties
+                  正在提取实体、关系和属性
                 </p>
                 <button className="btn-secondary" onClick={() => {
                   cancelRequest();
                   setConsent(false);
                   setStep('input');
-                }}>← Back</button>
+                }}>← 返回</button>
               </div>
             )}
 
@@ -585,7 +584,7 @@ export function NLBuilderModal({ onClose }: NLBuilderModalProps) {
                     onClick={() => setEditMode(!editMode)}
                   >
                     <Edit3 size={14} />
-                    {editMode ? 'Preview' : 'Edit JSON'}
+                    {editMode ? '预览' : '编辑 JSON'}
                   </button>
                 </div>
 
@@ -599,20 +598,20 @@ export function NLBuilderModal({ onClose }: NLBuilderModalProps) {
                 ) : (
                   <div className="preview-summary">
                     <div className="preview-section">
-                      <h4>Entities ({generatedOntology.entityTypes.length})</h4>
+                      <h4>实体（{generatedOntology.entityTypes.length}）</h4>
                       <div className="preview-items">
                         {generatedOntology.entityTypes.map((entity) => (
                           <div key={entity.id} className="preview-item entity">
                             <span className="entity-icon">{entity.icon}</span>
                             <span className="entity-name">{entity.name}</span>
-                            <span className="entity-props">{entity.properties.length} props</span>
+                            <span className="entity-props">{entity.properties.length} 个属性</span>
                           </div>
                         ))}
                       </div>
                     </div>
 
                     <div className="preview-section">
-                      <h4>Relationships ({generatedOntology.relationships.length})</h4>
+                      <h4>关系（{generatedOntology.relationships.length}）</h4>
                       <div className="preview-items">
                         {generatedOntology.relationships.map((rel) => (
                           <div key={rel.id} className="preview-item relationship">
@@ -635,11 +634,11 @@ export function NLBuilderModal({ onClose }: NLBuilderModalProps) {
 
                 <div className="preview-actions">
                   <button className="btn-secondary" onClick={() => setStep('input')}>
-                    ← Back
+                    ← 返回
                   </button>
                   <button className="btn-primary" onClick={handleApply}>
                     <Check size={16} />
-                    Apply Ontology
+                    应用本体
                   </button>
                 </div>
               </div>
@@ -648,12 +647,12 @@ export function NLBuilderModal({ onClose }: NLBuilderModalProps) {
         {step === 'error' && (
           <div className="nl-builder-content nl-error">
             <AlertCircle size={48} style={{ color: '#FF6B6B' }} />
-            <p style={{ color: '#FF6B6B' }}>Generation Failed</p>
+            <p style={{ color: '#FF6B6B' }}>生成失败</p>
             <p style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>
-              {error || 'An unknown error occurred'}
+              {error || '发生未知错误'}
             </p>
             <button className="btn-secondary" onClick={connector ? () => setStep('input') : reloadConnector}>
-              {connector ? 'Try Again' : 'Reload connector'}
+              {connector ? '重试' : '重新加载连接器'}
             </button>
           </div>
         )}

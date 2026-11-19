@@ -186,7 +186,7 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
           ...current,
           [entry.id]: loadError instanceof Error
             ? loadError.message
-            : 'Failed to load ontology payload',
+            : '加载本体数据失败',
         }));
       }
       return null;
@@ -274,7 +274,7 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
           ...current,
           [entry.id]: sourceError instanceof Error
             ? sourceError.message
-            : 'Failed to load original RDF source',
+            : '加载原始 RDF 源文件失败',
         }));
       }
     } finally {
@@ -353,7 +353,7 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
           ...current,
           [entry.id]: sourceError instanceof Error
             ? sourceError.message
-            : 'Failed to load complete RDF source',
+            : '加载完整 RDF 源文件失败',
         }));
       }
     } finally {
@@ -400,9 +400,9 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
           <div>
-            <h2 style={{ fontSize: 24, fontWeight: 600 }}>Ontology Gallery</h2>
+            <h2 style={{ fontSize: 24, fontWeight: 600 }}>本体目录</h2>
             <p style={{ fontSize: 14, color: 'var(--text-secondary)', marginTop: 4 }}>
-              Browse and load ontologies from the catalogue
+              浏览并加载目录中的本体
             </p>
           </div>
           <button className="icon-btn" onClick={handleClose}>
@@ -416,7 +416,7 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
             <Search size={16} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-tertiary)' }} />
             <input
               type="text"
-              placeholder="Search by name, tag, author, license…"
+              placeholder="按名称、标签、作者或许可证搜索…"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
@@ -450,10 +450,10 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
               fontSize: 13,
             }}
           >
-            <option value="all">All sources</option>
-            <option value="official">Official</option>
-            <option value="external">External</option>
-            <option value="community">Community</option>
+            <option value="all">所有来源</option>
+            <option value="official">官方</option>
+            <option value="external">外部</option>
+            <option value="community">社区</option>
           </select>
           <select
             value={categoryFilter}
@@ -475,7 +475,7 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
               fontSize: 13,
             }}
           >
-            <option value="all">All categories</option>
+            <option value="all">所有类别</option>
             {categories.map((cat) => (
               <option key={cat} value={cat}>
                 {CATEGORY_LABELS[cat] ?? cat}
@@ -487,7 +487,7 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
         {/* Loading / Error / Empty */}
         {loading && (
           <div style={{ textAlign: 'center', padding: 40, color: 'var(--text-secondary)' }}>
-            Loading catalogue…
+           正在加载本体目录…
           </div>
         )}
         {error && (
@@ -497,14 +497,14 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
         )}
         {!loading && !error && filtered.length === 0 && (
           <div style={{ textAlign: 'center', padding: 40, color: 'var(--text-secondary)' }}>
-            No ontologies match your filters.
+           没有符合筛选条件的本体。
           </div>
         )}
 
         {/* Result count */}
         {!loading && !error && filtered.length > 0 && (
           <div style={{ fontSize: 12, color: 'var(--text-tertiary)', marginBottom: 8 }}>
-            Showing {Math.min(visibleCount, filtered.length)} of {filtered.length} ontolog{filtered.length === 1 ? 'y' : 'ies'}
+           显示 {Math.min(visibleCount, filtered.length)} / {filtered.length} 个本体
           </div>
         )}
 
@@ -599,7 +599,7 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
                                 fontWeight: 500,
                               }}
                             >
-                              Community
+                             社区
                             </span>
                           )}
                           {entry.source === 'external' && (
@@ -613,7 +613,7 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
                                 fontWeight: 500,
                               }}
                             >
-                              External
+                             外部
                             </span>
                           )}
                         </div>
@@ -630,7 +630,7 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
                           fontWeight: 600,
                         }}
                       >
-                        Active
+                       当前
                       </div>
                     )}
                   </div>
@@ -704,9 +704,7 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
 
                   {entry.source === 'external' && (
                     <SourceFidelityNote className="catalogue-source-fidelity-note">
-                      <strong>About this view:</strong> The graph is a visual
-                      projection. Designer preserves the complete verified RDF
-                      source and limits edits to statements it can map exactly.
+                      <strong>关于此视图：</strong> 图谱是 RDF 的可视化投影。设计器会保留完整且已验证的 RDF 源码，并仅允许编辑能够精确映射的语句。
                     </SourceFidelityNote>
                   )}
 
@@ -723,14 +721,14 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
                     <div style={{ display: 'flex', gap: 16 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                         <Layers size={14} color="var(--text-tertiary)" />
-                        <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
-                          {entry.entityCount} entities
+                          <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
+                          {entry.entityCount} 个实体
                         </span>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                         <ArrowRight size={14} color="var(--text-tertiary)" />
                         <span style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
-                          {entry.relationshipCount} relationships
+                          {entry.relationshipCount} 个关系
                         </span>
                       </div>
                     </div>
@@ -740,8 +738,8 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
                         <button
                           className="btn btn-secondary"
                           style={{ padding: '5px 8px', fontSize: 11 }}
-                          title="View the hash-verified original RDF source"
-                          aria-label={`View original RDF source for ${entry.name}`}
+                          title="查看经过哈希校验的原始 RDF 源文件"
+                          aria-label={`查看 ${entry.name} 的原始 RDF 源文件`}
                           disabled={isLoadingSource}
                           onClick={(e) => {
                             e.stopPropagation();
@@ -749,7 +747,7 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
                           }}
                         >
                           <FileCheck2 size={13} />
-                          {isLoadingSource ? 'Loading…' : 'Complete RDF'}
+                          {isLoadingSource ? '正在加载…' : '完整 RDF'}
                         </button>
                       )}
                       {!hasCatalogueSourceArtifact(entry) && (
@@ -757,9 +755,9 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
                           className="btn btn-secondary"
                           style={{ padding: '5px 8px', fontSize: 11 }}
                           title={isLoadingEntry
-                            ? 'Loading ontology payload'
-                            : 'View Playground-generated RDF'}
-                          aria-label={`View generated RDF for ${entry.name}`}
+                            ? '正在加载本体数据'
+                            : '查看游乐场生成的 RDF'}
+                          aria-label={`查看 ${entry.name} 的生成版 RDF`}
                           disabled={isLoadingEntry}
                           onClick={(e) => {
                             e.stopPropagation();
@@ -767,13 +765,13 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
                           }}
                         >
                           <Code size={13} />
-                          Generated
+                         生成版 RDF
                         </button>
                       )}
                       <button
                         className="btn btn-secondary"
                         style={{ padding: '5px 8px', fontSize: 11 }}
-                        title={copiedEmbedId === entry.id ? 'Copied!' : 'Copy embed code'}
+                        title={copiedEmbedId === entry.id ? '已复制！' : '复制嵌入代码'}
                         onClick={(e) => {
                           e.stopPropagation();
                           handleCopyEmbed(entry);
@@ -784,7 +782,7 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
                       <button
                         className="btn btn-secondary"
                         style={{ padding: '5px 8px', fontSize: 11 }}
-                        title={designerScaleError ?? 'Edit in Designer'}
+                        title={designerScaleError ?? '在设计器中编辑'}
                         disabled={isLoadingEntry || Boolean(designerScaleError)}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -803,7 +801,7 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
                           }}
                           disabled={isLoadingEntry}
                         >
-                          {isLoadingEntry ? 'Loading…' : 'Load'}
+                          {isLoadingEntry ? '正在加载…' : '加载'}
                         </button>
                       )}
                     </div>
@@ -853,7 +851,7 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
                 style={{ padding: '8px 24px', fontSize: 13 }}
                 onClick={handleShowMore}
               >
-                Show more ({filtered.length - visibleCount} remaining)
+               显示更多（剩余 {filtered.length - visibleCount} 个）
               </button>
             </div>
           )}
@@ -871,7 +869,7 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
           }}
         >
           <p style={{ fontSize: 13, color: 'var(--text-secondary)' }}>
-            Want to contribute? See{' '}
+            想要参与贡献？请查看{' '}
             <a
               href="https://github.com/microsoft/Ontology-Playground/blob/main/CONTRIBUTING.md"
               target="_blank"
@@ -884,7 +882,7 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
             >
               <strong>CONTRIBUTING.md</strong>
             </a>
-            {' '}— add your ontology as an RDF file and{' '}
+            {' '}——将本体作为 RDF 文件添加，并{' '}
             <a
               href="https://github.com/microsoft/Ontology-Playground/fork"
               target="_blank"
@@ -895,7 +893,7 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
                 cursor: 'pointer',
               }}
             >
-              open a PR
+              提交拉取请求
             </a>
             .
           </p>
@@ -903,7 +901,7 @@ export function GalleryModal({ onClose }: GalleryModalProps) {
 
         <div style={{ marginTop: 20, textAlign: 'center' }}>
           <button className="btn btn-primary" onClick={handleClose}>
-            Done
+           完成
           </button>
         </div>
       </motion.div>
@@ -929,16 +927,16 @@ function CatalogueAttribution({ entry }: { entry: CatalogueEntry }) {
       {entry.license && (
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
           <Scale size={12} aria-hidden="true" />
-          License: {entry.license}
+          许可证：{entry.license}
         </span>
       )}
-      {entry.version && <span>Version: {entry.version}</span>}
+      {entry.version && <span>版本：{entry.version}</span>}
       {entry.sourceUrl && (
         <a
           href={entry.sourceUrl}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label={`View upstream source for ${entry.name}`}
+          aria-label={`查看 ${entry.name} 的上游源项目`}
           onClick={(event) => event.stopPropagation()}
           style={{
             display: 'inline-flex',
@@ -948,7 +946,7 @@ function CatalogueAttribution({ entry }: { entry: CatalogueEntry }) {
             textDecoration: 'underline',
           }}
         >
-          Upstream source
+         上游源项目
           <ExternalLink size={11} aria-hidden="true" />
         </a>
       )}
@@ -976,13 +974,13 @@ function GalleryRdfSource({
     <div style={{ marginTop: 12 }}>
       <strong style={{ display: 'block', fontSize: 12 }}>
         {isSubset
-          ? 'Playground-generated RDF subset'
-          : 'Playground-generated RDF'}
+          ? '游乐场生成的 RDF 子集'
+          : '游乐场生成的 RDF'}
       </strong>
       <p style={{ margin: '4px 0 8px', fontSize: 11, color: 'var(--text-secondary)' }}>
         {isSubset
-          ? 'Generated from the visual model, not the complete upstream ontology. It includes mapped classes, object properties, subclass edges, and ontology metadata. Source-only RDF remains in the reviewed source; imports are recorded but never fetched.'
-          : 'Generated from the Playground visual model and data bindings.'}
+          ? '此内容根据可视化模型生成，并非完整的上游本体。它包含已映射的类、对象属性、子类关系和本体元数据。仅存在于源文件中的 RDF 会保留在已审核源文件中；导入项只记录，不会获取。'
+          : '此内容根据游乐场可视化模型和数据绑定生成。'}
       </p>
       <RdfCodeBlock>{highlighted}</RdfCodeBlock>
     </div>
@@ -1018,7 +1016,7 @@ function GalleryOriginalSource({
   return (
     <div style={{ marginTop: 12 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
-        <strong style={{ fontSize: 12 }}>Original reviewed RDF source</strong>
+        <strong style={{ fontSize: 12 }}>已审核的原始 RDF 源文件</strong>
         <button
           className="btn btn-secondary"
           style={{ padding: '4px 8px', fontSize: 11 }}
@@ -1026,18 +1024,15 @@ function GalleryOriginalSource({
           onClick={handleDownload}
         >
           <Download size={12} />
-          Download verified source
+         下载已校验的源文件
         </button>
       </div>
       <p style={{ margin: '4px 0', fontSize: 11, color: 'var(--text-secondary)' }}>
-        Exact catalogue bytes; SHA-256 and byte length were verified before
-        display. SHACL rules and unsupported triples remain inert source data:
-        they are not executed, and imports are not dereferenced.
+        与目录中的原始字节完全一致；显示前已校验 SHA-256 和字节长度。SHACL 规则及不支持的三元组仅作为源数据保留，不会执行；导入项也不会被解析或访问。
       </p>
       {previewIsTruncated && (
         <p style={{ margin: '4px 0', fontSize: 11, color: 'var(--text-secondary)' }}>
-          Preview limited to the first {ORIGINAL_SOURCE_PREVIEW_CHARACTERS.toLocaleString()} characters.
-          Download the verified artifact for the complete source.
+         预览仅显示前 {ORIGINAL_SOURCE_PREVIEW_CHARACTERS.toLocaleString()} 个字符。下载已校验的文件以获取完整源内容。
         </p>
       )}
       <code style={{ display: 'block', marginBottom: 8, fontSize: 10, color: 'var(--text-tertiary)' }}>

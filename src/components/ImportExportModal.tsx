@@ -27,13 +27,13 @@ interface ImportExportModalProps {
 
 const sampleSchema = `{
   "ontology": {
-    "name": "My Ontology",
-    "description": "Description here",
+    "name": "示例本体",
+    "description": "本体说明",
     "entityTypes": [
       {
         "id": "entity1",
-        "name": "Entity Name",
-        "description": "What this entity represents",
+        "name": "实体名称",
+        "description": "此实体所表示的概念",
         "icon": "📦",
         "color": "#0078D4",
         "properties": [
@@ -214,12 +214,12 @@ export function ImportExportModal({ onClose, onFabricPush }: ImportExportModalPr
         if (!isCurrentRequest()) return;
         setImportStatus('error');
         if (err instanceof RDFParseError) {
-          setErrorMessage(`RDF parse error: ${err.message}`);
+          setErrorMessage(`RDF 解析错误：${err.message}`);
         } else {
           const message = err instanceof Error
             ? err.message
-            : 'Failed to parse file';
-          setErrorMessage(`RDF parse error: ${message}`);
+            : '文件解析失败';
+          setErrorMessage(`RDF 解析错误：${message}`);
         }
       }
     };
@@ -440,9 +440,9 @@ export function ImportExportModal({ onClose, onFabricPush }: ImportExportModalPr
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
           <div>
-            <h2 style={{ fontSize: 24, fontWeight: 600 }}>Import / Export Ontology</h2>
+            <h2 style={{ fontSize: 24, fontWeight: 600 }}>导入 / 导出本体</h2>
             <p style={{ fontSize: 14, color: 'var(--text-secondary)', marginTop: 4 }}>
-              Load your own ontology or export the current one
+              加载本体文件，或导出当前本体
             </p>
           </div>
           <button className="icon-btn" onClick={closeModal}>
@@ -461,10 +461,10 @@ export function ImportExportModal({ onClose, onFabricPush }: ImportExportModalPr
           alignItems: 'center'
         }}>
           <div>
-            <div style={{ fontSize: 13, color: 'var(--text-tertiary)', marginBottom: 4 }}>Currently Loaded</div>
+            <div style={{ fontSize: 13, color: 'var(--text-tertiary)', marginBottom: 4 }}>当前已加载</div>
             <div style={{ fontSize: 16, fontWeight: 600 }}>{currentOntology.name}</div>
             <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
-              {currentOntology.entityTypes.length} entity types, {currentOntology.relationships.length} relationships
+              {currentOntology.entityTypes.length} 种实体类型，{currentOntology.relationships.length} 种关系
             </div>
           </div>
           <button 
@@ -473,7 +473,7 @@ export function ImportExportModal({ onClose, onFabricPush }: ImportExportModalPr
             style={{ display: 'flex', alignItems: 'center', gap: 6 }}
           >
             <RotateCcw size={14} />
-            Reset to Default
+           恢复默认
           </button>
         </div>
 
@@ -490,7 +490,7 @@ export function ImportExportModal({ onClose, onFabricPush }: ImportExportModalPr
             color: 'var(--ms-green)'
           }}>
             <CheckCircle size={18} />
-            <span>Ontology loaded successfully!</span>
+            <span>本体加载成功！</span>
           </div>
         )}
 
@@ -554,9 +554,9 @@ export function ImportExportModal({ onClose, onFabricPush }: ImportExportModalPr
             }}>
               <Upload size={24} color="var(--ms-blue)" />
             </div>
-            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>Import Ontology</div>
+            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>导入本体</div>
             <div style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>
-              {LEGACY_FORMATS_ENABLED ? 'Drop JSON or RDF/OWL file here' : 'Drop RDF/OWL (.rdf, .owl, .iq) file here'}
+              {LEGACY_FORMATS_ENABLED ? '将 JSON 或 RDF/OWL 文件拖放到此处' : '将 RDF/OWL（.rdf、.owl、.iq）文件拖放到此处'}
             </div>
           </div>
 
@@ -581,7 +581,7 @@ export function ImportExportModal({ onClose, onFabricPush }: ImportExportModalPr
             }}>
               <Download size={24} color="var(--ms-green)" />
             </div>
-            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 12 }}>Export Current</div>
+            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 12 }}>导出当前本体</div>
             
             {/* Format Selector — only shown when legacy formats are enabled */}
             {LEGACY_FORMATS_ENABLED && (
@@ -654,7 +654,7 @@ export function ImportExportModal({ onClose, onFabricPush }: ImportExportModalPr
                     alignItems: 'center',
                     gap: 4
                   }}
-                  title="RDF/XML export"
+                  title="导出 RDF/XML"
                 >
                   <Share2 size={12} />
                   RDF
@@ -665,11 +665,8 @@ export function ImportExportModal({ onClose, onFabricPush }: ImportExportModalPr
             {exportFormat === 'rdf' && rdfDocument && (
               <>
                 <SourceFidelityNote className="import-export-source-fidelity-note">
-                  <strong>Complete RDF preservation:</strong>{' '}
-                  {currentCatalogueEntry?.name ?? currentOntology.name} will
-                  download as its exact original bytes until a supported semantic
-                  edit is made. Modified exports retain every unrelated RDF
-                  statement.
+                  <strong>完整保留 RDF：</strong>{' '}
+                  {currentCatalogueEntry?.name ?? currentOntology.name} 在进行受支持的语义编辑前，会按原始字节下载。修改后的导出文件仍会保留所有无关的 RDF 语句。
                 </SourceFidelityNote>
                 <label style={{
                   alignItems: 'flex-start',
@@ -685,8 +682,7 @@ export function ImportExportModal({ onClose, onFabricPush }: ImportExportModalPr
                     onChange={(event) =>
                       setIncludeDerivationMetadata(event.target.checked)}
                   />
-                  Add an explicit <code>prov:wasDerivedFrom</code> statement
-                  to this export. This intentionally produces a modified file.
+                  在导出文件中添加明确的 <code>prov:wasDerivedFrom</code> 语句。这会生成修改后的文件。
                 </label>
                 {lastRdfExport && (
                   <div style={{
@@ -694,14 +690,11 @@ export function ImportExportModal({ onClose, onFabricPush }: ImportExportModalPr
                     marginBottom: 12,
                     textAlign: 'left',
                   }}>
-                    Last export: {lastRdfExport.kind}; source statements:{' '}
-                    {lastRdfExport.sourceTripleCount.toLocaleString()};
-                    exported statements:{' '}
-                    {lastRdfExport.exportedTripleCount.toLocaleString()};
-                    patches: {lastRdfExport.patchCount.toLocaleString()};
-                    provenance: {lastRdfExport.derivationMetadataIncluded
-                      ? 'included'
-                      : 'not included'}.
+                    最近一次导出：{lastRdfExport.kind}；来源语句：
+                    {lastRdfExport.sourceTripleCount.toLocaleString()}；
+                    导出语句：{lastRdfExport.exportedTripleCount.toLocaleString()}；
+                    补丁：{lastRdfExport.patchCount.toLocaleString()}；
+                    来源记录：{lastRdfExport.derivationMetadataIncluded ? '已包含' : '未包含'}。
                   </div>
                 )}
               </>
@@ -720,7 +713,7 @@ export function ImportExportModal({ onClose, onFabricPush }: ImportExportModalPr
                   fontWeight: 600,
                   marginBottom: 6,
                 }}>
-                  RDF export profile
+                  RDF 导出配置
                 </legend>
                 <button
                   type="button"
@@ -744,10 +737,10 @@ export function ImportExportModal({ onClose, onFabricPush }: ImportExportModalPr
                   }}
                 >
                   <span style={{ display: 'block', fontSize: 12, fontWeight: 600 }}>
-                    Playground round-trip
+                    游乐场往返格式
                   </span>
                   <span style={{ color: 'var(--text-tertiary)', display: 'block', fontSize: 10, marginTop: 2 }}>
-                    Preserves icons, colors, bindings, and other Playground metadata.
+                    保留图标、颜色、绑定和其他游乐场元数据。
                   </span>
                 </button>
                 <button
@@ -771,10 +764,10 @@ export function ImportExportModal({ onClose, onFabricPush }: ImportExportModalPr
                   }}
                 >
                   <span style={{ display: 'block', fontSize: 12, fontWeight: 600 }}>
-                    Standards-oriented OWL + SHACL
+                    面向标准的 OWL + SHACL
                   </span>
                   <span style={{ color: 'var(--text-tertiary)', display: 'block', fontSize: 10, marginTop: 2 }}>
-                    Uses standard vocabulary for order, enums, identifiers, and cardinality.
+                    使用标准词汇表示顺序、枚举、标识符和基数。
                   </span>
                 </button>
               </fieldset>
@@ -787,12 +780,12 @@ export function ImportExportModal({ onClose, onFabricPush }: ImportExportModalPr
               style={{ width: '100%' }}
             >
               {isExporting
-                ? 'Preparing complete RDF…'
+                ? '正在准备完整 RDF…'
                 : rdfDocument && exportFormat === 'rdf'
-                  ? 'Download complete RDF'
+                  ? '下载完整 RDF'
                   : LEGACY_FORMATS_ENABLED
-                    ? `Download .${exportFormat}`
-                    : 'Download RDF/OWL'}
+                    ? `下载 .${exportFormat}`
+                    : '下载 RDF/OWL'}
             </button>
             {exportError && (
               <div role="alert" className="import-status error">
@@ -807,18 +800,16 @@ export function ImportExportModal({ onClose, onFabricPush }: ImportExportModalPr
                   onClick={onFabricPush}
                   disabled={Boolean(rdfDocument)}
                   title={rdfDocument
-                    ? 'Fabric push is unavailable because its API cannot preserve the complete RDF source.'
+                    ? 'Fabric API 无法完整保留 RDF 源文件，因此当前不可推送。'
                     : undefined}
                   style={{ width: '100%', marginTop: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}
                 >
                   <Cloud size={14} />
-                  Push to Microsoft Fabric
+                  推送到 Microsoft Fabric
                 </button>
                 {rdfDocument && (
                   <SourceFidelityNote className="import-export-source-fidelity-note">
-                    Fabric currently accepts only the visual projection, so
-                    pushing this source-backed document would omit preserved RDF
-                    statements. Download the complete RDF instead.
+                    Fabric 目前仅接受可视化投影，因此推送此源文件会丢失保留的 RDF 语句。请改为下载完整 RDF。
                   </SourceFidelityNote>
                 )}
               </>
@@ -838,7 +829,7 @@ export function ImportExportModal({ onClose, onFabricPush }: ImportExportModalPr
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <FileJson size={16} color="var(--text-tertiary)" />
                 <span style={{ fontSize: 13, color: 'var(--text-secondary)', fontWeight: 600 }}>
-                  JSON Schema Reference
+                  JSON 架构参考
                 </span>
               </div>
               <button 
@@ -847,7 +838,7 @@ export function ImportExportModal({ onClose, onFabricPush }: ImportExportModalPr
                 onClick={handleCopySchema}
               >
                 <Copy size={12} style={{ marginRight: 4 }} />
-                {copied ? 'Copied!' : 'Copy'}
+                {copied ? '已复制！' : '复制'}
               </button>
             </div>
             <pre style={{ 
@@ -868,7 +859,7 @@ export function ImportExportModal({ onClose, onFabricPush }: ImportExportModalPr
 
         <div style={{ marginTop: 20, textAlign: 'center' }}>
           <button className="btn btn-primary" onClick={closeModal}>
-            Done
+           完成
           </button>
         </div>
       </motion.div>

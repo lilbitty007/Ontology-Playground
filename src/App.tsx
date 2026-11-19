@@ -76,7 +76,7 @@ function App() {
     if (earnedBadges.length > 0) {
       const latestBadge = earnedBadges[earnedBadges.length - 1];
       setToast({
-        message: `Quest Complete! Earned: ${latestBadge.badge}`,
+        message: `任务完成！获得徽章：${latestBadge.badge}`,
         icon: latestBadge.icon
       });
       
@@ -107,7 +107,7 @@ function App() {
             setToast({
               message: error instanceof Error
                 ? error.message
-                : 'Failed to load catalogue ontology',
+                : '加载目录本体失败',
               icon: '!',
             });
             navigate({ page: 'catalogue' });
@@ -133,7 +133,7 @@ function App() {
             setToast({
               message: error instanceof Error
                 ? error.message
-                : 'Failed to decode shared ontology',
+                : '无法解析分享的本体',
               icon: '!',
             });
             navigate({ page: 'home' });
@@ -183,7 +183,7 @@ function App() {
       setToast({
         message: error instanceof Error
           ? error.message
-          : 'Failed to load complete RDF source',
+          : '无法加载完整 RDF 源文件',
         icon: '!',
       });
       return;
@@ -248,15 +248,15 @@ function App() {
 
   // ── Command palette items ──────────────────────────────
   const commands = useMemo<CommandItem[]>(() => [
-    { id: 'catalogue', label: 'Open Catalogue', icon: <LayoutGrid size={18} />, action: openGallery },
-    { id: 'designer', label: 'Open Designer', icon: <PenTool size={18} />, action: openDesigner },
-    { id: 'learn', label: 'Open Ontology School', icon: <BookOpen size={18} />, action: openLearn },
-    { id: 'import-export', label: 'Import / Export', icon: <FileJson size={18} />, action: () => setShowImportExport(true) },
-    { id: 'summary', label: 'View Summary', icon: <FileText size={18} />, action: () => setShowSummary(true) },
-    { id: 'about', label: 'About & Trademark Notice', icon: <Info size={18} />, action: () => setShowAbout(true) },
-    { id: 'help', label: 'Help', icon: <HelpCircle size={18} />, shortcut: '?', action: () => setShowHelp(true) },
-    { id: 'data-sources', label: 'Data Sources', icon: <Database size={18} />, action: () => setShowDataSources(true) },
-    { id: 'theme', label: 'Switch Theme', icon: <Palette size={18} />, action: cycleTheme },
+    { id: 'catalogue', label: '打开本体目录', icon: <LayoutGrid size={18} />, action: openGallery },
+    { id: 'designer', label: '打开本体设计器', icon: <PenTool size={18} />, action: openDesigner },
+    { id: 'learn', label: '打开本体学堂', icon: <BookOpen size={18} />, action: openLearn },
+    { id: 'import-export', label: '导入 / 导出', icon: <FileJson size={18} />, action: () => setShowImportExport(true) },
+    { id: 'summary', label: '查看本体摘要', icon: <FileText size={18} />, action: () => setShowSummary(true) },
+    { id: 'about', label: '关于与商标声明', icon: <Info size={18} />, action: () => setShowAbout(true) },
+    { id: 'help', label: '帮助', icon: <HelpCircle size={18} />, shortcut: '?', action: () => setShowHelp(true) },
+    { id: 'data-sources', label: '数据源', icon: <Database size={18} />, action: () => setShowDataSources(true) },
+    { id: 'theme', label: '切换主题', icon: <Palette size={18} />, action: cycleTheme },
   ], [openGallery, openDesigner, openLearn, cycleTheme]);
 
   // Full-page views
@@ -293,23 +293,23 @@ function App() {
       {/* Mobile bottom tabs — visible only on small screens via CSS */}
       <div className="mobile-panel-tabs">
         <button className={`mobile-tab ${mobilePanel === 'graph' ? 'active' : ''}`} onClick={() => setMobilePanel('graph')}>
-          <Search size={18} /> Graph
+          <Search size={18} /> 图谱
         </button>
         <button className={`mobile-tab ${mobilePanel === 'quests' ? 'active' : ''}`} onClick={() => setMobilePanel('quests')}>
-          <Compass size={18} /> Quests
+          <Compass size={18} /> 任务
         </button>
         <button className={`mobile-tab ${mobilePanel === 'inspector' ? 'active' : ''}`} onClick={() => setMobilePanel('inspector')}>
-          <Info size={18} /> Inspector
+          <Info size={18} /> 检查器
         </button>
         <button className={`mobile-tab ${mobilePanel === 'query' ? 'active' : ''}`} onClick={() => setMobilePanel('query')}>
-          <MessageSquare size={18} /> Query
+          <MessageSquare size={18} /> 查询
         </button>
       </div>
 
       {/* Mobile panel drawer — visible only on small screens when a panel is selected */}
       {mobilePanel !== 'graph' && (
         <div className="mobile-panel-drawer">
-          <button className="mobile-panel-close" onClick={() => setMobilePanel('graph')}>✕ Close</button>
+          <button className="mobile-panel-close" onClick={() => setMobilePanel('graph')}>✕ 关闭</button>
           {mobilePanel === 'quests' && <QuestPanel />}
           {mobilePanel === 'inspector' && (
             <>

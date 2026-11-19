@@ -1027,7 +1027,7 @@ export function OntologyGraph() {
       }
       const message = error instanceof Error
         ? error.message
-        : 'The graph could not be rendered';
+        : '图谱无法渲染';
       setLayoutError(message);
       updateLayoutStatus('error');
     }
@@ -1330,7 +1330,7 @@ export function OntologyGraph() {
 
     const cy = getCy();
     if (!cy) {
-      setPngExportError('The graph is not ready to export yet. Try again in a moment.');
+      setPngExportError('图谱尚未准备好导出，请稍后重试。');
       return;
     }
 
@@ -1345,7 +1345,7 @@ export function OntologyGraph() {
         createPngExportOptions(bb.w, bb.h, bg),
       );
       if (!(await isValidPngBlob(pngBlob))) {
-        throw new Error('The browser returned an invalid or empty PNG.');
+        throw new Error('浏览器返回的 PNG 文件无效或为空。');
       }
 
       const url = URL.createObjectURL(pngBlob);
@@ -1364,7 +1364,7 @@ export function OntologyGraph() {
       console.error('PNG export failed', error);
       if (mountedRef.current) {
         setPngExportError(
-          'Could not create a PNG in this browser. Reduce the visible graph with search or detail controls, then try again.',
+          '无法在此浏览器中生成 PNG。请使用搜索或详情控件减少当前显示的图谱内容，然后重试。',
         );
       }
     } finally {
@@ -1425,19 +1425,10 @@ export function OntologyGraph() {
             left: neighborActionPosition.left,
             top: neighborActionPosition.top,
           }}
-          aria-label={`Expand ${selectedOverviewEntity.name} to show ${
-            selectedOverviewEntity.hiddenNeighborCount
-          } hidden ${
-            selectedOverviewEntity.hiddenNeighborCount === 1
-              ? 'neighbor'
-              : 'neighbors'
-          }`}
+          aria-label={`展开 ${selectedOverviewEntity.name} 并显示 ${selectedOverviewEntity.hiddenNeighborCount} 个隐藏邻居`}
           onClick={handleExpandSelectedEntity}
         >
-          Show {selectedOverviewEntity.hiddenNeighborCount.toLocaleString()}{' '}
-          {selectedOverviewEntity.hiddenNeighborCount === 1
-            ? 'neighbor'
-            : 'neighbors'}
+          显示 {selectedOverviewEntity.hiddenNeighborCount.toLocaleString()} 个邻居
         </button>
       )}
 
@@ -1449,34 +1440,34 @@ export function OntologyGraph() {
         >
           {layoutStatus === 'error' ? (
             <>
-              <strong>Graph rendering failed</strong>
+              <strong>图谱渲染失败</strong>
               <span>{layoutError}</span>
               <button type="button" onClick={handleResumeLayout}>
-                Try again
+               重试
               </button>
             </>
           ) : layoutStatus === 'cancelled' ? (
             <>
-              <strong>Rendering paused</strong>
-              <span>The bounded graph was not rendered.</span>
+              <strong>渲染已暂停</strong>
+              <span>尚未绘制限量图谱。</span>
               <button type="button" onClick={handleResumeLayout}>
-                Resume rendering
+               继续渲染
               </button>
             </>
           ) : (
             <>
               <strong>
                 {isBoundedView
-                  ? layoutStatus === 'scheduled'
-                    ? 'Preparing bounded graph'
-                    : 'Laying out bounded graph'
-                  : 'Laying out graph'}
+                  ? (layoutStatus === 'scheduled'
+                    ? '正在准备限量图谱'
+                    : '正在排列限量图谱')
+                  : '正在排列图谱'}
               </strong>
               <span>
-                Navigation and size-aware controls remain available.
+               你仍可使用导航和适配大型本体的控件。
               </span>
               <button type="button" onClick={handleCancelLayout}>
-                Cancel rendering
+               取消渲染
               </button>
             </>
           )}
@@ -1486,7 +1477,7 @@ export function OntologyGraph() {
       {focusNodeId && !isBoundedView && (
         <div className="graph-focus-badge">
           <Crosshair size={13} />
-          <span>Focus mode</span>
+          <span>聚焦模式</span>
           <button
             className="graph-focus-exit"
             onClick={() => {
@@ -1495,7 +1486,7 @@ export function OntologyGraph() {
               if (cy) cy.elements().removeClass('dimmed');
             }}
           >
-            Click background or ✕ to exit
+            点击背景或 ✕ 退出
           </button>
         </div>
       )}
@@ -1504,8 +1495,8 @@ export function OntologyGraph() {
         <button
           className="graph-control-btn"
           onClick={handleZoomIn}
-          title="Zoom In"
-          aria-label="Zoom in"
+          title="放大"
+          aria-label="放大图谱"
           disabled={graphZoom >= MAX_GRAPH_ZOOM - 0.001}
         >
           <ZoomIn size={18} />
@@ -1513,16 +1504,16 @@ export function OntologyGraph() {
         <button
           className="graph-control-btn"
           onClick={handleZoomOut}
-          title="Zoom Out"
-          aria-label="Zoom out"
+          title="缩小"
+          aria-label="缩小图谱"
           disabled={graphZoom <= MIN_GRAPH_ZOOM + 0.001}
         >
           <ZoomOut size={18} />
         </button>
-        <button className="graph-control-btn" onClick={handleFit} title="Fit to View" aria-label="Fit graph to view">
+        <button className="graph-control-btn" onClick={handleFit} title="适应视图" aria-label="使图谱适应视图">
           <Maximize2 size={18} />
         </button>
-        <button className="graph-control-btn" onClick={handleReset} title="Reset Layout" aria-label="Reset graph layout">
+        <button className="graph-control-btn" onClick={handleReset} title="重置布局" aria-label="重置图谱布局">
           <RotateCcw size={18} />
         </button>
         <button
@@ -1530,17 +1521,17 @@ export function OntologyGraph() {
           onClick={handleDownload}
           title={
             isExportingPng
-              ? 'Preparing PNG'
+              ? '正在准备 PNG'
               : isBoundedView
-                ? 'Download Visible Graph as PNG'
-                : 'Download Graph as PNG'
+                ? '下载当前图谱为 PNG'
+                : '下载图谱为 PNG'
           }
           aria-label={
             isExportingPng
-              ? 'Preparing PNG'
+              ? '正在准备 PNG'
               : isBoundedView
-                ? 'Download Visible Graph as PNG'
-                : 'Download Graph as PNG'
+                ? '下载当前图谱为 PNG'
+                : '下载图谱为 PNG'
           }
           aria-busy={isExportingPng}
           disabled={isExportingPng}
@@ -1557,7 +1548,7 @@ export function OntologyGraph() {
           <button
             type="button"
             onClick={() => setPngExportError(null)}
-            aria-label="Dismiss PNG export error"
+            aria-label="关闭 PNG 导出错误提示"
           >
             <X size={16} aria-hidden="true" />
           </button>

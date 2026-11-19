@@ -43,26 +43,26 @@ export function RelationshipForm() {
   return (
     <div className="designer-relationship-list">
       <div className="designer-section-header">
-        <h3>Relationships ({ontology.relationships.length})</h3>
+        <h3>关系（{ontology.relationships.length}）</h3>
         <button
           className="designer-add-btn"
           onClick={handleAdd}
           disabled={entities.length < 1 || sourceBacked}
           title={sourceBacked
-            ? 'Adding relationships is not supported for source-backed RDF'
+            ? '带源文件的 RDF 暂不支持添加关系'
             : entities.length < 1
-              ? 'Create at least one entity to add a relationship'
-              : 'Add relationship'}
+              ? '请先创建至少一个实体，再添加关系'
+              : '添加关系'}
         >
-          <Plus size={14} /> Add
+          <Plus size={14} /> 添加
         </button>
       </div>
 
       {ontology.relationships.length === 0 && (
         <div className="designer-empty">
           {entities.length < 1
-            ? 'Create at least one entity first.'
-            : 'No relationships yet. Click "Add" to create one.'}
+            ? '请先创建至少一个实体。'
+            : '还没有关系。点击“添加”来创建。'}
         </div>
       )}
 
@@ -116,8 +116,8 @@ export function RelationshipForm() {
                 onClick={(e) => { e.stopPropagation(); removeRelationship(rel.id); }}
                 disabled={sourceBacked && (!isSubclass || !canEditSubclass)}
                 title={sourceBacked && (!isSubclass || !canEditSubclass)
-                  ? 'Only exactly mapped direct subclass edges can be deleted'
-                  : 'Delete relationship'}
+                  ? '只能删除 RDF 中可精确映射的直接子类关系'
+                  : '删除关系'}
               >
                 <Trash2 size={14} />
               </button>
@@ -128,16 +128,16 @@ export function RelationshipForm() {
                 {/* Name */}
                 {isSubclass ? (
                   <div className="designer-import-error">
-                    Class hierarchy edge (`rdfs:subClassOf`). It remains a subclass statement on RDF export.
+                    类层级关系（`rdfs:subClassOf`）。导出 RDF 时仍会保留为子类语句。
                   </div>
                 ) : (
                   <label className="designer-field">
-                    <span>Name</span>
+                    <span>名称</span>
                     <input
                       type="text"
                       value={rel.name}
                       onChange={(e) => updateRelationship(rel.id, { name: e.target.value })}
-                      placeholder="Relationship name"
+                      placeholder="关系名称"
                       disabled={!canEditName}
                       title={!canEditName
                         ? 'This value has no unambiguous RDF label mapping'
@@ -149,7 +149,7 @@ export function RelationshipForm() {
                 {/* Source / Target */}
                 <div className="designer-field-row">
                   <label className="designer-field">
-                    <span>{isSubclass ? 'Subclass' : 'From'}</span>
+                    <span>{isSubclass ? '子类' : '起点'}</span>
                     <select
                       value={rel.from}
                       onChange={(e) => updateRelationship(rel.id, { from: e.target.value })}
@@ -168,7 +168,7 @@ export function RelationshipForm() {
                     </select>
                   </label>
                   <label className="designer-field">
-                    <span>{isSubclass ? 'Parent class' : 'To'}</span>
+                    <span>{isSubclass ? '父类' : '终点'}</span>
                     <select
                       value={rel.to}
                       onChange={(e) => updateRelationship(rel.id, { to: e.target.value })}
@@ -191,7 +191,7 @@ export function RelationshipForm() {
                 {/* Cardinality */}
                 {!isSubclass && (
                   <label className="designer-field">
-                    <span>Cardinality</span>
+                    <span>基数</span>
                     <select
                       value={rel.cardinality}
                       disabled={sourceBacked}
@@ -208,12 +208,12 @@ export function RelationshipForm() {
 
                 {/* Description */}
                 <label className="designer-field">
-                  <span>Description</span>
+                  <span>描述</span>
                   <textarea
                     rows={2}
                     value={rel.description ?? ''}
                     onChange={(e) => updateRelationship(rel.id, { description: e.target.value })}
-                    placeholder="Describe this relationship"
+                    placeholder="描述此关系"
                     disabled={!canEditDescription}
                     title={!canEditDescription
                       ? 'This value has no unambiguous RDF comment mapping'
@@ -225,16 +225,16 @@ export function RelationshipForm() {
                 {!isSubclass && (
                   <div className="designer-field">
                     <div className="designer-section-header">
-                      <span>Attributes ({rel.attributes?.length ?? 0})</span>
+                      <span>属性（{rel.attributes?.length ?? 0}）</span>
                       <button
                         className="designer-add-btn small"
                         onClick={() => addRelationshipAttribute(rel.id)}
                         disabled={sourceBacked}
                         title={sourceBacked
-                          ? 'Relationship attributes are read-only'
+                          ? '关系属性为只读'
                           : undefined}
                       >
-                        <Plus size={12} /> Add
+                        <Plus size={12} /> 添加
                       </button>
                     </div>
                     {(rel.attributes ?? []).map((attr, idx) => (
@@ -246,7 +246,7 @@ export function RelationshipForm() {
                           onChange={(e) =>
                             updateRelationshipAttribute(rel.id, idx, { name: e.target.value })
                           }
-                          placeholder="Attribute name"
+                          placeholder="属性名称"
                           disabled={sourceBacked}
                         />
                         <input
@@ -256,14 +256,14 @@ export function RelationshipForm() {
                           onChange={(e) =>
                             updateRelationshipAttribute(rel.id, idx, { type: e.target.value })
                           }
-                          placeholder="Type"
+                          placeholder="类型"
                           disabled={sourceBacked}
                         />
                         <button
                           className="designer-delete-btn small"
                           onClick={() => removeRelationshipAttribute(rel.id, idx)}
                           disabled={sourceBacked}
-                          title={sourceBacked ? 'Relationship attributes are read-only' : 'Remove attribute'}
+                          title={sourceBacked ? '关系属性为只读' : '删除属性'}
                         >
                           <Trash2 size={12} />
                         </button>
