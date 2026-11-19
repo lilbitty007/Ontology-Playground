@@ -1,6 +1,6 @@
 {
-  "name": "Incident Management",
-  "description": "Incident management model for ITIL-aligned services, incidents, problems, configuration items, and support ownership.",
+  "name": "事件管理",
+  "description": "与 ITIL 对齐的事件管理模型，涵盖服务、事件、问题、配置项及支持责任归属。",
   "icon": "📦",
   "category": "general",
   "tags": [],

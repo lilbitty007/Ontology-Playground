@@ -1,9 +1,15 @@
 {
-  "name": "OpenIM — Open Investment Model",
-  "description": "A community catalogue adaptation of the MIT-licensed Open Investment Model for institutional investment management, including funds, managers, portfolios, holdings, instruments, documents, and their directed relationships.",
+  "name": "OpenIM — 开放投资模型",
+  "description": "基于 MIT 许可的 Open Investment Model（开放投资模型）的社区目录改编版，面向机构投资管理，涵盖基金、管理人、投资组合、持仓、金融工具、文档及其有向关系。",
   "category": "finance",
   "icon": "📈",
-  "tags": ["investment", "asset-management", "fibo-aligned", "knowledge-graph", "open-source"],
+  "tags": [
+    "investment",
+    "asset-management",
+    "fibo-aligned",
+    "knowledge-graph",
+    "open-source"
+  ],
   "author": "antikas",
   "license": "MIT",
   "sourceUrl": "https://github.com/antikas/open-investment-model/tree/v0.2.1",

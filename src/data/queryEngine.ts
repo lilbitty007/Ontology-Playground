@@ -39,6 +39,23 @@ const ENTITY_NAMES_ZH: Record<string, string[]> = {
   invoice: ['发票'], contract: ['合同'], asset: ['资产'], risk: ['风险'],
   factory: ['工厂'], machine: ['机器', '设备'], material: ['材料', '物料'],
   productionorder: ['生产订单'], workorder: ['工单'],
+  warehouse: ['仓库', '仓储'], carrier: ['承运商', '物流商'], route: ['路线', '航线'],
+  port: ['港口'], facility: ['设施', '场馆'], incident: ['事件', '故障'],
+  ticket: ['工单', '票据'], policy: ['保单', '策略'], claim: ['理赔', '索赔'],
+  portfolio: ['投资组合'], branch: ['分支机构', '网点'], merchant: ['商户', '商家'],
+  cart: ['购物车'], coupon: ['优惠券'], promotion: ['促销', '优惠活动'],
+  vehicle: ['车辆'], driver: ['司机', '驾驶员'], vessel: ['船舶'],
+  cruise: ['邮轮', '航次'], passenger: ['乘客', '旅客'], cabin: ['客舱'],
+  appointment: ['预约'], prescription: ['处方'], medication: ['药物', '药品'],
+  agent: ['代理', '智能体'], channel: ['频道', '渠道'], server: ['服务器'],
+  member: ['成员'], role: ['角色'], release: ['发布', '版本'],
+  deployment: ['部署'], pipeline: ['流水线', '管道'], maintenance: ['维护', '保养'],
+  inspection: ['质检', '检查'], defect: ['缺陷'], batch: ['批次'],
+  grower: ['种植户', '种植者'], farm: ['农场'], orchard: ['果园'],
+  harvest: ['采收', '收成'], retailer: ['零售商'], enrollment: ['选课', '注册'],
+  semester: ['学期'], faculty: ['教职员工', '院系'], grade: ['成绩'],
+  assignment: ['任务', '任职'], candidate: ['候选人'], interview: ['面试'],
+  payroll: ['薪资', '工资'],
 };
 
 function entityAliases(entity: Ontology['entityTypes'][number]): string[] {
@@ -106,7 +123,7 @@ export function generateQuerySuggestions(ontology: Ontology): string[] {
 // Process a natural language query against the ontology
 export function processQuery(query: string, ontology: Ontology): QueryResponse {
   const normalizedQuery = query.toLowerCase().trim();
-  const normalizedNoPunctuation = normalizedQuery.replace(/[?!.:,;]+/g, '').trim();
+  const normalizedNoPunctuation = normalizedQuery.replace(/[?!.:,;？！。：，；]+/g, '').trim();
   const entities = ontology.entityTypes;
   const relationships = ontology.relationships;
 
@@ -121,7 +138,7 @@ export function processQuery(query: string, ontology: Ontology): QueryResponse {
         result: demoResponse.result,
         highlightEntities: demoResponse.highlightEntities,
         highlightRelationships: demoResponse.highlightRelationships,
-        interpretation: 'Detected: Fourth Coffee sample query'
+        interpretation: '已识别：Fourth Coffee 示例查询'
       };
     }
   }
@@ -247,7 +264,7 @@ export function processQuery(query: string, ontology: Ontology): QueryResponse {
     ) {
       return {
         query,
-        result: `**${rel.name}** connects **${fromEntity?.name ?? rel.from}** to **${toEntity?.name ?? rel.to}** (${rel.cardinality}).${rel.description ? `\n\n${rel.description}` : ''}`,
+        result: `**${rel.name}** 将 **${fromEntity?.name ?? rel.from}** 连接到 **${toEntity?.name ?? rel.to}**（${rel.cardinality}）。${rel.description ? `\n\n${rel.description}` : ''}`,
         highlightEntities: [rel.from, rel.to],
         highlightRelationships: [rel.id],
         interpretation: `已识别：查询关系 ${rel.name}`
@@ -257,10 +274,23 @@ export function processQuery(query: string, ontology: Ontology): QueryResponse {
 
   for (const entity of entities) {
     const entityNameLower = entity.name.toLowerCase();
+    const aliases = entityAliases(entity);
     
-    if (normalizedQuery.includes(`${entityNameLower} 如何`) || normalizedQuery.includes(`如何连接到 ${entityNameLower}`) || normalizedQuery.includes(`how does ${entityNameLower}`) ||
-        normalizedQuery.includes(`${entityNameLower} connect`) ||
-        normalizedQuery.includes(`${entityNameLower} relate`)) {
+    if (
+      aliases.some(alias =>
+        normalizedQuery.includes(`${alias} 如何`)
+        || normalizedQuery.includes(`${alias}如何`)
+        || normalizedQuery.includes(`如何连接到 ${alias}`)
+        || normalizedQuery.includes(`如何连接到${alias}`)
+        || normalizedQuery.includes(`${alias} 的关系`)
+        || normalizedQuery.includes(`${alias}有什么关系`)
+        || normalizedQuery.includes(`与 ${alias}`)
+        || normalizedQuery.includes(`和 ${alias}`)
+      ) ||
+      normalizedQuery.includes(`how does ${entityNameLower}`) ||
+      normalizedQuery.includes(`${entityNameLower} connect`) ||
+      normalizedQuery.includes(`${entityNameLower} relate`)
+    ) {
       
       const relatedRels = relationships.filter(r => r.from === entity.id || r.to === entity.id);
       
@@ -275,7 +305,7 @@ export function processQuery(query: string, ontology: Ontology): QueryResponse {
 
         return {
           query,
-          result: `**${entity.name}** ${entity.icon} has ${relatedRels.length} connection(s):\n\n${relList}`,
+          result: `**${entity.name}** ${entity.icon} 共有 ${relatedRels.length} 个关联关系：\n\n${relList}`,
           highlightEntities: [entity.id, ...relatedRels.map(r => r.from === entity.id ? r.to : r.from)],
           highlightRelationships: relatedRels.map(r => r.id),
         interpretation: `已识别：查询 ${entity.name} 的关系`
@@ -303,7 +333,7 @@ export function processQuery(query: string, ontology: Ontology): QueryResponse {
   // Counting queries
   if (normalizedQuery.includes('how many') || normalizedQuery.includes('有多少') || normalizedQuery.includes('多少')) {
     for (const entity of entities) {
-      if (normalizedQuery.includes(entity.name.toLowerCase())) {
+      if (entityAliases(entity).some(alias => normalizedQuery.includes(alias))) {
         return {
           query,
           result: `本体定义了 **${entity.name}** 实体类型。\n\n_在实际应用中，此查询会统计数据平台中的 ${entity.name} 记录。_\n\n示例："SELECT COUNT(*) FROM ${entity.name.toLowerCase()}s"`,

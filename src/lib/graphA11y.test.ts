@@ -35,29 +35,29 @@ function ontology(name: string, entities: number, rels: number): Ontology {
 describe('describeOntologyGraph', () => {
   it('names the ontology and counts its full model', () => {
     expect(describeOntologyGraph(ontology('Fourth Coffee', 6, 7))).toBe(
-      'Fourth Coffee ontology graph: 6 entity types, 7 relationships. Interactive diagram.',
+      'Fourth Coffee 本体图谱：6 种实体类型，7 种关系。 交互式图谱。',
     );
   });
 
   it('uses singular nouns for a count of one', () => {
-    expect(describeOntologyGraph(ontology('Tiny', 1, 1))).toContain('1 entity type, 1 relationship.');
+    expect(describeOntologyGraph(ontology('Tiny', 1, 1))).toContain('1 种实体类型，1 种关系。');
   });
 
   it('describes an empty ontology without crashing', () => {
     expect(describeOntologyGraph(ontology('Blank', 0, 0))).toBe(
-      'Blank ontology graph: 0 entity types, 0 relationships. Interactive diagram.',
+      'Blank 本体图谱：0 种实体类型，0 种关系。 交互式图谱。',
     );
   });
 
   it('falls back to a generic subject when the ontology is unnamed', () => {
     expect(describeOntologyGraph(ontology('', 2, 1))).toBe(
-      'Ontology graph: 2 entity types, 1 relationship. Interactive diagram.',
+      '本体图谱：2 种实体类型，1 种关系。 交互式图谱。',
     );
   });
 
   it('ignores a whitespace-only ontology name', () => {
     expect(describeOntologyGraph(ontology('   ', 2, 1))).toBe(
-      'Ontology graph: 2 entity types, 1 relationship. Interactive diagram.',
+      '本体图谱：2 种实体类型，1 种关系。 交互式图谱。',
     );
   });
 
@@ -67,7 +67,7 @@ describe('describeOntologyGraph', () => {
       visibleNodeCount: 4,
       visibleEdgeCount: 3,
     })).toBe(
-      'Taxonomy ontology graph: 350 entity types, 349 relationships. Semantic overview showing 4 entity types and 3 relationships. Interactive diagram.',
+      'Taxonomy 本体图谱：350 种实体类型，349 种关系。 语义概览显示 4 种实体类型和 3 种关系。 交互式图谱。',
     );
   });
 
@@ -76,7 +76,7 @@ describe('describeOntologyGraph', () => {
       mode: 'bounded',
       visibleNodeCount: 1,
       visibleEdgeCount: 0,
-    })).toContain('Semantic overview showing 1 entity type and 0 relationships.');
+    })).toContain('语义概览显示 1 种实体类型和 0 种关系。');
   });
 
   it('does not describe dense complete graphs as semantic overviews', () => {
@@ -85,7 +85,7 @@ describe('describeOntologyGraph', () => {
       visibleNodeCount: 90,
       visibleEdgeCount: 89,
     })).toBe(
-      'Dense ontology graph: 90 entity types, 89 relationships. Interactive diagram.',
+      'Dense 本体图谱：90 种实体类型，89 种关系。 交互式图谱。',
     );
   });
 });

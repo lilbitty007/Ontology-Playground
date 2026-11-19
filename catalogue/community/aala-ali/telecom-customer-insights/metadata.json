@@ -1,6 +1,6 @@
 {
-  "name": "Telecom Customer Insights",
-  "description": "Models telecom customer behavior, usage patterns, churn risk, offers, campaigns, devices, and revenue relationships.",
+  "name": "电信客户洞察",
+  "description": "对电信客户行为、使用模式、流失风险、优惠方案、营销活动、设备与收入关系进行建模。",
   "icon": "📶",
   "category": "general",
   "tags": [

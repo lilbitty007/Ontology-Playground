@@ -37,7 +37,7 @@ export function validateQueryQuestSteps(quests: Quest[], ontology: Ontology): Qu
       }
 
       const response = processQuery(query, ontology);
-      const fellBack = response.result.startsWith(`I couldn't interpret`);
+      const fellBack = response.result.startsWith(`I couldn't interpret`) || response.result.startsWith('无法理解有关');
       const emptyResult = response.result.trim().length === 0;
       const lacksContext = !response.interpretation && response.highlightEntities.length === 0 && response.highlightRelationships.length === 0;
 

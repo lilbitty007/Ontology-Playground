@@ -1,8 +1,14 @@
 {
-  "name": "Elements of Software",
-  "description": "A reusable reference model for common SaaS and business-application concepts, including parties, roles, work, products, subscriptions, billing, interactions, automations, permissions, and audit events.",
+  "name": "软件要素",
+  "description": "一个可复用的参考模型，涵盖常见的 SaaS 与业务应用概念，包括参与方、角色、工作事项、产品、订阅、计费、交互、自动化、权限与审计事件。",
   "icon": "🧪",
   "category": "technology",
-  "tags": ["saas", "patterns", "party-role", "crm", "modeling"],
+  "tags": [
+    "saas",
+    "patterns",
+    "party-role",
+    "crm",
+    "modeling"
+  ],
   "author": "daocoding"
 }

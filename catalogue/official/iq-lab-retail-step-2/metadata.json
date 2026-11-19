@@ -1,6 +1,6 @@
 {
-  "name": "Retail Supply Chain — Step 2: Order Details & Categories",
-  "description": "OrderLine and ProductCategory add detail and grouping",
+  "name": "零售供应链 — 第 2 步：订单明细与品类",
+  "description": "OrderLine 与 ProductCategory 增加明细与分组",
   "icon": "📝",
   "category": "school",
   "tags": [

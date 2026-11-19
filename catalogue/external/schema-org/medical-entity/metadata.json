@@ -1,9 +1,15 @@
 {
-  "name": "Schema.org — MedicalEntity",
-  "description": "Medical conditions, drugs, procedures, and healthcare providers — a health-domain subset of Schema.org.",
+  "name": "Schema.org — 医疗实体",
+  "description": "疾病、药物、诊疗程序与医疗服务提供者——Schema.org 的健康领域子集。",
   "category": "healthcare",
   "author": "Schema.org (adapted)",
-  "tags": ["schema-org", "medical", "health", "drug", "hospital"],
+  "tags": [
+    "schema-org",
+    "medical",
+    "health",
+    "drug",
+    "hospital"
+  ],
   "license": "CC-BY-SA-3.0",
   "sourceUrl": "https://schema.org/version/latest/schemaorg-current-https.rdf"
 }

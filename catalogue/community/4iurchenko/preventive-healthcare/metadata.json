@@ -1,9 +1,9 @@
 {
-  "name": "Preventive Healthcare Wellbeing Check",
+  "name": "预防性医疗健康检查",
   "author": "Iurii Iurchenko",
   "fabric_forum_user_name": "4iurchenko",
   "author_linkedin": "https://www.linkedin.com/in/4iurchenko/",
-  "description": "Domain ontology for a U.S. direct-to-consumer wellbeing-check subscription service for working-age adults.",
+  "description": "面向美国直接面向消费者（DTC）模式、服务于工作年龄人群的健康检查订阅服务的领域本体。",
   "category": "healthcare",
   "tags": [
     "healthcare",

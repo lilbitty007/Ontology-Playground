@@ -1,8 +1,15 @@
 {
-  "name": "DevOps Value Stream & Release Intelligence",
-  "description": "Models the full software delivery chain from feature request through work items, CI/CD build pipelines, and deployment releases to production incidents and post-mortems, enabling AI agents to trace which feature caused a production failure and who is accountable.",
+  "name": "DevOps 价值流与发布智能",
+  "description": "对从功能请求经过工作项、CI/CD 构建流水线与部署发布，直到生产事件与复盘的完整软件交付链路建模，使 AI 智能体能够追溯哪个功能引发了生产故障以及责任归属是谁。",
   "icon": "🚀",
   "category": "general",
-  "tags": ["devops", "cicd", "release-management", "incident-response", "software-delivery", "fabric-iq"],
+  "tags": [
+    "devops",
+    "cicd",
+    "release-management",
+    "incident-response",
+    "software-delivery",
+    "fabric-iq"
+  ],
   "author": "demonjd2026-afk"
 }

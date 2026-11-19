@@ -1,9 +1,15 @@
 {
   "name": "Brick Schema 1.4.4",
-  "description": "The BSD-licensed Brick ontology for describing buildings, equipment, points, locations, systems, and their relationships.",
+  "description": "采用 BSD 许可的 Brick 本体，用于描述建筑物、设备、点位、位置、系统及其关系。",
   "icon": "🧱",
   "category": "technology",
-  "tags": ["buildings", "iot", "building-automation", "schema", "open-source"],
+  "tags": [
+    "buildings",
+    "iot",
+    "building-automation",
+    "schema",
+    "open-source"
+  ],
   "author": "Brick Consortium",
   "license": "BSD-3-Clause",
   "sourceUrl": "https://github.com/BrickSchema/Brick/tree/v1.4.4",
