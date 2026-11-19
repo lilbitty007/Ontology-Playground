@@ -6,99 +6,99 @@ order: 2
 embed: official/iq-lab-retail-step-1
 ---
 
-## The foundation
+## 基础
 
-Every retail system starts with three core concepts:
+每个零售系统都以三个核心概念开始：
 
-- **Customer** — who is buying?
-- **Order** — what transaction happened?
-- **Product** — what was purchased?
+- **客户** - 谁在购买？
+- **订单** — 发生了什么交易？
+- **产品** — 购买了什么？
 
-These three entity types form the heart of the ontology. Everything else we add in later steps connects back to them.
+这三种实体类型构成了本体的核心。我们在后续步骤中添加的所有其他内容都会连接回它们。
 
-## Defining entity types
+## 定义实体类型
 
-Each entity type needs:
+每个实体类型需要：
 
-1. A **name** — singular, descriptive (e.g. `Customer`, not `Customers` or `tbl_cust`)
-2. An **identifier property** — a unique key for each instance
-3. **Properties** — the attributes that describe each instance
+1. A **名称** — 单数、描述性（例如 `Customer`，而不是 `Customers`或 `tbl_cust`)
+2. **标识符属性** — 每个实例的唯一键
+3. **属性** — 描述每个实例的属性
 
-### Customer
+### 客户
 
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `customerId` | string | ✓ |
-| `name` | string | |
-| `email` | string | |
-| `loyaltyTier` | string | |
-| `lifetimeValue` | decimal (USD) | |
+| `customerId` |字符串| ✓ |
+| `name` |字符串| |
+| `email` |字符串| |
+| `loyaltyTier` |字符串| |
+| `lifetimeValue` |小数（美元）| |
 
-The `customerId` uniquely identifies each customer. Properties like `loyaltyTier` and `lifetimeValue` are business-meaningful names that map to potentially cryptic column names in the source database.
+`customerId` 唯一标识每个客户。 `loyaltyTier` 和 `lifetimeValue` 等属性是具有业务意义的名称，它们映射到源数据库中潜在的神秘列名称。
 
-### Order
+### 订单
 
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `orderId` | string | ✓ |
-| `orderDate` | datetime | |
-| `status` | string | |
-| `totalAmount` | decimal (USD) | |
+| `orderId` |字符串| ✓ |
+| `orderDate` |日期时间 | |
+| `status` |字符串| |
+| `totalAmount` |小数（美元）| |
 
-### Product
+### 产品
 
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `productId` | string | ✓ |
-| `name` | string | |
-| `unitCost` | decimal (USD) | |
-| `discountPercent` | decimal (%) | |
+| `productId` |字符串| ✓ |
+| `name` |字符串| |
+| `unitCost` |小数（美元）| |
+| `discountPercent` |小数 (%) | |
 
-## Connecting with relationships
+## 连接关系
 
-Entities alone are just isolated tables. **Relationships** turn them into a connected graph:
+单独的实体只是孤立的表。 **关系**将它们变成一个连通图：
 
-- **OrderPlacedByCustomer** — `Order` → `Customer` (many-to-one)
-  Each order is placed by exactly one customer, but a customer can place many orders.
+- **OrderPlacedByCustomer** — `Order` → `Customer`（多对一）
+每个订单都由一位客户下单，但一个客户可以下多个订单。
 
-- **OrderContainsProduct** — `Order` → `Product` (many-to-many)
-  An order can contain multiple products, and a product can appear in multiple orders.
+- **OrderContainsProduct** — `Order` → `Product`（多对多）
+一个订单可以包含多个产品，一个产品可以出现在多个订单中。
 
-### Cardinality matters
+### 基数很重要
 
-The cardinality tells the system how to count and aggregate:
+基数告诉系统如何计数和聚合：
 
-| Cardinality | Meaning | Example |
+|基数 |意义|示例|
 |---|---|---|
-| one-to-one | Exactly one on each side | Employee → Badge |
-| one-to-many | One parent, many children | Customer → Orders |
-| many-to-one | Many children, one parent | Orders → Customer |
-| many-to-many | No restriction | Orders ↔ Products |
+|一对一|每边正好一个 |员工 → 徽章 |
+|一对多 |一位父母，许多孩子|客户→订单|
+|多对一 |多个孩子，一位家长|订单 → 客户 |
+|多对多 |无限制 |订单 ↔ 产品 |
 
-Choosing the right cardinality ensures that queries like "How many orders did each customer place?" return correct counts.
+选择正确的基数可确保诸如“每个客户下了多少订单？”之类的查询。返回正确的计数。
 
-## The graph so far
+## 到目前为止的图
 
-With just three entities and two relationships, we already have a connected graph:
+只需三个实体和两个关系，我们就已经有了一个连接图：
 
 <ontology-embed id="official/iq-lab-retail-step-1" height="350px"></ontology-embed>
 
-*Customer, Order, and Product connected by two relationships. This is the foundation everything else builds on.*
+*客户、订单和产品由两个关系连接。这是其他一切构建的基础。*
 
-## What we learned
+## 我们学到了什么
 
-- Every entity type needs an identifier property
-- Use business-meaningful names, not internal column names
-- Relationships have cardinality that affects how data is counted
-- Even three entities create a useful connected graph
+- 每个实体类型都需要一个标识符属性
+- 使用具有业务意义的名称，而不是内部列名称
+- 关系具有影响数据计数方式的基数
+- 即使三个实体也可以创建有用的连通图
 
 ```quiz
-Q: A Customer can place many Orders, but each Order belongs to one Customer. What cardinality is this?
-- One-to-one
-- Many-to-many
-- One-to-many [correct]
-- Many-to-one
-> From Customer's perspective this is one-to-many: one customer can have many orders. From Order's perspective it's many-to-one. The relationship is defined as Customer → Order with one-to-many cardinality.
+Q:一个客户可以下多个订单，但每个订单属于一个客户。这是什么基数？
+- 一对一
+- 多对多
+- 一对多 [correct]
+- 多对一
+> 从客户的角度来看，这是一对多：一个客户可以有多个订单。从Order的角度来看，它是多对一的。该关系被定义为具有一对多基数的客户→订单。
 ```
 
-Next, we'll add detail to orders and organize products into categories.
+接下来，我们将向订单添加详细信息并将产品组织到类别中。

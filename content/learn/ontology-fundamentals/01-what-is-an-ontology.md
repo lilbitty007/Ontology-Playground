@@ -6,61 +6,61 @@ order: 1
 embed: official/cosmic-coffee
 ---
 
-## Thinking in graphs
+## 用关系图思考
 
-Imagine you're describing a coffee shop. You'd talk about **things** — stores, products, customers, orders — and the **connections** between them: a customer *places* an order, an order *contains* products, a store *stocks* products.
+想象一下，你正在介绍一家咖啡店。你会说到各种**事物**——门店、产品、顾客、订单——以及它们之间的**联系**：顾客*下单*，订单*包含*产品，门店*销售*产品。
 
-An **ontology** is a formal way of describing exactly that: the types of things in a domain and how they relate to each other. It's a blueprint for your data — not the data itself, but the *shape* of the data.
+**本体**就是用正式的方式描述这些内容：某个领域中有哪些事物类型，以及它们彼此如何关联。本体是数据的蓝图——它描述的不是数据本身，而是数据的*结构*。
 
-## Entities, properties, and relationships
+## 实体、属性和关系
 
-Every ontology is built from three building blocks:
+每个本体都由三个基本要素组成：
 
-| Concept | What it means | Example |
+| 概念 | 含义 | 示例 |
 |---------|--------------|---------|
-| **Entity type** | A category of thing | `Customer`, `Product`, `Store` |
-| **Property** | A fact about an entity | `Customer.name`, `Product.price` |
-| **Relationship** | A connection between entities | `Customer → places → Order` |
+| **实体类型** | 一类事物 | `Customer`（顾客）、`Product`（产品）、`Store`（门店） |
+| **属性** | 关于某个实体的信息 | `Customer.name`、`Product.price` |
+| **关系** | 实体之间的联系 | `Customer → places → Order`（顾客下单） |
 
-Properties have **types** — text, numbers, dates, booleans — and every entity needs at least one **identifier property** (like a customer ID) that uniquely distinguishes each instance.
+属性有自己的**数据类型**，例如文本、数字、日期和布尔值。每个实体至少需要一个**标识符属性**（例如顾客 ID），用来唯一地区分每个实例。
 
-## Why ontologies matter
+## 本体为何重要
 
-Without an ontology, your data is just tables and columns. With one, a system can understand that "revenue" is the sum of `Order.totalAmount` grouped by `Store.city` — because the ontology tells it how those concepts connect.
+没有本体时，数据只是一些表和列。有了本体，系统就能理解“收入”是按 `Store.city`（门店城市）分组后汇总 `Order.totalAmount`（订单总额）得到的，因为本体说明了这些概念之间如何关联。
 
-This is the foundation of **semantic data models**: instead of writing SQL by hand, you describe what you want in plain language and the system uses the ontology to generate the right query.
+这也是**语义数据模型**的基础：你不必手写 SQL，而是用日常语言描述需求，由系统根据本体生成正确的查询。
 
 <ontology-embed id="official/cosmic-coffee" height="400px"></ontology-embed>
 
-*The Fourth Coffee ontology above models a coffee shop chain. Click any node to inspect its properties, or click an edge to see the relationship details.*
+*上方的 Fourth Coffee 本体展示了一家咖啡连锁店。点击任意节点可查看其属性，点击连线可查看关系详情。*
 
-## From concept to code
+## 从概念到代码
 
-Ontologies are typically represented in **RDF/OWL** — an XML-based standard for describing classes, properties, and relationships. You don't need to write XML by hand, though: tools like the [Ontology Designer](#/designer) let you build one visually and export valid RDF.
+本体通常使用 **RDF/OWL** 表示。这是一种基于 XML、用于描述类、属性和关系的标准。不过你不必手写 XML，可以使用[本体设计器](#/designer)等工具进行可视化建模，并导出符合标准的 RDF。
 
-## Key takeaways
+## 要点回顾
 
-- An ontology defines the **types of things** in a domain and **how they relate**
-- It's a schema, not data — it describes the shape, not the content
-- It enables semantic querying: ask questions in natural language, get structured answers
-- The standard format is **RDF/OWL**, but you can also work with JSON representations
+- 本体定义某个领域中有哪些**事物类型**，以及它们**如何关联**
+- 本体是结构定义，不是数据本身；它描述数据的形状，而非具体内容
+- 本体支持语义查询：用自然语言提问，获取结构化答案
+- 标准格式是 **RDF/OWL**，也可以使用 JSON 表示
 
 ```quiz
-Q: Which of the following is NOT a building block of an ontology?
-- Entity type
-- Property
-- SQL query [correct]
-- Relationship
-> Ontologies are built from entity types, properties, and relationships. SQL queries are how you retrieve data — they are not part of the ontology definition itself.
+Q: 以下哪一项不是本体的基本组成要素？
+- 实体类型
+- 属性
+- SQL 查询 [correct]
+- 关系
+> 本体由实体类型、属性和关系构成。SQL 查询用于检索数据，本身并不属于本体定义。
 ```
 
 ```quiz
-Q: What is the purpose of an identifier property?
-- To store the entity's colour
-- To uniquely distinguish each instance of an entity [correct]
-- To connect two entities together
-- To define the data format
-> An identifier property (like a customer ID) uniquely identifies each instance within an entity type, allowing the system to count, group, and join correctly.
+Q: 标识符属性的作用是什么？
+- 存储实体的颜色
+- 唯一区分实体的每个实例 [correct]
+- 连接两个实体
+- 定义数据格式
+> 标识符属性（例如顾客 ID）可唯一标识某种实体类型中的每个实例，让系统能够正确计数、分组和关联数据。
 ```
 
-Ready to see how RDF works under the hood? Continue to the next article.
+准备好了解 RDF 如何运作了吗？请继续阅读下一篇文章。

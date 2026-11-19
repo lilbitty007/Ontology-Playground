@@ -5,11 +5,11 @@ description: "Understand how disruptions cascade — the 7 relationships that mo
 order: 3
 ---
 
-## The cascade: 7 relationships
+## 级联：7 个关系
 
-The power of your ontology lies in its relationships — they encode how impact flows through your supply chain. A data agent follows these paths to answer questions like "How many product lines are exposed to this supplier failure?"
+本体的力量在于其关系 - 它们编码影响如何流经供应链。数据代理遵循这些路径来回答诸如“有多少产品线面临该供应商故障的影响？”之类的问题。
 
-### 1. **Supplier supplies Component** (one-to-many)
+### 1. **供应商供应组件**（一对多）
 
 ```
 Supplier "ChipX Corp" 
@@ -18,10 +18,10 @@ Supplier "ChipX Corp"
          → Component "Power Supply"
 ```
 
-- **Why it matters**: Disrupting one supplier affects all its dependent components
-- **Query example**: "Show me all components from suppliers in Taiwan"
+- **为什么重要**：中断一个供应商会影响其所有依赖组件
+- **查询示例**：“显示台湾供应商的所有组件”
 
-### 2. **Component used in ProductLine** (many-to-many)
+### 2. **ProductLine 中使用的组件**（多对多）
 
 ```
 Component "GPU Module"
@@ -30,10 +30,10 @@ Component "GPU Module"
        → ProductLine "Tablet Plus"
 ```
 
-- **Why it matters**: A single component failure can halt multiple product lines
-- **Query example**: "How many product lines depend on this component?"
+- **为什么重要**：单个组件故障可能会停止多个产品线
+- **查询示例**：“有多少产品线依赖于该组件？”
 
-### 3. **DisruptionEvent affects Supplier** (many-to-many)
+### 3. **DisruptionEvent 影响供应商**（多对多）
 
 ```
 DisruptionEvent "Taiwan Power Outage 2024-05-01"
@@ -41,10 +41,10 @@ DisruptionEvent "Taiwan Power Outage 2024-05-01"
         → Supplier "Memory Inc"
 ```
 
-- **Why it matters**: One disaster can hit multiple suppliers simultaneously
-- **Query example**: "Which suppliers are in the flood zone?"
+- **为什么重要**：一场灾难可以同时袭击多个供应商
+- **查询示例**：“哪些供应商位于洪水区？”
 
-### 4. **DisruptionEvent triggers RiskAssessment** (one-to-many)
+### 4. **DisruptionEvent 触发 RiskAssessment**（一对多）
 
 ```
 DisruptionEvent "Taiwan Power Outage"
@@ -52,10 +52,10 @@ DisruptionEvent "Taiwan Power Outage"
          → RiskAssessment "Workstation - Impact Analysis"
 ```
 
-- **Why it matters**: Each disruption triggers detailed impact analysis for affected product lines
-- **Query example**: "What's the total revenue at risk from this disruption?"
+- **为什么重要**：每次中断都会触发受影响产品线的详细影响分析
+- **查询示例**：“这次中断带来的风险总收入是多少？”
 
-### 5. **RiskAssessment recommends MitigationAction** (one-to-many)
+### 5. **风险评估建议采取缓解措施**（一对多）
 
 ```
 RiskAssessment "Gaming Laptop - Impact Analysis"
@@ -64,10 +64,10 @@ RiskAssessment "Gaming Laptop - Impact Analysis"
            → MitigationAction "Redesign Component"
 ```
 
-- **Why it matters**: Each impact analysis produces a prioritized action list
-- **Query example**: "What's the best action to minimize disruption impact?"
+- **为什么重要**：每次影响分析都会生成一个按优先顺序排列的操作列表
+- **查询示例**：“最大限度地减少中断影响的最佳操作是什么？”
 
-### 6. **MitigationAction activates AlternativeSupplier** (many-to-many)
+### 6. **MitigationAction 激活 AlternativeSupplier**（多对多）
 
 ```
 MitigationAction "Activate Alt Supplier X"
@@ -75,10 +75,10 @@ MitigationAction "Activate Alt Supplier X"
           → AlternativeSupplier "SemiCorp Japan"
 ```
 
-- **Why it matters**: One action can bring multiple backups online simultaneously
-- **Query example**: "Which pre-qualified suppliers can take over?"
+- **为什么重要**：一项操作可以使多个备份同时在线
+- **查询示例**：“哪些通过资格预审的供应商可以接管？”
 
-### 7. **AlternativeSupplier canReplace Supplier** (many-to-one)
+### 7. **替代供应商可以替换供应商**（多对一）
 
 ```
 AlternativeSupplier "ChipX Europe"
@@ -88,12 +88,12 @@ AlternativeSupplier "SemiCorp Japan"
   canReplace→ Supplier "ChipX Corp"
 ```
 
-- **Why it matters**: Multiple approved backups exist for critical suppliers
-- **Query example**: "Is there an approved backup for this supplier?"
+- **为什么重要**：关键供应商存在多个经批准的备份
+- **查询示例**：“该供应商是否有经批准的备份？”
 
-## The complete cascade example
+## 完整的级联示例
 
-Let's trace impact through a real scenario:
+让我们通过一个真实场景来追踪影响：
 
 ```
 DISRUPTION
@@ -136,27 +136,27 @@ DISRUPTION
 │     │     └─ (similar cascade...)
 ```
 
-## Why this structure enables automation
+## 为什么此结构可以实现自动化
 
-Your data agent can now:
+您的数据代理现在可以：
 
-1. **Detect** — "Monitor these suppliers and this region"
-2. **Trace** — "When ChipX Corp has issues, automatically trace to all 14 affected product lines"
-3. **Quantify** — "Calculate total revenue at risk ($80M) and time to impact (3 days)"
-4. **Recommend** — "Activate pre-qualified alternatives that save 2 days and cost $2M vs. $80M loss"
-5. **Act** — "Send procurement alerts, update production schedules, notify stakeholders"
-6. **Learn** — "Track which actions actually worked and their real vs. estimated impact"
+1. **检测** —“监控这些供应商和该地区”
+2. **追踪** —“当 ChipX Corp 出现问题时，自动追踪到所有 14 个受影响的产品线”
+3. **量化** - “计算风险总收入（8000 万美元）和影响时间（3 天）”
+4. **推荐** - “激活经过资格预审的替代方案，节省 2 天时间并花费 200 万美元，而损失则为 8000 万美元”
+5. **行动** - “发送采购警报，更新生产计划，通知利益相关者”
+6. **学习** —“跟踪哪些操作实际有效，以及它们的实际影响与估计影响”
 
-## Cardinality rules
+## 基数规则
 
-| Relationship | Cardinality | Why |
+|关系 |基数 |为什么 |
 |---|---|---|
-| Supplier → Component | 1:N | One supplier may provide many components |
-| Component → ProductLine | M:N | Components reused; products share components |
-| Disruption → Supplier | M:N | One disaster hits multiple suppliers; supplier faces multiple threats |
-| Disruption → Assessment | 1:N | Each disruption spawns assessments for each affected product line |
-| Assessment → Action | 1:N | Each assessment recommends multiple actions |
-| Action → Alternative | M:N | One action activates multiple backups; backups handle multiple situations |
-| Alternative → Supplier | M:1 | Multiple pre-qualified backups exist for one primary supplier |
+|供应商 → 组件 | 1：N |一个供应商可能提供多种组件|
+|组件 → 产品线 |中号：中号 |组件重复使用；产品共享组件|
+|颠覆→供应商|中号：中号 |一场灾难袭击了多个供应商；供应商面临多重威胁|
+|颠覆→评估| 1：N |每次中断都会对每个受影响的产品线进行评估|
+|评估→行动| 1：N |每项评估都建议采取多项行动 |
+|行动→替代|中号：中号 |一次操作激活多个备份；备份处理多种情况|
+|替代方案 → 供应商 |中号：1 |一个主要供应商存在多个经过资格预审的备份 |
 
-Next, we'll see how to use this model to execute mitigation workflows in practice.
+接下来，我们将了解如何在实践中使用此模型来执行缓解工作流程。

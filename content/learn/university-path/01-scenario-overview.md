@@ -5,39 +5,39 @@ description: "Meet the University System — an academic institution that needs 
 order: 1
 ---
 
-## The scenario
+## 场景
 
-You are designing the data model for a **university management system**. The institution tracks:
+您正在为**大学管理系统**设计数据模型。该机构跟踪：
 
-- **Students** with their enrollment status, GPA, and academic standing
-- **Courses** with credit hours, levels, and prerequisites
-- **Enrollments** recording which students take which courses and their grades
-- **Professors** teaching courses with their rank, tenure status, and office hours
-- **Departments** organizing academic programs and housing faculty
+- **学生**及其注册状况、GPA 和学术地位
+- **课程** 包含学分、级别和先决条件
+- **注册**记录学生选修哪些课程及其成绩
+- **教授**教授课程及其等级、任期状态和办公时间
+- **部门** 组织学术课程和为教师提供住宿
 
-Data lives across student information systems (SIS), learning management systems (LMS), human resources, and academic planning databases.
+数据存在于学生信息系统 (SIS)、学习管理系统 (LMS)、人力资源和学术规划数据库中。
 
-## Why an ontology?
+## 为什么是本体？
 
-An academic question like **"Which departments have professors teaching courses where over 50% of enrolled students scored below a C?"** crosses departmental records, faculty assignments, course offerings, and student grades.
+像**“哪些院系的教授教授的课程超过 50% 的注册学生得分低于 C？”** 的学术问题涉及院系记录、教师作业、课程设置和学生成绩。
 
-With an ontology, this maps to: `Department → Professor → Course → Enrollment (grade < C) ← Student`.
+通过本体，这映射到：`Department → Professor → Course → Enrollment (grade < C) ← Student`。
 
-## What we'll build
+## 我们将构建什么
 
-| Step | Entities | What you'll learn |
+|步骤|实体|你将学到什么 |
 |---|---|---|
-| 1 | Student, Course, Enrollment | Academic records, many-to-many through junction entities |
-| 2 | + Professor | Faculty assignments, teaching relationships |
-| 3 | + Department | Organizational structure, hierarchy |
+| 1 |学生、课程、入学 |学术记录，通过联结实体进行多对多|
+| 2 | + 教授 |教师作业、教学关系 |
+| 3 | + 部门 |组织结构、层级|
 
-By the end, you'll have a 5-entity, 6-relationship ontology covering the complete academic administration model.
+到最后，您将拥有一个涵盖完整学术管理模型的 5 个实体、6 个关系本体。
 
-## Key concepts
+## 关键概念
 
-- **Junction entities** — Enrollment resolves the Student–Course many-to-many relationship
-- **Academic hierarchies** — Departments organize professors and courses
-- **Grade tracking** — letter grades and GPA as ontology properties
-- **Temporal data** — semesters, enrollment dates, academic years
+- **连接实体** — 注册解决学生与课程的多对多关系
+- **学术层次结构** — 院系组织教授和课程
+- **成绩跟踪** — 字母成绩和 GPA 作为本体属性
+- **时间数据** — 学期、入学日期、学年
 
-Let's start with the academic core.
+让我们从学术核心开始。

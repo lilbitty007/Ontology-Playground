@@ -7,57 +7,57 @@ embed: official/fibo-risk-step-4
 reviewStatus: under-human-review
 ---
 
-## Closing the loop
+## 闭环
 
-The first three steps built reference data: industry, geography, and loan classification. In this final step we add the **regulatory enforcement layer** — the regulations and quantitative limits that constrain portfolio concentration.
+前三个步骤构建了参考数据：行业、地理和贷款分类。在最后一步中，我们添加了**监管执行层**——限制投资组合集中度的法规和数量限制。
 
-This is where the ontology becomes operationally powerful: you can now trace from a specific loan to its concentration category to the regulatory limits that apply, and know which regulation mandates each limit.
+这就是本体在操作上变得强大的地方：您现在可以从特定贷款到其集中度类别再到适用的监管限制，并了解哪些法规强制执行每个限制。
 
-## New entity types
+## 新实体类型
 
-### Regulation
+### 法规
 
-A regulatory framework issued by a banking authority.
+银行机构发布的监管框架。
 
-| Property | Type | Notes |
+|属性 |类型 |笔记|
 |---|---|---|
-| `regulationCode` | string | Identifier (e.g., "OCC_CRE_2006") |
-| `name` | string | Regulation name |
-| `issuingAuthority` | string | Who issued it (OCC, FDIC, Basel Committee) |
-| `effectiveDate` | date | When it took effect |
-| `scope` | string | What it covers |
-| `description` | string | Full description |
+| `regulationCode` |字符串|标识符（例如“OCC_CRE_2006”）|
+| `name` |字符串|法规名称 |
+| `issuingAuthority` |字符串|由谁签发（OCC、FDIC、巴塞尔委员会）|
+| `effectiveDate` |日期 |什么时候生效 |
+| `scope` |字符串|它涵盖什么 |
+| `description` |字符串|完整描述 |
 
 ### RegulatoryLimit
 
-A specific quantitative threshold from a regulation.
+法规中的特定定量阈值。
 
-| Property | Type | Notes |
+|属性 |类型 |笔记|
 |---|---|---|
-| `limitId` | string | Identifier |
-| `limitName` | string | Display name |
-| `category` | string | What dimension it constrains |
-| `thresholdPct` | decimal (%) | The limit value |
-| `severity` | string | Consequences of breach (e.g., "warning", "action required", "supervisory intervention") |
-| `description` | string | What this limit means |
+| `limitId` |字符串|标识符 |
+| `limitName` |字符串|显示名称 |
+| `category` |字符串|它限制什么维度？
+| `thresholdPct` |小数 (%) |极限值|
+| `severity` |字符串|违规后果（例如“警告”、“需要采取行动”、“监督干预”）|
+| `description` |字符串|这个限制意味着什么 |
 
-Key examples:
+关键示例：
 
-| Limit | Threshold | Regulation |
+|限制|门槛|监管 |
 |---|---|---|
-| CRE concentration | 300% of capital | OCC Guidance 2006-46 |
-| Climate + hurricane | 15% of portfolio | Internal risk policy |
-| Geographic concentration | 20% of portfolio | OCC Bulletin 2011-12 |
-| Industry concentration | 25% of portfolio | FDIC Risk Management |
+| CRE浓度| 300% 资本 | OCC 指南 2006-46 |
+|气候+飓风|投资组合的 15% |内部风险政策|
+|地理集中度|投资组合的 20% | OCC 公告 2011 年 12 月 |
+|产业集中度|投资组合的 25% | FDIC 风险管理 |
 
-## New relationships
+## 新关系
 
-- **mandatedBy**: `RegulatoryLimit` → `Regulation` (`many-to-one`) — each limit is mandated by a specific regulation
-- **limitAppliesToCategory**: `RegulatoryLimit` → `ConcentrationCategory` (`many-to-one`) — links limits to the concentration categories they constrain
+- **强制执行者**：`RegulatoryLimit` → `Regulation` (`many-to-one`) — 每个限制均由特定法规强制执行
+- **limitAppliesToCategory**: `RegulatoryLimit` → `ConcentrationCategory` (`many-to-one`) — 将限制链接到它们所约束的集中度类别
 
-## The design pattern: cross-domain bridge
+## 设计模式：跨域桥
 
-With `limitAppliesToCategory`, the regulatory layer connects to the loan classification layer via ConcentrationCategory. This completes a **cross-domain query path**:
+With `limitAppliesToCategory`，监管层通过ConcentrationCategory连接贷款分类层。这样就完成了一个**跨域查询路径**：
 
 ```
 Jurisdiction (hurricaneZone=true)
@@ -68,7 +68,7 @@ Jurisdiction (hurricaneZone=true)
           → Regulation (issuingAuthority)
 ```
 
-And from the industry side:
+而从行业角度来说：
 
 ```
 IndustryGroup (climateSensitivity="high")
@@ -76,55 +76,55 @@ IndustryGroup (climateSensitivity="high")
     → Subsector → Sector
 ```
 
-## Complete model
+## 完整模型
 
-The final ontology has **11 entity types** across four domains and **10 relationships**:
+最终本体具有跨四个域的 **11 种实体类型**和 **10 种关系**：
 
-| Domain | Entities | Relationships |
+|领域 |实体|关系 |
 |---|---|---|
-| Industry | Sector, Subsector, IndustryGroup | partOfSector, belongsToSubsector |
-| Geography | Region, Country, Jurisdiction | inCountry, inRegion |
-| Loan Classification | ConcentrationCategory, LoanType, CollateralType | loanClassifiedAs, collateralClassifiedAs, typicallySecuredBy |
-| Regulation | Regulation, RegulatoryLimit | mandatedBy, limitAppliesToCategory |
+|工业|部门、分部门、行业组|部分扇区，属于子扇区 |
+|地理 |地区、国家、司法管辖区 |在国家/地区、在地区 |
+|贷款分类|集中度类别、贷款类型、抵押品类型 |贷款分类为，抵押品分类为，通常为担保人 |
+|监管 |监管、监管限制|强制执行者、限制适用于类别 |
 
-## Step 4 graph (diff from Step 3)
+## 步骤 4 图表（与步骤 3 不同）
 
 <ontology-embed id="official/fibo-risk-step-4" diff="official/fibo-risk-step-3" height="480px"></ontology-embed>
 
-*Two new entities (Regulation and RegulatoryLimit) complete the model. The limitAppliesToCategory relationship bridges regulatory enforcement to loan classification.*
+*两个新实体（Regulation 和 RegulatoryLimit）完善了模型。 limitAppliesToCategory 关系将监管执行与贷款分类联系起来。*
 
-## Full external reference ontologies
+## 完整的外部参考本体
 
-You can also explore each domain individually in the external catalogue:
+您还可以在外部目录中单独探索每个域：
 
-- [FIBO Industry Classification](/#/catalogue/external/fibo/industry-classification)
-- [FIBO Geographic Hierarchy](/#/catalogue/external/fibo/geographic-hierarchy)
-- [FIBO Loan Classification](/#/catalogue/external/fibo/loan-classification)
-- [FIBO Regulatory Context](/#/catalogue/external/fibo/regulatory-context)
+- [FIBO Industry分类](/#/catalogue/external/fibo/行业分类)
+- [FIBO 地理层次结构](/#/catalogue/external/fibo/geographic-hierarchy)
+- [FIBO 贷款分类](/#/catalogue/external/fibo/loan-classification)
+- [FIBO 监管环境](/#/catalogue/external/fibo/regulatory-context)
 
-## What you built
+## 您构建的内容
 
-You now have a comprehensive FIBO-inspired risk management ontology that enables:
+您现在拥有一个全面的受 FIBO 启发的风险管理本体，它能够：
 
-- **Industry concentration analysis** — roll up exposure by sector, subsector, and industry group
-- **Geographic risk assessment** — filter by disaster-zone flags and cross-reference with portfolio data
-- **Basel III capital calculations** — apply standardized risk weights to loan types
-- **Regulatory compliance monitoring** — check portfolio concentration against mandated limits
+- **行业集中度分析** — 按行业、子行业和行业组汇总风险暴露
+- **地理风险评估** — 按灾区标志筛选并与投资组合数据交叉引用
+- **巴塞尔 III 资本计算** — 对贷款类型应用标准化风险权重
+- **监管合规性监控** - 根据强制限制检查投资组合集中度
 
-This model powers the kind of cross-domain risk queries that would require complex multi-table JOINs in a traditional data warehouse, but can be expressed as simple graph traversals in an ontology-driven system.
+该模型支持跨域风险查询，这种查询在传统数据仓库中需要复杂的多表 JOIN，但可以在本体驱动系统中表示为简单的图形遍历。
 
-## Licensing
+## 许可
 
-All FIBO ontology content referenced in this lab is:
+本实验中引用的所有 FIBO 本体内容为：
 
-- **Copyright** (c) 2016-2025 EDM Council, Inc. and Object Management Group, Inc.
-- **Licensed** under the [MIT License](https://opensource.org/licenses/MIT)
-
+- **版权** (c) 2016-2025 EDM Council, Inc. 和 Object Management Group, Inc.
+- **根据 [MIT 许可证](https://opensource.org/licenses/MIT)
+获得许可**
 ```quiz
-Q: What role does ConcentrationCategory play in the complete model?
-- It stores geographic coordinates
-- It acts as a hub entity connecting loan classification, collateral types, and regulatory limits across domains [correct]
-- It defines the Basel risk weight for each loan
-- It replaces the Regulation entity for compliance tracking
-> ConcentrationCategory is the central hub that bridges the loan classification domain to the regulatory domain. Both LoanType and CollateralType classify into it, and RegulatoryLimit constrains it. This makes it the key node for cross-domain concentration risk queries.
+Q:ConcentrationCategory 在完整模型中扮演什么角色？
+- 它存储地理坐标
+- 它充当跨域连接贷款分类、抵押品类型和监管限制的枢纽实体 [correct]
+- 它定义每笔贷款的巴塞尔风险权重
+- 它取代用于合规性跟踪的监管实体
+> ConcentrationCategory 是桥接贷款分类的中央枢纽域到监管域。 LoanType和Collat​​erType都属于它，RegulatoryLimit对其进行约束。这使其成为跨域集中风险查询的关键节点。
 ```

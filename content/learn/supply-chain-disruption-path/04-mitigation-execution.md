@@ -5,15 +5,15 @@ description: "Transform your ontology into operational action — how to use it 
 order: 4
 ---
 
-## From model to action
+## 从模型到操作
 
-Your ontology is now ready to power real-time decision automation. Here's how it flows from disruption detection to mitigation execution:
+您的本体现在已准备好支持实时决策自动化。以下是从中断检测到缓解执行的流程：
 
-### Phase 1: Detection (minute 0)
+### 第 1 阶段：检测（第 0 分钟）
 
-**Input**: External signal (supplier goes offline, natural disaster alert, quality issue reported)
+**输入**：外部信号（供应商离线、自然灾害警报、报告质量问题）
 
-**Your ontology enables**:
+**您的本体启用**：
 ```
 Data Agent Query:
   "Which suppliers are affected by the Taiwan earthquake?"
@@ -24,11 +24,11 @@ Data Agent Query:
   Result: 3 critical suppliers identified
 ```
 
-### Phase 2: Trace impact (minute 5)
+### 第 2 阶段：跟踪影响（第 5 分钟）
 
-**Input**: List of affected suppliers
+**输入**：受影响的供应商列表
 
-**Your ontology enables**:
+**您的本体启用**：
 ```
 Data Agent Query:
   "For these 3 suppliers, show me all components they supply"
@@ -44,11 +44,11 @@ Then: "For these 47 components, which product lines use them?"
   Result: 12 product lines exposed
 ```
 
-### Phase 3: Quantify impact (minute 15)
+### 第 3 阶段：量化影响（第 15 分钟）
 
-**Input**: List of exposed product lines
+**输入**：暴露的产品线列表
 
-**Your ontology enables**:
+**您的本体支持**：
 ```
 Calculation Engine:
   For each exposed ProductLine:
@@ -65,11 +65,11 @@ Calculation Engine:
     Affected customers: 450,000+
 ```
 
-### Phase 4: Recommend actions (minute 20)
+### 第 4 阶段：建议操作（第 20 分钟）
 
-**Input**: Risk assessment results
+**输入**：风险评估结果
 
-**Your ontology enables**:
+**您的本体启用**：
 ```
 Recommendation Engine:
   For each component in each affected product line:
@@ -89,9 +89,9 @@ Recommendation Engine:
        - Action C: Redesign component (lead time unknown)
 ```
 
-### Phase 5: Execute (minute 25)
+### 第 5 阶段：执行（第 25 分钟）
 
-**Your ontology triggers automated workflows**:
+**您的本体触发自动化工作流程**：
 
 ```
 IF RiskAssessment.revenueAtRisk > $50M AND 
@@ -109,9 +109,9 @@ IF RiskAssessment.revenueAtRisk > $50M AND
      5. Start monitoring MitigationAction.status
 ```
 
-## Real-world workflow: End-to-end
+## 真实工作流程：端到端
 
-### Day 1: Disruption detected
+### 第 1 天：检测到中断
 
 ```
 10:30 AM: Taiwan earthquake magnitude 6.8
@@ -149,7 +149,7 @@ IF RiskAssessment.revenueAtRisk > $50M AND
           ├─ Production impact reduced from 7 days → 3 days
 ```
 
-### Day 2-4: Monitoring and adjustment
+### 第 2-4 天：监控和调整
 
 ```
 Every 4 hours:
@@ -167,9 +167,9 @@ Day 3: ChipX Europe shipment received
   ├─ Revenue protected: ~$100M of $127M exposure
 ```
 
-## Connecting to Fabric IQ
+## 连接到 Fabric IQ
 
-Your ontology integrates seamlessly with Fabric IQ data agents:
+您的本体与 Fabric IQ 数据代理无缝集成：
 
 ```
 User: "What's our supply chain risk exposure right now?"
@@ -200,30 +200,30 @@ Result:
   - Semiconductor Direct USA (capacity: 25K/month, +15% cost)
 ```
 
-## Continuous improvement
+## 持续改进
 
-Track the effectiveness of your mitigation model:
+跟踪缓解模型的有效性：
 
-| Metric | Calculation | Goal |
+|公制|计算|目标|
 |--------|-------------|------|
-| Detection speed | Hours from disruption to RiskAssessment | < 1 hour |
-| Trace accuracy | % of actual affected components identified | > 95% |
-| Impact estimate accuracy | Estimated vs. actual revenue at risk | ±10% |
-| Time to mitigation | Hours from assessment to MitigationAction execution | < 2 hours |
-| Cost efficiency | Actual cost vs. estimated cost of actions | ±5% |
-| Revenue protection rate | % of at-risk revenue protected by actions | > 80% |
+|检测速度|从中断到风险评估所需的时间 | < 1 小时 |
+|追踪精度 |已识别的实际受影响组件的百分比 | > 95% |
+|影响估算准确性 |预计收入与实际收入的风险| ±10% |
+|是时候采取缓解措施了|从评估到执行缓解行动所需的时间 | < 2 小时 |
+|成本效益|实际成本与估计行动成本| ±5% |
+|收入保障率|受行动保护的风险收入百分比 | > 80% |
 
-Each disruption event becomes a training opportunity. Your agents learn which alternative suppliers actually perform, which lead times hold up, and which product lines are most resilient.
+每个中断事件都成为培训机会。您的代理商了解哪些替代供应商实际表现良好，哪些交货时间持续，以及哪些产品线最具弹性。
 
-## Summary
+## 摘要
 
-Your Supply Chain Disruption & Risk Propagation ontology is production-ready:
+您的供应链中断和风险传播本体已做好生产准备：
 
-✅ **7 entity types** capture the full disruption lifecycle  
-✅ **40 properties** provide rich context for decision-making  
-✅ **7 relationships** model realistic impact cascades  
-✅ **Fabric IQ compatible** for natural-language agents  
-✅ **Automation-ready** with enum classifications and timestamps  
-✅ **Measurable outcomes** — reduce disruption impact from days to hours  
+✅ **7 种实体类型** 捕获完整的中断生命周期
+✅ **40属性** 为决策提供丰富的上下文
+✅ **7 个关系** 模拟真实的影响级联
+✅ **Fabric IQ 兼容**，适用于自然语言代理
+✅ **自动化就绪**，具有枚举分类和时间戳
+✅ **可衡量的结果** - 将中断影响从几天缩短到几小时
 
-Deploy it, monitor it, and watch your supply chain resilience transform.
+部署、监控并观察您的供应链弹性转变。

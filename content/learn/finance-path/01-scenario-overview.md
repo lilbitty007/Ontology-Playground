@@ -5,39 +5,39 @@ description: "Meet the Banking & Finance scenario — why financial services nee
 order: 1
 ---
 
-## The scenario
+## 场景
 
-You are designing the data model for a **retail banking platform**. The bank manages:
+您正在为**零售银行平台**设计数据模型。银行管理：
 
-- **Customers** with credit profiles and risk assessments
-- **Accounts** (checking, savings, brokerage) with balances and interest rates
-- **Transactions** recording every debit, credit, and transfer
-- **Loans** including mortgages, auto loans, and personal credit
-- **Investments** tracking stock holdings and portfolio values
+- **客户**，具有信用概况和风险评估
+- **账户**（支票、储蓄、经纪）以及余额和利率
+- **交易**记录每笔借记、贷记和转账
+- **贷款**，包括抵押贷款、汽车贷款和个人贷款信用
+- **投资** 跟踪股票持有量和投资组合价值
 
-Data spans core banking systems, payment processors, credit bureaus, and brokerage platforms — each with its own schema and identifiers.
+数据跨越核心银行系统、支付处理器、征信机构和经纪平台 - 每个都有自己的模式和标识符。
 
-## Why an ontology?
+## 为什么是本体？
 
-A compliance question like **"Show all transactions from accounts owned by high-risk customers with active loans exceeding $100K"** requires traversing from transactions to accounts to customers to loans, crossing multiple systems.
+像**“显示活跃贷款超过 10 万美元的高风险客户所拥有的账户的所有交易”** 之类的合规性问题需要从交易到账户再到客户到贷款的遍历，跨多个系统。
 
-With an ontology, this is a graph traversal: `Transaction → Account → Customer (riskProfile='high') → Loan (principal > 100000)`.
+有了本体，这是一个图遍历：`Transaction → Account → Customer (riskProfile='high') → Loan (principal > 100000)`。
 
-## What we'll build
+## 我们将构建什么
 
-| Step | Entities | What you'll learn |
+|步骤|实体|你将学到什么 |
 |---|---|---|
-| 1 | Customer, Account | Core banking entities, ownership relationships |
-| 2 | + Transaction | Activity tracking, temporal data |
-| 3 | + Loan, Investment | Financial products, multi-path relationships |
+| 1 |客户、帐户 |核心银行实体、所有权关系|
+| 2 | + 交易 |活动跟踪、时间数据 |
+| 3 | + 贷款、投资 |金融产品，多路径关系|
 
-By the end, you'll have a 5-entity, 6-relationship ontology covering the complete banking customer relationship.
+最后，您将拥有一个包含 5 个实体、6 个关系的本体，涵盖完整的银行客户关系。
 
-## Key concepts
+## 关键概念
 
-- **Ownership chains** — Customer → Account → Transaction / Loan / Investment
-- **Financial identifiers** — account numbers, transaction IDs, loan IDs
-- **Risk and compliance** — credit scores, risk profiles
-- **Multi-path relationships** — when one entity connects to another through different paths
+- **所有权链** — 客户 → 账户 → 交易/贷款/投资
+- **财务标识符** — 帐号、交易 ID、贷款 ID
+- **风险与合规性** — 信用分数、风险概况
+- **多路径关系** — 当一个实体通过不同路径连接到另一个实体时
 
-Let's start with the banking foundation: Customer and Account.
+让我们从银行基础开始：客户和账户。

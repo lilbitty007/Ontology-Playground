@@ -7,87 +7,87 @@ embed: official/fibo-risk-step-2
 reviewStatus: under-human-review
 ---
 
-## Where risk lives
+## 风险所在
 
-Industry classification tells you *what* sectors your portfolio is exposed to. Geographic hierarchy tells you *where*. A portfolio concentrated in Florida faces different risks than one concentrated in California — hurricanes vs. earthquakes and wildfires.
+行业分类告诉您您的投资组合面临*哪些*行业。地理层次结构告诉您*在哪里*。集中在佛罗里达州的投资组合面临着与集中在加利福尼亚州不同的风险——飓风、地震和野火。
 
-In this step we add three entities that model geographic location at increasing granularity, enriched with natural disaster flags.
+在此步骤中，我们添加三个实体，以不断增加的粒度对地理位置进行建模，并添加自然灾害标志。
 
-## New entity types
+## 新实体类型
 
-### Region
+### 区域
 
-Continental or macroeconomic regions — "North America", "Europe", "Asia-Pacific".
+大陆或宏观经济区域 - “北美”、“欧洲”、“亚太”。
 
-| Property | Type | Notes |
+|属性 |类型 |笔记|
 |---|---|---|
-| `regionCode` | string | Identifier |
-| `regionName` | string | Display name |
-| `description` | string | Region description |
-| `disasterProfile` | string | Dominant disaster types for the region |
+| `regionCode` |字符串|标识符 |
+| `regionName` |字符串|显示名称 |
+| `description` |字符串|地区描述|
+| `disasterProfile` |字符串|该地区的主要灾害类型|
 
-### Country
+### 国家
 
-Nation-states with economic and regulatory attributes.
+具有经济和监管属性的民族国家。
 
-| Property | Type | Notes |
+|属性 |类型 |笔记|
 |---|---|---|
-| `countryCode` | string | Identifier (ISO country code) |
-| `countryName` | string | Display name |
-| `economicZone` | string | Economic classification (e.g., "developed", "emerging") |
-| `currency` | string | National currency code |
-| `regulatoryFramework` | string | Primary banking regulatory body |
+| `countryCode` |字符串|标识符（ISO 国家代码）|
+| `countryName` |字符串|显示名称 |
+| `economicZone` |字符串|经济分类（例如“发达”、“新兴”）|
+| `currency` |字符串|国家货币代码 |
+| `regulatoryFramework` |字符串|主要银行监管机构|
 
-### Jurisdiction
+### 管辖区
 
-Subnational jurisdictions (states, provinces) with boolean disaster-zone flags.
+具有布尔灾区标志的国家以下管辖区（州、省）。
 
-| Property | Type | Notes |
+|属性 |类型 |笔记|
 |---|---|---|
-| `code` | string | Identifier (e.g., "FL", "CA") |
-| `name` | string | Display name |
-| `hurricaneZone` | boolean | Exposed to hurricane risk |
-| `floodZone` | boolean | Exposed to flood risk |
-| `earthquakeZone` | boolean | Exposed to earthquake risk |
-| `wildfireZone` | boolean | Exposed to wildfire risk |
-| `coastal` | boolean | Coastal jurisdiction |
-| `latitude` | decimal | Geographic latitude |
-| `longitude` | decimal | Geographic longitude |
+| `code` |字符串|标识符（例如“FL”、“CA”）|
+| `name` |字符串|显示名称 |
+| `hurricaneZone` |布尔 |面临飓风风险|
+| `floodZone` |布尔 |面临洪水风险|
+| `earthquakeZone` |布尔 |面临地震风险|
+| `wildfireZone` |布尔 |面临野火风险|
+| `coastal` |布尔 |沿海管辖|
+| `latitude` |小数 |地理纬度|
+| `longitude` |小数 |地理经度 |
 
-## New relationships
+## 新关系
 
-- **inCountry**: `Jurisdiction` → `Country` (`many-to-one`) — each jurisdiction belongs to one country
-- **inRegion**: `Jurisdiction` → `Region` (`many-to-one`) — each jurisdiction maps to a geographic region
+- **inCountry**：`Jurisdiction` → `Country` (`many-to-one`) — 每个司法管辖区属于一个国家
+- **inRegion**： `Jurisdiction` → `Region` (`many-to-one`) — 每个管辖区映射到一个地理区域
 
-## The design pattern: boolean risk flags
+## 设计模式：布尔风险标志
 
-Notice that Jurisdiction uses **boolean flags** rather than a single "riskType" enum. This is deliberate — a jurisdiction can be in multiple disaster zones simultaneously. Florida is both a `hurricaneZone` and a `floodZone`. California is both an `earthquakeZone` and a `wildfireZone`.
+请注意，管辖区使用 **布尔标志** 而不是单个“riskType”枚举。这是经过深思熟虑的——一个管辖区可以同时位于多个灾区。佛罗里达州既是 `hurricaneZone` 又是 `floodZone`。加利福尼亚州既是 `earthquakeZone` 又是 `wildfireZone`。
 
-This pattern enables precise filtering:
+此模式可实现精确过滤：
 
-- "Show all jurisdictions that are both `hurricaneZone = true` AND `coastal = true`"
-- "What's our total exposure in `earthquakeZone` jurisdictions?"
+- “显示同时属于 `hurricaneZone = true` 和 `coastal = true` 的所有司法管辖区”
+- “我们在 `earthquakeZone` 中的总暴露量是多少司法管辖区？”
 
-## Two independent hierarchies
+## 两个独立的层次结构
 
-At this point the model has two separate subgraphs:
+此时模型有两个独立的子图：
 
-1. **Industry**: Sector ← Subsector ← IndustryGroup
-2. **Geography**: Region ← Country (via Jurisdiction) and Region ← Jurisdiction
+1. **Industry**：Sector ← Subsector ← IndustryGroup
+2. **地理**：地区←国家（通过管辖区）和地区←管辖区
 
-These will connect in later steps when we add loan products and regulatory limits.
+当我们添加贷款产品和监管限制时，这些将在后续步骤中连接。
 
-## Step 2 graph (diff from Step 1)
+## 步骤 2 图表（与步骤 1 不同）
 
 <ontology-embed id="official/fibo-risk-step-2" diff="official/fibo-risk-step-1" height="400px"></ontology-embed>
 
-*Three new entities (highlighted) add the geographic dimension. Note the two independent subgraphs — they'll connect in Step 3.*
+*三个新实体（突出显示）添加了地理维度。注意两个独立的子图 - 它们将在步骤 3 中连接。*
 
 ```quiz
-Q: Why does Jurisdiction use boolean flags instead of a single riskType property?
-- Boolean flags are easier to store in a database
-- A jurisdiction can be in multiple disaster zones simultaneously, which a single enum cannot represent [correct]
-- Boolean flags render better in the graph visualization
-- FIBO requires boolean properties for all classifiers
-> A single jurisdiction can face multiple natural disaster risks at once. Florida is both hurricane-prone and flood-prone. Boolean flags allow precise multi-dimensional filtering, which is essential for compound risk queries like "hurricane zone AND coastal AND flood zone."
+Q:为什么 Jurisdiction 使用布尔标志而不是单个riskType 属性？
+- 布尔标志更容易存储在数据库中
+- 一个管辖区可以同时位于多个灾区，单个枚举无法表示[correct]
+- 布尔标志在图形可视化中呈现得更好
+- FIBO 要求所有分类器都有布尔属性
+> 单个管辖区可以面对多个自然灾害风险立即显现。佛罗里达州是飓风和洪水的多发地区。布尔标志允许精确的多维过滤，这对于诸如“飓风区 AND 沿海 AND 洪水区”之类的复合风险查询至关重要。
 ```

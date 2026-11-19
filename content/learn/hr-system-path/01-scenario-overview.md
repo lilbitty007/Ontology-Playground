@@ -5,40 +5,40 @@ description: "Meet the HR System scenario and the cross-functional questions you
 order: 1
 ---
 
-## The scenario
+## 场景
 
-You are designing a **human resources ontology** for a growing organization. The business needs a shared model for:
+您正在为成长型组织设计**人力资源本体**。业务需要以下共享模型：
 
-- **Employees** and their lifecycle status
-- **Departments** and budget ownership
-- **Positions** and role hierarchy
-- **Assignments** that place employees into departments and positions over time
-- **Performance reviews** used for development and compensation discussions
+- **员工**及其生命周期状态
+- **部门**和预算所有权
+- **职位**和角色层次结构
+- **分配**，随着时间的推移将员工分配到部门和职位
+- **绩效评论** 用于开发和薪酬讨论
 
-Data currently lives across payroll tools, HRIS, spreadsheets, and manager notes.
+数据目前存在于薪资工具、HRIS、电子表格和经理注释中。
 
-## Why an ontology?
+## 为什么是本体？
 
-A question like **"Which departments have the highest number of senior employees rated outstanding in the last review cycle?"** crosses employee records, org structure, role definitions, and review outcomes.
+像 **“哪些部门在上一个审核周期中被评为优秀的高级员工数量最多？”** 的问题涉及员工记录、组织结构、角色定义和审核结果。
 
-With an ontology, this becomes a connected graph query instead of manual joins across disconnected systems.
+通过本体，这将成为连接的图形查询，而不是跨断开连接的系统进行手动联接。
 
-## What we'll build
+## 我们将构建什么
 
-| Step | Entities in focus | What you'll learn |
+|步骤|焦点实体 |你将学到什么 |
 |---|---|---|
-| 1 | Employee, Department, Position | Organizational foundation and identifiers |
-| 2 | + Assignment | Junction entity pattern for staffing history |
-| 3 | + PerformanceReview | Review cycles, ratings, and people analytics |
-| 4 | Complete model | End-to-end HR questions and graph reasoning |
+| 1 |员工、部门、职位 |组织基础和标识符|
+| 2 | + 作业 |人员配置历史的连接实体模式|
+| 3 | + 绩效评估 |审核周期、评级和人员分析 |
+| 4 |完整模型 |端到端人力资源问题和图表推理 |
 
-By the end, you'll understand how to model a practical HR domain with clear governance-ready structure.
+最后，您将了解如何对具有清晰的治理就绪结构的实际 HR 领域进行建模。
 
-## Key concepts
+## 关键概念
 
-- **Stable identifiers** for every entity
-- **Junction entities** for many-to-many staffing scenarios
-- **Temporal properties** (startDate, reviewDate) for time-aware analysis
-- **Enum values** for controlled statuses and ratings
+- **每个实体的稳定标识符**
+- **多对多人员配置场景的连接实体**
+- **时间属性**（startDate、reviewDate）用于时间感知分析
+- **受控状态和评级的枚举值**
 
-Let's start with the organization core.
+让我们从组织核心开始。

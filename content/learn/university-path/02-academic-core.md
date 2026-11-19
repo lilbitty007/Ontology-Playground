@@ -6,82 +6,82 @@ order: 2
 embed: official/university-step-1
 ---
 
-## The academic record foundation
+## 学术记录基础
 
-Academic records revolve around a core question: *which students take which courses, and how do they perform?* Three entities answer this:
+学术记录围绕一个核心问题：*哪些学生选修哪些课程，以及他们的表现如何？* 三个实体回答这个问题：
 
-- **Student** — who is learning?
-- **Course** — what is being taught?
-- **Enrollment** — the record connecting a student to a course with a grade
+- **学生** - 谁在学习？
+- **课程** — 教授什么？
+- **注册** — 将学生连接到成绩为
+的课程的记录
+## 定义实体
 
-## Defining the entities
+### 学生
 
-### Student
-
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `studentId` | string | ✓ |
-| `name` | string | |
-| `gpa` | float | |
-| `enrollmentYear` | integer | |
-| `major` | string | |
+| `studentId` |字符串| ✓ |
+| `name` |字符串| |
+| `gpa` |浮动| |
+| `enrollmentYear` |整数 | |
+| `major` |字符串| |
 
-The `gpa` property is a float — Grade Point Average ranges from 0.0 to 4.0. This aggregate metric enables academic standing queries and honor roll calculations.
+`gpa` 属性是一个浮点数 — 平均绩点范围从 0.0 到 4.0。该聚合指标支持学术排名查询和荣誉榜计算。
 
-### Course
+### 课程
 
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `courseId` | string | ✓ |
-| `title` | string | |
-| `credits` | integer | |
-| `level` | string | |
-| `maxEnrollment` | integer | |
+| `courseId` |字符串| ✓ |
+| `title` |字符串| |
+| `credits` |整数 | |
+| `level` |字符串| |
+| `maxEnrollment` |整数 | |
 
-The `level` property (100, 200, 300, 400) indicates course difficulty and prerequisites. The `maxEnrollment` integer enables capacity planning.
+`level` 属性（100、200、300、400）指示课程难度和先决条件。 `maxEnrollment` 整数支持容量规划。
 
-### Enrollment
+### 注册
 
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `enrollmentId` | string | ✓ |
-| `semester` | string | |
-| `grade` | string | |
-| `enrollDate` | date | |
-| `status` | string | |
+| `enrollmentId` |字符串| ✓ |
+| `semester` |字符串| |
+| `grade` |字符串| |
+| `enrollDate` |日期 | |
+| `status` |字符串| |
 
-Enrollment is a **junction entity** — it exists specifically to connect Students and Courses with additional context (grade, semester, status).
+注册是一个**连接实体** - 它专门用于将学生和课程与其他上下文（年级、学期、状态）连接起来。
 
-## Relationships
+## 关系
 
-- **enrolls_in** — `Student` → `Enrollment` (one-to-many)
-  A student has multiple enrollments across semesters.
+- **enrolls_in** — `Student` → `Enrollment`（一对多）
+学生在学期内多次注册。
 
-- **for_course** — `Enrollment` → `Course` (many-to-one)
-  Each enrollment is for one specific course.
+- **for_course** — `Enrollment` → `Course`（多对一）
+每次注册均针对一门特定课程。
 
-> **Junction entity pattern:** When two entities have a many-to-many relationship with attributes, you create a junction entity. A student takes many courses. A course has many students. Enrollment sits between them, carrying the grade, semester, and status. This is one of the most common patterns in ontology design.
+> **联结实体模式：** 当两个实体与属性具有多对多关系时，您将创建一个联结实体。一个学生修读许多课程。一门课程有很多学生。注册信息位于它们之间，包含年级、学期和状态。这是本体设计中最常见的模式之一。
 
-## The graph so far
+## 到目前为止的图表
 
 <ontology-embed id="official/university-step-1" height="350px"></ontology-embed>
 
-*Student and Course connected through Enrollment — the classic junction entity pattern.*
+*学生和课程通过连接注册 — 经典的连接实体模式。*
 
-## What we learned
+## 我们学到了什么
 
-- **Junction entities** (Enrollment) resolve many-to-many relationships with attributes
-- **Float properties** (GPA) enable aggregate calculations and thresholds
-- **Integer properties** (credits, maxEnrollment) enable capacity and workload planning
-- The academic core follows Student → Enrollment → Course
+- **连接实体**（注册）解决与属性的多对多关系
+- **浮动属性** (GPA) 支持聚合计算和阈值
+- **整数属性**（学分、maxEnrollment）支持容量和工作量规划
+- 学术核心遵循学生 → 注册 → 课程
 
 ```quiz
-Q: Why is Enrollment modelled as a separate entity instead of a direct Student–Course relationship?
-- To make the graph have more nodes
-- Because Enrollment carries its own attributes (grade, semester, status) that don't belong to either Student or Course [correct]
-- Ontologies require at least three entities
-- Direct relationships between entities are not allowed
-> A direct Student–Course relationship couldn't carry grade, semester, or status information. The junction entity pattern creates a first-class entity for the relationship itself, enabling queries like "What grade did this student get in this course this semester?" — which requires attributes on the connection, not on either endpoint.
+Q:为什么注册被建模为一个单独的实体，而不是直接的学生与课程关系？
+- 使图表具有更多节点
+- 因为注册具有其自己的属性（年级、学期、状态），不属于学生或课程 [correct]
+- 本体需要至少三个实体
+- 不允许实体之间存在直接关系
+> 直接学生与课程关系不能承载年级、学期或状态信息。连接实体模式为关系本身创建了一个一流的实体，支持诸如“这个学生本学期这门课程获得了多少分？”之类的查询。 — 这需要连接上的属性，而不是任一端点上的属性。
 ```
 
-Next, we'll add Professor to track faculty assignments.
+接下来，我们将添加教授来跟踪教师作业。

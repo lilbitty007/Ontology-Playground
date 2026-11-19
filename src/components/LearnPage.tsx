@@ -7,6 +7,7 @@ import { isValidCatalogueId } from '../lib/catalogueId';
 import type { Route } from '../lib/router';
 import type { LearnManifest, LearnCourse, LearnArticle } from '../types/learn';
 import { loadCatalogueEntry } from '../lib/catalogue';
+import { localizeArticle, localizeCourses } from '../lib/learn/zh-CN';
 import type { Core as CytoscapeCore, StylesheetCSS, LayoutOptions } from 'cytoscape';
 
 interface LearnPageProps {
@@ -37,7 +38,7 @@ export function LearnPage({ route }: LearnPageProps) {
   if (error) {
     return (
       <div className={`learn-page ${themeClass(theme)}`}>
-        <div className="learn-error">Failed to load learning content: {error}</div>
+        <div className="learn-error">学习内容加载失败：{error}</div>
       </div>
     );
   }
@@ -45,17 +46,23 @@ export function LearnPage({ route }: LearnPageProps) {
   if (!manifest) {
     return (
       <div className={`learn-page ${themeClass(theme)}`}>
-        <div className="learn-loading">Loading…</div>
+        <div className="learn-loading">正在加载…</div>
       </div>
     );
   }
 
-  const course = route.courseSlug
+  const sourceCourse = route.courseSlug
     ? manifest.courses.find((c) => c.slug === route.courseSlug)
     : null;
+  const course = sourceCourse
+    ? localizeCourses([sourceCourse])[0]
+    : null;
 
-  const article = course && route.articleSlug
-    ? course.articles.find((a) => a.slug === route.articleSlug)
+  const article = sourceCourse && route.articleSlug
+    ? (() => {
+        const sourceArticle = sourceCourse.articles.find((a) => a.slug === route.articleSlug);
+        return sourceArticle ? localizeArticle(sourceArticle, sourceCourse.slug) : null;
+      })()
     : null;
 
   // Determine back button behavior
@@ -65,10 +72,10 @@ export function LearnPage({ route }: LearnPageProps) {
     backLabel = course.title;
     backAction = () => navigate({ page: 'learn', courseSlug: course.slug });
   } else if (course) {
-    backLabel = 'All courses';
+    backLabel = '全部课程';
     backAction = () => navigate({ page: 'learn' });
   } else {
-    backLabel = 'Playground';
+    backLabel = '本体游乐场';
     backAction = () => navigate({ page: 'home' });
   }
 
@@ -85,9 +92,9 @@ export function LearnPage({ route }: LearnPageProps) {
         </button>
         <button className="learn-header-title" onClick={() => navigate({ page: 'learn' })}>
           <BookOpen size={20} />
-          <span>Ontology School</span>
+          <span>本体学堂</span>
         </button>
-        <button className="icon-btn" onClick={toggleDarkMode} title="Toggle Theme">
+        <button className="icon-btn" onClick={toggleDarkMode} title="切换主题">
           {darkMode ? <Sun size={20} /> : <Moon size={20} />}
         </button>
       </header>
@@ -97,7 +104,7 @@ export function LearnPage({ route }: LearnPageProps) {
       ) : course ? (
         <CourseDetail course={course} />
       ) : (
-        <CourseCatalogue courses={manifest.courses} />
+        <CourseCatalogue courses={localizeCourses(manifest.courses)} />
       )}
     </div>
   );
@@ -121,8 +128,7 @@ function CourseCatalogue({ courses }: { courses: LearnCourse[] }) {
     <div className="learn-index">
       <div className="learn-index-hero">
         <p>
-          Learning paths and hands-on labs to help you understand and build
-          ontologies for Microsoft Fabric IQ.
+          通过学习路径和动手实验，理解并构建 Microsoft Fabric IQ 本体。
         </p>
       </div>
       <div className="learn-card-grid">
@@ -136,16 +142,16 @@ function CourseCatalogue({ courses }: { courses: LearnCourse[] }) {
               <span className="learn-card-icon">{c.icon}</span>
               <span className={`learn-card-badge learn-card-badge--${c.type}`}>
                 {c.type === 'lab' ? <FlaskConical size={12} /> : <GraduationCap size={12} />}
-                {c.type === 'lab' ? 'Lab' : 'Path'}
+                {c.type === 'lab' ? '实验' : '路径'}
               </span>
             </div>
             <h2>{c.title}</h2>
             <p>{c.description}</p>
             <span className="learn-card-meta">
-              {c.articles.length} {c.type === 'lab' ? 'steps' : 'articles'}
+              {c.articles.length} {c.type === 'lab' ? '个步骤' : '篇文章'}
             </span>
             <span className="learn-card-cta">
-              {c.type === 'lab' ? 'Start lab' : 'Start learning'} <ChevronRight size={16} />
+              {c.type === 'lab' ? '开始实验' : '开始学习'} <ChevronRight size={16} />
             </span>
           </button>
         ))}
@@ -163,7 +169,7 @@ function CourseDetail({ course }: { course: LearnCourse }) {
           <span className="learn-course-icon">{course.icon}</span>
           <span className={`learn-card-badge learn-card-badge--${course.type}`}>
             {course.type === 'lab' ? <FlaskConical size={12} /> : <GraduationCap size={12} />}
-            {course.type === 'lab' ? 'Lab' : 'Learning Path'}
+            {course.type === 'lab' ? '实验' : '学习路径'}
           </span>
         </div>
         <h1>{course.title}</h1>
@@ -177,15 +183,15 @@ function CourseDetail({ course }: { course: LearnCourse }) {
             onClick={() => navigate({ page: 'learn', courseSlug: course.slug, articleSlug: a.slug })}
           >
             <span className="learn-card-order">
-              {course.type === 'lab' ? (a.order === 1 ? 'Overview' : `Step ${a.order - 1}`) : a.order}
+              {course.type === 'lab' ? (a.order === 1 ? '概览' : `第 ${a.order - 1} 步`) : a.order}
             </span>
             <h2>{a.title}</h2>
             {a.reviewStatus === 'under-human-review' && (
-              <span className="learn-card-review-badge">🔍 Under human review</span>
+              <span className="learn-card-review-badge">🔍 人工审核中</span>
             )}
             <p>{a.description}</p>
             <span className="learn-card-cta">
-              {course.type === 'lab' ? 'Open step' : 'Read article'} <ChevronRight size={16} />
+              {course.type === 'lab' ? '打开步骤' : '阅读文章'} <ChevronRight size={16} />
             </span>
           </button>
         ))}
@@ -208,7 +214,7 @@ function replaceEmbedPlaceholder(
   if (!isValidCatalogueId(id) || (diffId && !isValidCatalogueId(diffId))) {
     const error = document.createElement('div');
     error.className = 'learn-embed-error';
-    error.textContent = 'Invalid ontology reference';
+    error.textContent = '本体引用无效';
     element.replaceWith(error);
     return;
   }
@@ -311,7 +317,7 @@ function ArticleView({
               slot,
               loadError instanceof Error
                 ? loadError.message
-                : 'Failed to load catalogue ontology',
+                : '目录本体加载失败',
             );
           }
         });
@@ -325,10 +331,10 @@ function ArticleView({
         <button
           className="learn-present-btn"
           onClick={() => setPresenting(true)}
-          title="Present as slides"
+          title="以幻灯片播放"
         >
           <Play size={16} />
-          <span>Present</span>
+          <span>播放</span>
         </button>
       </div>
       <ArticleContent article={article} contentRef={contentRef} />
@@ -355,7 +361,7 @@ function ArticleView({
           >
             <ArrowLeft size={16} />
             <div>
-              <span className="learn-nav-label">Previous</span>
+            <span className="learn-nav-label">上一篇</span>
               <span className="learn-nav-title">{prevArticle.title}</span>
             </div>
           </button>
@@ -368,7 +374,7 @@ function ArticleView({
             onClick={() => navigate({ page: 'learn', courseSlug: course.slug, articleSlug: nextArticle.slug })}
           >
             <div>
-              <span className="learn-nav-label">Next</span>
+            <span className="learn-nav-label">下一篇</span>
               <span className="learn-nav-title">{nextArticle.title}</span>
             </div>
             <ChevronRight size={16} />
@@ -463,8 +469,8 @@ export function QuizSlide({ quiz }: { quiz: QuizData }) {
       {chose && (
         <div className={`quiz-result ${isCorrect ? 'quiz-result--correct' : 'quiz-result--wrong'}`}>
           {isCorrect
-            ? <><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Correct!</>
-            : <><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> Not quite</>}
+            ? <><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> 回答正确</>
+            : <><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg> 再想一想</>}
         </div>
       )}
       {chose && quiz.explanation && (
@@ -709,7 +715,7 @@ function PresentationMode({
               slot,
               loadError instanceof Error
                 ? loadError.message
-                : 'Failed to load catalogue ontology',
+                : '目录本体加载失败',
             );
           }
         });
@@ -720,13 +726,13 @@ function PresentationMode({
   return (
     <div className={`presentation-overlay ${presenterDark ? '' : 'light-theme'}`}>
       <div className="presentation-chrome">
-        <button className="presentation-close" onClick={onClose} title="Exit (Esc)">
+        <button className="presentation-close" onClick={onClose} title="退出（Esc）">
           <X size={20} />
         </button>
         <button
           className="presentation-theme-toggle"
           onClick={() => setPresenterDark((d) => !d)}
-          title="Toggle theme"
+          title="切换主题"
         >
           {presenterDark ? <Sun size={18} /> : <Moon size={18} />}
         </button>
@@ -737,7 +743,7 @@ function PresentationMode({
           className="presentation-nav presentation-nav--prev"
           onClick={goPrev}
           disabled={slideIndex === 0 && !prevArticle}
-          aria-label={slideIndex === 0 && prevArticle ? `Previous: ${prevArticle.title}` : 'Previous slide'}
+          aria-label={slideIndex === 0 && prevArticle ? `上一篇：${prevArticle.title}` : '上一张幻灯片'}
         >
           <ArrowLeft size={28} />
         </button>
@@ -761,7 +767,7 @@ function PresentationMode({
           className="presentation-nav presentation-nav--next"
           onClick={goNext}
           disabled={slideIndex === total - 1 && !nextArticle}
-          aria-label={slideIndex === total - 1 && nextArticle ? `Next: ${nextArticle.title}` : 'Next slide'}
+          aria-label={slideIndex === total - 1 && nextArticle ? `下一篇：${nextArticle.title}` : '下一张幻灯片'}
         >
           <ChevronRight size={28} />
         </button>
@@ -777,10 +783,10 @@ function PresentationMode({
         <span className="presentation-counter">
           {slideIndex + 1} / {total}
           {slideIndex === total - 1 && nextArticle && (
-            <span className="presentation-next-hint"> — next: {nextArticle.title}</span>
+            <span className="presentation-next-hint"> — 下一篇：{nextArticle.title}</span>
           )}
           {slideIndex === 0 && prevArticle && (
-            <span className="presentation-next-hint"> — prev: {prevArticle.title}</span>
+            <span className="presentation-next-hint"> — 上一篇：{prevArticle.title}</span>
           )}
         </span>
       </div>

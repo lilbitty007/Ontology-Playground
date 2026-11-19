@@ -6,52 +6,52 @@ order: 1
 reviewStatus: under-human-review
 ---
 
-## The problem: concentration risk
+## 问题：集中风险
 
-When a bank's loan portfolio is too heavily exposed to a single industry, geography, or product type, a single adverse event — a hurricane, an industry downturn, a regulatory change — can cascade into systemic losses. This is **concentration risk**, and regulators like the OCC and FDIC require banks to monitor and limit it.
+当银行的贷款组合过度暴露于单一行业、地区或产品类型时，单个不利事件（飓风、行业衰退、监管变化）可能会引发系统性损失。这就是**集中风险**，OCC 和 FDIC 等监管机构要求银行对其进行监控和限制。
 
-The challenge? Concentration risk spans multiple domains simultaneously:
+挑战？集中风险同时跨越多个领域：
 
-- **Industry**: Is too much lending concentrated in construction or real estate?
-- **Geography**: Are loans clustered in hurricane-prone or earthquake-prone jurisdictions?
-- **Product type**: What's the Basel III risk-weighted exposure by loan type?
-- **Regulation**: Which concentration limits are approaching their thresholds?
+- **行业**：是否有太多贷款集中在建筑业或房地产领域？
+- **地理位置**：贷款是否集中在飓风多发或地震多发的司法管辖区？
+- **产品类型**：按贷款类型划分的巴塞尔协议 III 风险加权敞口是多少？
+- **法规**：哪些集中度限值正在接近其阈值？
 
-## Why ontologies matter here
+## 为什么本体在这里很重要
 
-Traditional data warehouses store these dimensions in separate tables with foreign keys. An ontology-driven approach gives you:
+传统数据仓库将这些维度存储在带有外键的单独表中。本体驱动的方法为您提供：
 
-- **Explicit semantics** — "a residential mortgage has a 35% Basel risk weight" is encoded in the model, not buried in business rules
-- **Cross-domain queries** — traverse from a jurisdiction's disaster flags through its loans to their concentration categories in a single graph walk
-- **Regulatory traceability** — every limit links to the regulation that mandates it
+- **显式语义** - “住宅抵押贷款的巴塞尔风险权重为 35%”被编码在模型中，而不是隐藏在业务规则中
+- **跨域查询** - 在单个图形遍历中从辖区的灾难标志通过其贷款遍历到其集中度类别
+- **监管可追溯性** — 每个限制都链接到强制执行它的法规
 
-## What we'll build
+## 我们将构建什么
 
-Over four progressive steps, we'll model a **FIBO Risk Management** ontology with 11 entity types and 10 relationships:
+经过四个渐进步骤，我们将使用 11 种实体类型和 10 种关系来建模 **FIBO 风险管理**本体：
 
-| Step | Domain | New Entities |
+|步骤|领域 |新实体 |
 |---|---|---|
-| 1 | Industry Classification | Sector, Subsector, IndustryGroup |
-| 2 | Geographic Hierarchy | Region, Country, Jurisdiction |
-| 3 | Loan Classification | ConcentrationCategory, LoanType, CollateralType |
-| 4 | Regulatory Context | Regulation, RegulatoryLimit |
+| 1 |行业分类|部门、分部门、行业组|
+| 2 |地理层次|地区、国家、司法管辖区 |
+| 3 |贷款分类|集中度类别、贷款类型、抵押品类型 |
+| 4 |监管背景|监管、监管限制|
 
-## Real questions this model supports
+## 该模型支持的实际问题
 
-- Which jurisdictions in hurricane zones have the highest concentration of construction loans?
-- What percentage of the portfolio exceeds OCC concentration limits?
-- Which loan types carry the highest Basel risk weight in regions with high climate sensitivity?
-- How do regulatory limits map across concentration categories?
+- 飓风区中哪些辖区的建筑贷款最集中？
+- 投资组合中超过 OCC 集中度限制的百分比是多少？
+- 在气候敏感性高的地区，哪些贷款类型具有最高的巴塞尔风险权重？
+- 监管限值如何映射到集中度类别？
 
-## Source and licensing
+## 来源和许可
 
-All concepts in this lab are adapted from the [EDM Council FIBO](https://github.com/edmcouncil/fibo) ontology under the [MIT License](https://opensource.org/licenses/MIT). The specific modules referenced include classification, geographic, debt/equity, and regulatory frameworks from the FIBO family.
+本实验中的所有概念均根据 [MIT 许可证](https://opensource.org/licenses/MIT) 改编自 [EDM Council FIBO](https://github.com/edmcouncil/fibo) 本体。引用的具体模块包括 FIBO 系列的分类、地理、债务/股权和监管框架。
 
 ```quiz
-Q: What is concentration risk in banking?
-- The risk that a bank's technology systems are too centralized
-- The risk that too much of a loan portfolio is exposed to a single industry, geography, or product type [correct]
-- The risk that a bank has too many branches in one city
-- The risk that interest rates change unexpectedly
-> Concentration risk occurs when a bank's lending is overly exposed to a single sector, region, or product type. A single adverse event (natural disaster, industry downturn) can then cause outsized losses across the portfolio.
+Q:什么是银行业集中度风险？
+- 银行技术系统过于集中的风险
+- 太多贷款组合暴露于单一行业、地域或产品类型的风险 [correct]
+- 银行在一个城市拥有过多分支机构的风险
+- 利率意外变化的风险
+> 出现集中风险当银行的贷款过度暴露于单一部门、地区或产品类型时。单一的不利事件（自然灾害、行业低迷）可能会导致整个投资组合遭受巨大损失。
 ```

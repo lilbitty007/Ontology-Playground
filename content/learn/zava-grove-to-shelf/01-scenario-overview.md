@@ -5,54 +5,54 @@ description: Meet Zava — a premium fresh-fruit producer that needs one semanti
 order: 1
 ---
 
-## The Zava story
+## Zava 故事
 
-**Zava** is a global premium fresh fruit & vegetable producer and distributor. Their business spans:
+**Zava** 是全球优质新鲜水果和蔬菜生产商和分销商。他们的业务涵盖：
 
-- **Multi-origin sourcing** — partner farms in Spain, Ecuador, South Africa, Tunisia, Germany and more.
-- **Four-stage quality control** — every harvest is inspected in the field, the packhouse, the destination DC and finally the store.
-- **Cold-chain logistics** — reefer containers carrying perishable lots, monitored continuously by temperature sensors.
-- **Retail partners** — supermarket chains (DCs and stores) place orders for specific varieties.
-- **Sustainability** — a grower-development program (Zava Dreams) that farms can join.
+- **多来源采购** - 西班牙、厄瓜多尔、南非、突尼斯、德国等地的合作农场。
+- **四阶段质量控制** - 每次收获都会在田间、包装厂、目的地配送中心和最后的商店进行检查。
+- **冷链物流** — 装载易腐烂货物的冷藏集装箱，由温度传感器持续监控。
+- **零售合作伙伴** — 连锁超市（配送中心和商店）针对特定品种下订单。
+- **可持续发展** - 农场可以加入的种植者发展计划（Zava Dreams）。
 
-## The data problem
+## 数据问题
 
-Today, every one of those domains lives in a different system: agronomy ERPs, packhouse QC apps, IoT eventhouses, retail EDI feeds, CSR spreadsheets. A single question like:
+如今，这些领域中的每一个都存在于不同的系统中：农学 ERP、包装厂 QC 应用程序、物联网事件室、零售 EDI 源、CSR 电子表格。一个问题，如：
 
-> *"This morning a reefer container with 18 tonnes of Nadorcott mandarins crossed 9°C while in transit to a retailer's DC. Which retailer orders are at risk, and what is the revenue exposure?"*
+> *“今天早上，一个装有 18 吨 Nadorcott 柑橘的冷藏集装箱在运往零售商配送中心的途中温度超过了 9°C。哪些零售商订单面临风险，收入风险是多少？”*
 
-…requires manually traversing five different systems. Analysts need to know which table holds shipments, which lakehouse holds orders, which eventhouse holds sensor telemetry — and how to join them.
+…需要手动遍历五个不同的系统。分析师需要知道哪个表保存发货，哪个 Lakehouse 保存订单，哪个 eventhouse 保存传感器遥测数据 - 以及如何加入它们。
 
-## Why an ontology
+## 为什么本体
 
-An ontology defines the **business concepts** — `Grower`, `Farm`, `HarvestLot`, `Shipment`, `ColdChainSensor`, `RetailDC`, `Order`, `SustainabilityProgram` — and the **relationships** between them, *once*. The underlying tables and event streams are then **bound** to these concepts.
+本体定义了**业务概念** — `Grower`、`Farm`、`HarvestLot`、`Shipment`、`ColdChainSensor`、 `RetailDC`、`Order`、`SustainabilityProgram` — 以及它们之间的**关系**，*一次*。然后，基础表和事件流将被**绑定**到这些概念。
 
-| Without ontology | With ontology |
+|没有本体|与本体|
 |---|---|
-| Analyst must know that `dim_grow.gr_lt_id = fact_harv.gr_id` | Business user asks "which growers placed lots at risk this week?" |
-| Cold-chain telemetry lives in one system, orders in another | One traversal `Sensor → Shipment → HarvestLot → Order → Store` |
-| New retailer? Rewrite five queries | New retailer? Add bindings, model stays the same |
-| Sustainability tracking is a side spreadsheet | `Farm participatesIn SustainabilityProgram` is first-class |
+|分析师必须知道`dim_grow.gr_lt_id = fact_harv.gr_id` |商业用户询问“本周哪些种植者将批次置于危险之中？” |
+|冷链遥测存在于一个系统中，订单存在于另一个系统中 |一遍历`Sensor → Shipment → HarvestLot → Order → Store` |
+|新零售商？重写五个查询 |新零售商？添加绑定，模型保持不变 |
+|可持续性跟踪是一个辅助电子表格 | `Farm participatesIn SustainabilityProgram`一流|
 
-## What we'll build
+## 我们将构建什么
 
-Over five progressive steps we'll construct the complete Zava grove-to-shelf ontology — **12 entity types** and **13 relationships** covering every layer of the business:
+通过五个渐进步骤，我们将构建完整的 Zava grove-to-shelf 本体 — **12 种实体类型**和 **13 种关系**，覆盖业务的每一层：
 
-1. **Orchard Foundation** — `Grower`, `Farm`, `Plot`, `FruitVariety`
-2. **Harvest & Quality** — `HarvestLot`, `QualityCheck`
-3. **Cold-Chain Logistics** — `Shipment`, `ColdChainSensor`
-4. **Retail Fulfillment** — `RetailDC`, `Store`, `Order`
-5. **Complete Model** — `SustainabilityProgram`
+1. **果园基金会** — `Grower`、`Farm`、`Plot`、`FruitVariety`
+2. **收获和质量** — `HarvestLot`、`QualityCheck`
+3. **冷链物流** — `Shipment`、`ColdChainSensor`
+4. **零售配送** — `RetailDC`、`Store`、`Order`
+5. **完整模型** — `SustainabilityProgram`
 
-At each step you'll see the graph grow and we'll preview the business questions the new entities unlock.
+在每一步中，您都会看到图表不断增长，我们将预览新实体解锁的业务问题。
 
 ```quiz
-Q: Which of these is the *primary* reason Zava benefits from an ontology over a traditional data warehouse?
-- An ontology is faster than SQL at runtime
-- It eliminates the need to store data altogether
-- It expresses cross-domain business concepts once so business users can ask plain-language questions [correct]
-- It replaces the need for cold-chain sensors
-> The value isn't speed or storage — it's that *one* semantic vocabulary spans agronomy, logistics, retail and CSR data, so cross-domain questions become natural.
+Q:与传统数据仓库相比，Zava 从本体中获益的“主要原因”是哪一个？
+- 本体在运行时比 SQL 更快
+- 它完全消除了存储数据的需要
+- 它一次表达了跨域业务概念，因此业务用户可以提出简单语言问题[correct]
+- 它取代了对冷链传感器的需求
+> 价值不是速度或存储 - 而是这个*一个*语义词汇涵盖农学、物流、零售和企业社会责任数据，因此跨领域问题变得自然。
 ```
 
-Let's start with the orchard.
+让我们从果园开始吧。

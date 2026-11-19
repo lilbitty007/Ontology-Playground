@@ -6,101 +6,101 @@ order: 4
 embed: official/cosmic-coffee
 ---
 
-## What we'll build
+## 本教程将构建什么
 
-In this tutorial, you'll create a simple **Library** ontology with three entity types: `Book`, `Author`, and `Member` — connected by relationships. By the end, you'll have a valid RDF file ready for use with Microsoft Fabric IQ or any semantic tool.
+在本教程中，你将创建一个简单的**图书馆**本体，其中包含三种实体类型：`Book`（图书）、`Author`（作者）和 `Member`（会员），并通过关系将它们连接起来。完成后，你将得到一个可用于 Microsoft Fabric IQ 或其他语义工具的有效 RDF 文件。
 
-## Step 1: Open the designer
+## 第 1 步：打开设计器
 
-Click the **Designer** button in the top navigation bar, or go directly to [/#/designer](#/designer). You'll see a blank canvas: an entity form on the left, a live graph preview on the right.
+点击顶部导航栏中的**设计器**按钮，或直接前往 [/#/designer](#/designer)。你会看到一个空白画布：左侧是实体表单，右侧是实时关系图预览。
 
-## Step 2: Create entity types
+## 第 2 步：创建实体类型
 
-Add three entities using the **+ Add Entity** button:
+点击**＋添加实体**按钮，创建以下三种实体：
 
 **Book**
-- Name: `Book`
-- Icon: `📚`
-- Color: pick a blue
-- Properties:
-  - `isbn` — string, **identifier** ✓
-  - `title` — string
-  - `publishedYear` — integer
+- 名称：`Book`
+- 图标：`📚`
+- 颜色：选择蓝色
+- 属性：
+  - `isbn`——字符串，**标识符** ✓
+  - `title`——字符串
+  - `publishedYear`——整数
 
 **Author**
-- Name: `Author`
-- Icon: `✍️`
-- Color: pick a green
-- Properties:
-  - `authorId` — string, **identifier** ✓
-  - `name` — string
-  - `nationality` — string
+- 名称：`Author`
+- 图标：`✍️`
+- 颜色：选择绿色
+- 属性：
+  - `authorId`——字符串，**标识符** ✓
+  - `name`——字符串
+  - `nationality`——字符串
 
 **Member**
-- Name: `Member`
-- Icon: `👤`
-- Color: pick a purple
-- Properties:
-  - `memberId` — string, **identifier** ✓
-  - `name` — string
-  - `joinDate` — date
+- 名称：`Member`
+- 图标：`👤`
+- 颜色：选择紫色
+- 属性：
+  - `memberId`——字符串，**标识符** ✓
+  - `name`——字符串
+  - `joinDate`——日期
 
-As you add each entity, watch the graph preview update in real-time.
+添加每个实体后，都可以看到关系图预览实时更新。
 
-## Step 3: Add relationships
+## 第 3 步：添加关系
 
-Switch to the **Relationships** tab and add:
+切换到**关系**标签页，添加以下关系：
 
 | Relationship | From | To | Cardinality |
 |-------------|------|-----|-------------|
 | `writtenBy` | Book | Author | Many-to-one |
 | `borrowedBy` | Book | Member | Many-to-many |
 
-The `writtenBy` relationship is many-to-one because many books can share one author, but each book has one primary author. The `borrowedBy` relationship is many-to-many because a book can be borrowed by many members, and a member can borrow many books.
+`writtenBy` 是多对一关系，因为多本图书可以由同一位作者创作，而每本图书都有一位主要作者。`borrowedBy` 是多对多关系，因为一本书可以先后被多位会员借阅，一位会员也可以借阅多本书。
 
-## Step 4: Validate
+## 第 4 步：验证
 
-Click the **Validate** button in the toolbar. If everything is correct, you'll see a green "No issues found" banner. Otherwise, fix any reported issues:
+点击工具栏中的**验证**按钮。如果设置正确，会看到绿色的“未发现问题”提示；如果有问题，请根据提示修正：
 
-- Every entity must have at least one identifier property
-- Relationships must reference existing entity types
-- No duplicate IDs
+- 每个实体都必须至少有一个标识符属性
+- 关系必须引用已存在的实体类型
+- ID 不能重复
 
-## Step 5: Preview the RDF
+## 第 5 步：预览 RDF
 
-Click the **RDF** tab in the preview pane. You'll see the live RDF/OWL output with syntax highlighting. This is the exact file that tools like Fabric IQ consume.
+点击预览面板中的 **RDF** 标签页，即可查看带语法高亮的实时 RDF/OWL 输出。Fabric IQ 等工具读取的正是这种格式。
 
 <ontology-embed id="official/cosmic-coffee" height="400px"></ontology-embed>
 
-*The Fourth Coffee ontology was built using the same workflow. Your Library ontology will look similar — entities as colourful nodes, relationships as directed edges.*
+*Fourth Coffee 本体也采用了同样的流程构建。你的图书馆本体会呈现相似结构：实体显示为彩色节点，关系显示为有向连线。*
 
-## Step 6: Export
+## 第 6 步：导出
 
-You have three options:
+你可以选择以下三种方式：
 
-1. **Download RDF** — saves a `.rdf` file to your Downloads folder
-2. **Submit to Catalogue** — opens a one-click PR flow to contribute your ontology to the community catalogue (requires GitHub sign-in)
-3. **Copy JSON** — copies the JSON representation for use in apps
+1. **下载 RDF**——将 `.rdf` 文件保存到下载文件夹
+2. **提交到目录**——通过一键拉取请求流程，将本体贡献给社区目录（需要登录 GitHub）
+3. **复制 JSON**——复制 JSON 表示，以便在应用中使用
 
-## What's next?
+## 接下来可以做什么？
 
-- Explore the [Catalogue](#/catalogue) to see how other ontologies are structured
-- Read [Ontology Design Patterns](#/learn/ontology-design-patterns) for naming conventions and best practices
-- Try the **Query Playground** on the home page to ask natural-language questions against your ontology
+- 浏览[本体目录](#/catalogue)，了解其他本体的结构
+- 阅读[本体设计模式](#/learn/ontology-design-patterns)，了解命名约定和最佳实践
+- 在首页试用**查询 Playground**，针对你的本体提出自然语言问题
 
-## Key takeaways
+## 要点回顾
 
-- The designer provides a visual, code-free workflow for building ontologies
-- Every entity needs a name, at least one property, and one identifier
-- Relationships connect entities with a name and cardinality
-- The live graph and RDF previews give instant feedback as you design
-- Export to RDF for Fabric IQ, or submit directly to the community catalogue
+- 设计器提供可视化、无需编写代码的本体构建流程
+- 每个实体都需要名称、至少一个属性和一个标识符
+- 通过名称和基数定义实体之间的关系
+- 关系图与 RDF 预览会在设计过程中即时反馈
+- 可导出为 RDF 供 Fabric IQ 使用，也可以直接提交到社区目录
 
 ```quiz
-Q: Why is the borrowedBy relationship between Book and Member set to many-to-many?
-- A book can only be borrowed once
-- Each member borrows exactly one book at a time
-- A book can be borrowed by many members over time, and a member can borrow many books [correct]
-- Many-to-many is the default cardinality for all relationships
-> A single book can be borrowed by different members at different times, and each member can borrow multiple books simultaneously — this bidirectional multiplicity is what makes it many-to-many.
+Q: 为什么 Book 与 Member 之间的 `borrowedBy` 关系设置为多对多？
+- 一本书只能被借阅一次
+- 每位会员每次只能借一本书
+- 一本书可以先后被多位会员借阅，一位会员也可以借阅多本书 [correct]
+- 多对多是所有关系的默认基数
+> 一本书可以在不同时段由不同会员借阅，每位会员也可以同时借阅多本书。关系两端都允许多个实例，因此这是多对多关系。
 ```

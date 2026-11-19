@@ -6,75 +6,75 @@ order: 4
 embed: official/finance-step-3
 ---
 
-## Financial products
+## 金融产品
 
-Beyond basic accounts and transactions, banks offer two major product categories:
+除了基本账户和交易之外，银行还提供两大产品类别：
 
-- **Loans** — credit products where the bank lends money
-- **Investments** — holdings where customers grow wealth
+- **贷款** — 银行放贷的信贷产品
+- **投资** — 客户增值的持股
 
-Adding these completes the picture and creates interesting multi-path relationships.
+添加这些使图片完整并创建有趣的多路径关系。
 
-## Loan
+## 贷款
 
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `loanId` | string | ✓ |
-| `principal` | decimal (USD) | |
-| `apr` | decimal (%) | |
-| `term` | integer (months) | |
-| `status` | string | |
+| `loanId` |字符串| ✓ |
+| `principal` |小数（美元）| |
+| `apr` |小数 (%) | |
+| `term` |整数（月）| |
+| `status` |字符串| |
 
-The `term` is an integer measured in months — a common pattern for duration properties. The `apr` (Annual Percentage Rate) uses a percentage unit.
+`term` 是以月为单位的整数，这是持续时间属性的常见模式。 `apr`（年度百分比率）使用百分比单位。
 
-## Investment
+## 投资
 
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `holdingId` | string | ✓ |
-| `symbol` | string | |
-| `shares` | decimal | |
-| `purchasePrice` | decimal (USD) | |
-| `currentValue` | decimal (USD) | |
+| `holdingId` |字符串| ✓ |
+| `symbol` |字符串| |
+| `shares` |小数 | |
+| `purchasePrice` |小数（美元）| |
+| `currentValue` |小数（美元）| |
 
-The `symbol` property (e.g., MSFT, AAPL) identifies the stock. Having both `purchasePrice` and `currentValue` enables gain/loss calculations.
+`symbol` 属性（例如 MSFT、AAPL）标识股票。同时拥有 `purchasePrice` 和 `currentValue` 可以进行增益/损耗计算。
 
-## New relationships
+## 新关系
 
-Four relationships connect the financial products:
+连接金融产品的四种关系：
 
-- **has_loan** — `Customer` → `Loan` (one-to-many)
-  A customer can have multiple loans.
+- **has_loan** — `Customer` → `Loan`（一对多）
+一个客户可以拥有多笔贷款。
 
-- **funds** — `Account` → `Loan` (one-to-many)
-  An account serves as the payment source for loan repayments.
+- **资金** — `Account` → `Loan`（一对多）
+账户作为贷款还款的支付来源。
 
-- **holds** — `Customer` → `Investment` (one-to-many)
-  A customer's investment portfolio.
+- **持有** — `Customer` → `Investment`（一对多）
+客户的投资组合。
 
-- **linked_to** — `Account` → `Investment` (one-to-many)
-  A brokerage account linked to investment holdings.
+- **linked_to** — `Account` → `Investment`（一对多）
+与投资控股相关的经纪账户。
 
-> **Multi-path pattern:** Investment connects to Customer through *two* different paths: directly via `holds` and indirectly via `Account → linked_to`. This redundancy is intentional — it models both ownership (who holds it?) and funding (which account backs it?).
+> **多路径模式：** 投资通过*两条*不同的路径连接到客户：直接通过 `holds` 和间接通过 `Account → linked_to`。这种冗余是有意为之的——它模拟了所有权（谁持有它？）和资金（哪个账户支持它？）。
 
-## The complete graph
+## 完整图
 
 <ontology-embed id="official/finance-step-3" diff="official/finance-step-2" height="500px"></ontology-embed>
 
-*The complete Banking & Finance ontology: 5 entities, 6 relationships. Loan and Investment connect through both Customer and Account.*
+*完整的银行与金融本体：5 个实体，6 个关系。贷款和投资通过客户和账户连接。*
 
-## What the complete model enables
+## 完整模型支持什么
 
-| Question | Graph path |
+|问题 |图形路径|
 |---|---|
-| Which high-risk customers have large loans? | Customer (riskProfile=high) → Loan (principal > 100K) |
-| What's the portfolio value for our top customers? | Customer → Investment (sum currentValue) |
-| Which accounts fund both loans and investments? | Account → Loan AND Account → Investment |
-| Which customers' investments outperform their loan costs? | Customer → Investment (currentValue) vs Customer → Loan (principal × apr) |
+|哪些高风险客户拥有大额贷款？ |客户 (riskProfile=high) → 贷款 (本金 > 100K) |
+|我们的顶级客户的投资组合价值是什么？ |客户 → 投资（当前价值总和）|
+|哪些账户同时为贷款和投资提供资金？ |账户 → 贷款 AND 账户 → 投资 |
+|哪些客户的投资收益优于其贷款成本？ |客户→投资（当前价值）与客户→贷款（本金×年利率）|
 
-## GQL query example
+## GQL 查询示例
 
-Find customers whose investment portfolio exceeds their total loan principal:
+查找投资组合超过其贷款本金总额的客户：
 
 ```gql
 MATCH (c:Customer)-[:holds]->(inv:Investment),
@@ -84,29 +84,29 @@ WHERE portfolio > debt
 RETURN c.name, portfolio, debt
 ```
 
-## What we built
+## 我们构建了什么
 
-| Step | Entities added | Cumulative | Key concept |
+|步骤|添加实体 |累计|关键概念|
 |---|---|---|---|
-| 1 | Customer, Account | 2 | Ownership, financial identifiers |
-| 2 | Transaction | 3 | Activity tracking, datetime precision |
-| 3 | Loan, Investment | 5 | Financial products, multi-path relationships |
+| 1 |客户、帐户 | 2 |所有权、财务标识符|
+| 2 |交易 | 3 |活动跟踪、日期时间精度 |
+| 3 |贷款、投资 | 5 |金融产品，多路径关系|
 
-## Key takeaways
+## 要点
 
-1. **Ownership chains** (Customer → Account → Transaction) enable compliance queries
-2. **Datetime precision** is critical for financial data
-3. **Multi-path relationships** model different aspects of the same connection
-4. **Duration properties** (term in months) use integers with units
-5. Financial ontologies describe data shape — sensitive data stays in source systems
+1. **所有权链**（客户 → 账户 → 交易）支持合规性查询
+2. **日期时间精度**对于财务数据至关重要
+3. **多路径关系** 对财务数据的不同方面进行建模相同连接
+4. **持续时间属性**（以月为单位）使用带单位的整数
+5. 金融本体描述数据形状 — 敏感数据保留在源系统中
 
 ```quiz
-Q: Why does Investment connect to both Customer (via "holds") and Account (via "linked_to")?
-- It's a mistake — only one relationship is needed
-- Each relationship models a different aspect: ownership vs. funding source [correct]
-- Investment needs at least two relationships to be valid
-- One-to-many relationships always come in pairs
-> The "holds" relationship answers "who owns this investment?" while "linked_to" answers "which account funds it?" These are different questions with potentially different answers (e.g., a joint account funding one person's investment).
+Q:为什么投资同时连接到客户（通过“持有”）和账户（通过“linked_to”）？
+- 这是一个错误 - 只需要一个关系
+- 每种关系模拟不同的方面：所有权与资金来源 [correct]
+- 投资需要至少两个关系才有效
+- 一对多关系总是成对出现
+> “持有”关系回答“谁拥有这项投资？”而“linked_to”则回答“哪个帐户为其提供资金？”这些是不同的问题，可能有不同的答案（例如，为一个人的投资提供资金的联名账户）。
 ```
 
-You've completed the Banking & Finance learning path! Load any step from the [catalogue](#/catalogue) to explore it interactively.
+您已完成银行与金融学习路径！从[目录](#/catalogue) 加载任何步骤以交互方式探索它。

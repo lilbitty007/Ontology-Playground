@@ -6,71 +6,71 @@ order: 4
 embed: official/iq-lab-retail-step-3
 ---
 
-## Adding location context
+## 添加位置上下文
 
-Commerce doesn't happen in a vacuum — it happens in **places**. Adding geographic entities lets us answer questions like:
+商业不会在真空中发生——它发生在**地方**。添加地理实体可以让我们回答以下问题：
 
-- "What were total sales in the southwest region?"
-- "Which stores in the northeast have declining order volume?"
-- "Does the southwest region require cold-chain logistics?"
+- “西南地区的总销售额是多少？”
+- “东北哪些门店订单量下降？”
+- “西南地区需要冷链物流吗？”
 
-## Region
+＃＃ 地区
 
-Regions represent broad geographic areas that contain stores and warehouses:
+区域代表包含商店和仓库的广泛地理区域：
 
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `regionId` | string | ✓ |
-| `regionName` | string | |
-| `timezone` | string | |
-| `coldChainRequired` | boolean | |
+| `regionId` |字符串| ✓ |
+| `地区名称` |字符串| |
+| `时区` |字符串| |
+| `冷链必需` |布尔 | |
 
-The `coldChainRequired` property is a good example of a **boolean property** — it captures a yes/no business rule (does this region need refrigerated shipping?) as a queryable attribute rather than burying it in documentation.
+“coldChainRequired”属性是**布尔属性**的一个很好的例子 - 它捕获是/否业务规则（该区域是否需要冷藏运输？）作为可查询的属性，而不是将其隐藏在文档中。
 
-## Store
+＃＃ 店铺
 
-Stores are the physical retail locations where customers place orders:
+商店是客户下订单的实体零售地点：
 
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `storeId` | string | ✓ |
-| `storeName` | string | |
-| `address` | string | |
+| `storeId` |字符串| ✓ |
+| `商店名称` |字符串| |
+| `地址` |字符串| |
 
-## New relationships
+## 新关系
 
-- **OrderFulfilledToRegion** — `Order` → `Region` (many-to-one)
-  Each order is fulfilled in one region. This enables regional sales analysis.
+- **OrderFulfilledToRegion** — `Order` → `Region`（多对一）
+每份订单均在一个地区履行。这使得区域销售分析成为可能。
 
-- **StoreInRegion** — `Store` → `Region` (many-to-one)
-  Each store belongs to one region. Combined with the order relationship, this creates two paths to Region — useful for different analytical perspectives.
+- **StoreInRegion** — `Store` → `Region` （多对一）
+每个商店属于一个地区。与顺序关系相结合，这创建了两条通往区域的路径——对于不同的分析视角非常有用。
 
-## Geographic hierarchies
+## 地理层次结构
 
-Notice the pattern: **Store** → **Region** forms a **geographic hierarchy**. In a more detailed ontology, you might add City, State, or Country levels. The key principle is:
+请注意这种模式：**商店**→**区域**形成**地理层次结构**。在更详细的本体中，您可以添加城市、州或国家级别。关键原则是：
 
-> Each level in the hierarchy connects to the next via a many-to-one relationship. This enables automatic roll-up: store-level data aggregates to region-level totals.
+> 层次结构中的每个级别都通过多对一关系连接到下一个级别。这可以实现自动汇总：商店级数据聚合到区域级总计。
 
-## The graph at Step 3
+## 第 3 步的图表
 
 <ontology-embed id="official/iq-lab-retail-step-3" diff="official/iq-lab-retail-step-2" height="400px"></ontology-embed>
 
-*Seven entity types. Region and Store add geographic context. Notice how Order now connects to both Customer (who bought) and Region (where it was fulfilled).*
+*七种实体类型。区域和商店添加地理背景。请注意订单现在如何连接到客户（购买者）和区域（履行订单的地方）。*
 
-## What we learned
+## 我们学到了什么
 
-- **Geographic entities** enable location-based analytics
-- **Boolean properties** (like `coldChainRequired`) capture business rules
-- **Hierarchies** allow data to roll up from granular to aggregate
-- An entity can have multiple relationships to different entities — Order connects to Customer, Product (via OrderLine), and Region
+- **地理实体**支持基于位置的分析
+- **布尔属性**（如“coldChainRequired”）捕获业务规则
+- **层次结构**允许数据从细粒度汇总到聚合
+- 一个实体可以与不同的实体有多种关系 - 订单连接到客户、产品（通过 OrderLine）和区域
 
 ```quiz
-Q: Why is it useful to model Region as a separate entity instead of adding a "region" text property on Store?
-- It saves storage space
-- It enables roll-up queries and maintains a single source of truth for geographic data [correct]
-- It makes the ontology diagram look better
-- Fabric IQ requires it
-> Modelling Region as a separate entity creates a hierarchy: Store → Region. This lets IQ aggregate data by region ("total sales in the northeast") and ensures region metadata is defined once, not duplicated across every store.
+Q:为什么将 Region 建模为单独的实体而不是在 Store 上添加“region”文本属性会很有用？
+- 它节省存储空间
+- 它启用汇总查询并维护地理数据的单一事实来源[correct]
+- 它使本体图看起来更好
+- Fabric IQ 需要它
+> 将区域建模为单独的实体创建层次结构：存储 → 区域。这使得 IQ 按区域（“东北部的总销售额”）聚合数据，并确保区域元数据定义一次，而不是在每个商店中重复。
 ```
 
-Next, we'll model how orders actually get delivered.
+接下来，我们将对订单的实际交付方式进行建模。

@@ -6,61 +6,61 @@ order: 5
 embed: official/iq-lab-retail-step-4
 ---
 
-## The delivery pipeline
+## 交付管道
 
-Customers place orders, but how do those orders reach them? The fulfillment layer connects orders to the physical logistics infrastructure:
+客户下订单，但这些订单如何到达他们手中？履行层将订单与物理物流基础设施连接起来：
 
-- **Shipment** — a delivery record
-- **Carrier** — the logistics provider (FedEx, UPS, etc.)
-- **Warehouse** — the fulfillment center that stocks and ships products
+- **装运** — 交货记录
+- **承运人** — 物流提供商（FedEx、UPS 等）
+- **仓库** — 库存和运输产品的履行中心
 
-## Shipment
+##货件
 
-Each shipment represents a delivery:
+每批货件代表一次交货：
 
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `shipmentId` | string | ✓ |
-| `shipDate` | date | |
-| `deliveryDate` | date | |
-| `status` | string | |
+| `shipmentId` |字符串| ✓ |
+| `shipDate` |日期 | |
+| `deliveryDate` |日期 | |
+| `status` |字符串| |
 
-## Carrier
+## 承运人
 
-The logistics company handling the delivery:
+负责发货的物流公司：
 
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `carrierId` | string | ✓ |
-| `carrierName` | string | |
-| `serviceType` | string | |
+| `carrierId` |字符串| ✓ |
+| `carrierName` |字符串| |
+| `serviceType` |字符串| |
 
-## Warehouse
+## 仓库
 
-The fulfillment center:
+运营中心：
 
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `warehouseId` | string | ✓ |
-| `warehouseName` | string | |
-| `capacity` | integer | |
+| `warehouseId` |字符串| ✓ |
+| `warehouseName` |字符串| |
+| `capacity` |整数 | |
 
-## New relationships
+## 新关系
 
-Three new relationships connect the logistics entities:
+连接物流实体的三个新关系：
 
-- **ShipmentFulfillsOrder** — `Shipment` → `Order` (many-to-one)
-  Each shipment fulfills one order. Multiple shipments can fulfill the same order (split shipments).
+- **ShipmentFulfillsOrder** — `Shipment` → `Order` （多对一）
+每批货物完成一个订单。多次发货可以完成同一个订单（拆分发货）。
 
-- **ShipmentByCarrier** — `Shipment` → `Carrier` (many-to-one)
-  Each shipment is handled by one carrier.
+- **按承运商装运** — `Shipment` → `Carrier`（多对一）
+每批货件均由一个承运商处理。
 
-- **ShipmentDepartedFromWarehouse** — `Shipment` → `Warehouse` (many-to-one)
-  Each shipment departs from one warehouse.
+- **货件从仓库出发** — `Shipment` → `Warehouse`（多对一）
+每批货件从一个仓库出发。
 
-## The hub pattern
+## 中心模式
 
-Notice that **Shipment** acts as a **hub entity** — it connects to Order, Carrier, and Warehouse simultaneously. This is a common pattern for transaction or event entities that bridge multiple concepts:
+请注意，**发货**充当**中心实体** — 它同时连接到订单、承运商和仓库。这是桥接多个概念的事务或事件实体的常见模式：
 
 ```
 Carrier ← Shipment → Order → Customer
@@ -68,28 +68,28 @@ Carrier ← Shipment → Order → Customer
           Warehouse
 ```
 
-A single graph traversal from Carrier through Shipment to Order to Customer answers: "Which customers received shipments from CarrierX?"
+从 Carrier 通过发货到订单到客户的单个图遍历回答：“哪些客户收到了 CarrierX 的发货？”
 
-## The graph at Step 4
+## 第 4 步的图表
 
 <ontology-embed id="official/iq-lab-retail-step-4" diff="official/iq-lab-retail-step-3" height="450px"></ontology-embed>
 
-*Ten entity types forming a rich connected graph. Shipment links the logistics layer (Carrier, Warehouse) to the commerce layer (Order, Customer). You can traverse from any warehouse to any customer through the graph.*
+*十种实体类型形成丰富的连通图。装运将物流层（承运商、仓库）与商务层（订单、客户）联系起来。您可以通过图从任何仓库遍历到任何客户。*
 
-## What we learned
+## 我们学到了什么
 
-- **Hub entities** (like Shipment) connect multiple domains
-- The logistics layer extends the commerce layer — no need to modify existing entities
-- Graph traversal makes cross-domain queries natural: "Which warehouses ship to the southwest region?" requires no SQL joins
-- The ontology is now 10 entities with 10 relationships — growing but still readable
+- **Hub 实体**（如 Shipment）连接多个域
+- 物流层扩展了商业层 - 无需修改现有实体
+- 图遍历让跨域查询变得自然：“哪些仓库发货到西南地区？”不需要 SQL 连接
+- 本体现在是具有 10 个关系的 10 个实体 - 不断增长但仍然可读
 
 ```quiz
-Q: What role does the Shipment entity play in the ontology?
-- It replaces the Order entity
-- It acts as a hub connecting the logistics layer to the commerce layer [correct]
-- It stores customer addresses
-- It defines the cardinality between Warehouse and Carrier
-> Shipment is a hub entity that connects multiple domains: it links Order to the logistics infrastructure (Carrier, Warehouse), enabling cross-domain queries without modifying existing entities.
+Q:Shipment 实体在本体中扮演什么角色？
+- 它取代了订单实体
+- 它充当连接物流层和商业层的枢纽[correct]
+- 它存储客户地址
+- 它定义仓库和承运商之间的基数
+> 装运是连接多个域的枢纽实体：它将订单链接到物流基础设施（承运商、 Warehouse），无需修改现有实体即可实现跨域查询。
 ```
 
-Next, we'll add inventory tracking and demand forecasting.
+接下来，我们将添加库存跟踪和需求预测。

@@ -6,50 +6,50 @@ order: 4
 embed: official/healthcare-step-3
 ---
 
-## The treatment chain
+## 治疗链
 
-The final piece of the healthcare puzzle is **Prescription** — the treatment response to a diagnosis. This closes the care cycle: appointment → diagnosis → treatment.
+医疗保健难题的最后一块是**处方**——对诊断的治疗反应。这样就结束了护理周期：预约→诊断→治疗。
 
-## Prescription entity
+## 处方实体
 
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `rxNumber` | string | ✓ |
-| `medication` | string | |
-| `dosage` | string | |
-| `frequency` | string | |
-| `refillsRemaining` | integer | |
+| `rxNumber` |字符串| ✓ |
+| `medication` |字符串| |
+| `dosage` |字符串| |
+| `frequency` |字符串| |
+| `refillsRemaining` |整数 | |
 
-The identifier is `rxNumber` (prescription number) — a pharmacy-standard identifier. The `refillsRemaining` integer enables refill tracking and medication adherence monitoring.
+标识符是 `rxNumber`（处方号）——药房标准标识符。 `refillsRemaining` 整数可实现补充跟踪和药物依从性监控。
 
-## New relationships
+## 新关系
 
-- **treated_by** — `Diagnosis` → `Prescription` (one-to-many)
-  A diagnosis can lead to multiple prescriptions (e.g., multiple medications for the same condition).
+- **treatment_by** — `Diagnosis` → `Prescription`（一对多）
+一个诊断可能会导致多个处方（例如，针对同一病症的多种药物）。
 
-- **prescribes** — `Provider` → `Prescription` (one-to-many)
-  A provider writes prescriptions for their patients.
+- **开处方** — `Provider` → `Prescription`（一对多）
+提供者为其患者开处方。
 
-> **Care chain:** The complete path is now `Patient → Diagnosis → Prescription`, with `Provider` connecting at every stage (sees appointments, makes diagnoses, writes prescriptions). This reflects the real clinical workflow.
+> **护理链：** 完整的路径现在是 `Patient → Diagnosis → Prescription`，每个阶段都有 `Provider` 连接（看预约、诊断、开处方）。这反映了真实的临床工作流程。
 
-## The complete graph
+## 完整图
 
 <ontology-embed id="official/healthcare-step-3" diff="official/healthcare-step-2" height="500px"></ontology-embed>
 
-*The complete Healthcare ontology: 5 entities, 6 relationships. The care chain flows from Patient through Diagnosis to Prescription.*
+*完整的医疗保健本体：5 个实体，6 个关系。护理链从患者到诊断再到处方。*
 
-## What the complete model enables
+## 完整模型能够实现什么
 
-| Question | Graph path |
+|问题 |图形路径|
 |---|---|
-| Which patients need prescription refills? | Patient → Diagnosis → Prescription (refillsRemaining=0) |
-| Which providers prescribe the most medications? | Provider → Prescription (count) |
-| Which severe diagnoses have no treatment yet? | Diagnosis (severity=severe) with no → Prescription |
-| Which specialists diagnose conditions they also prescribe for? | Provider → Diagnosis AND Provider → Prescription |
+|哪些患者需要处方补充？ |患者→诊断→处方（补充剩余=0）|
+|哪些提供者开出的药物最多？ |提供者 → 处方（计数）|
+|哪些严重的诊断尚未得到治疗？ |没有 → 处方 | 诊断（严重程度=严重）
+|哪些专家诊断他们也开出处方的病症？ |提供者 → 诊断和提供者 → 处方 |
 
-## GQL query example
+## GQL查询示例
 
-Find patients with severe diagnoses whose prescriptions are running out:
+查找处方即将用完的重症患者：
 
 ```gql
 MATCH (p:Patient)-[:diagnosed_with]->(d:Diagnosis)-[:treated_by]->(rx:Prescription)
@@ -57,29 +57,29 @@ WHERE d.severity = 'severe' AND rx.refillsRemaining <= 1
 RETURN p.patientId, d.description, rx.medication, rx.refillsRemaining
 ```
 
-## What we built
+## 我们构建了什么
 
-| Step | Entities added | Cumulative | Key concept |
+|步骤|添加实体 |累计|关键概念|
 |---|---|---|---|
-| 1 | Patient, Provider, Appointment | 3 | Shared entities, scheduling |
-| 2 | Diagnosis | 4 | Standardized codes, dual connections |
-| 3 | Prescription | 5 | Care chains, treatment tracking |
+| 1 |患者、提供者、预约 | 3 |共享实体、调度|
+| 2 |诊断 | 4 |标准化代码，双连接|
+| 3 |处方| 5 |护理链、治疗追踪|
 
-## Key takeaways
+## 要点
 
-1. **Shared entities** (Appointment, Diagnosis) connect multiple actors
-2. **Standardized codes** (ICD, Rx) enable cross-system interoperability
-3. **Care chains** (Patient → Diagnosis → Prescription) model clinical workflows
-4. **Provider connects at every stage** — reflecting the central role in healthcare delivery
-5. **Integer properties** (refillsRemaining, duration) enable operational queries
+1. **共享实体**（预约、诊断）连接多个参与者
+2. **标准化代码**（ICD、Rx）实现跨系统互操作性
+3. **护理链**（患者 → 诊断 → 处方）建立临床工作流程模型
+4. **提供者在每个阶段进行连接** — 反映医疗保健服务中的核心作用
+5. **整数属性**（剩余补充量、持续时间）支持操作查询
 
 ```quiz
-Q: How does the Provider entity connect across the complete healthcare ontology?
-- Provider only connects to Appointment
-- Provider connects to Appointment, Diagnosis, and Prescription — reflecting their role at every stage of care [correct]
-- Provider connects to Patient directly
-- Provider connects to Prescription only
-> Provider is the most connected entity in this ontology — they see appointments, make diagnoses, and write prescriptions. This reflects the real-world workflow where healthcare providers are involved at every stage of the care delivery chain.
+Q:提供商实体如何跨完整的医疗保健本体进行连接？
+- 提供者仅连接到预约
+- 提供者连接到预约、诊断和处方 - 反映他们在护理每个阶段的角色 [correct]
+- 提供者直接连接到患者
+- 提供者仅连接到处方
+> 提供者是此本体中连接最紧密的实体 - 他们查看预约、做出诊断和开处方。这反映了现实世界的工作流程，医疗保健提供者参与护理提供链的每个阶段。
 ```
 
-You've completed the Healthcare System learning path! Load any step from the [catalogue](#/catalogue) to explore it interactively.
+您已完成医疗保健系统学习路径！从[目录](#/catalogue) 加载任何步骤以交互方式探索它。

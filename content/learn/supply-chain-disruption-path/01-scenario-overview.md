@@ -5,20 +5,20 @@ description: "Understand the real-world challenge of supply chain resilience —
 order: 1
 ---
 
-## The challenge
+## 挑战
 
-Your manufacturing operation depends on a complex web of suppliers. One disruption — a natural disaster, geopolitical event, quality issue, or cyber attack — doesn't just affect that one supplier. It ripples through:
+您的制造运营取决于复杂的供应商网络。自然灾害、地缘政治事件、质量问题或网络攻击等一种中断不仅仅影响到某一家供应商。它会影响到：
 
-- **Components** that depend on that supplier
-- **Product lines** that use those components
-- **Revenue** when products can't be shipped
-- **Production timelines** that slip week by week
+- **依赖于该供应商的组件**
+- **使用这些组件的产品线**
+- **产品无法发货时的收入**
+- **生产时间表**逐周下滑
 
-Without visibility into these cascades, you react after the damage is done. With it, you **anticipate and act before customers are affected**.
+在无法看到这些级联的情况下，您会在损坏完成后做出反应。有了它，您**可以在客户受到影响之前进行预测并采取行动**。
 
-## Real-world example
+## 真实示例
 
-A semiconductor supplier in Taiwan experiences a power outage lasting 48 hours:
+台湾一家半导体供应商遭遇持续 48 小时的停电：
 
 ```
 Disruption: Taiwan Supplier Outage
@@ -34,36 +34,36 @@ Result: $12M revenue at risk, customer orders delayed
 Mitigation: Activate pre-qualified alternative supplier + safety stock
 ```
 
-**Without an ontology**, this analysis takes days and manual spreadsheets.  
-**With an ontology**, an AI agent can:
-1. Identify all affected components within minutes
-2. Trace to all product lines and production timelines
-3. Recommend alternative suppliers and safety stock quantities
-4. Calculate cost-benefit of each mitigation action
-5. Trigger automated alerts and procurement workflows
+**如果没有本体**，此分析需要数天时间和手动电子表格。
+**借助本体**，AI 代理可以：
+1. 在几分钟内识别所有受影响的组件
+2. 追踪所有产品线和生产时间表
+3. 推荐替代供应商和安全库存数量
+4. 计算每个缓解措施的成本效益
+5. 触发自动警报和采购工作流程
 
-## What you'll build
+## 您将构建什么
 
-Over four steps, we'll construct a production-grade ontology that powers this intelligence:
+通过四个步骤，我们将构建一个支持这种智能的生产级本体：
 
-| Step | Focus | Outcome |
+|步骤|焦点|结果|
 |---|---|---|
-| 1 | Core entities (Supplier, Component, ProductLine, Disruption) | Vocabulary of your supply chain |
-| 2 | Entity properties and identifiers | Rich attributes for risk calculation |
-| 3 | Relationships and cascade modeling | Impact propagation graph |
-| 4 | Risk assessment and mitigation actions | Decision automation |
+| 1 |核心实体（供应商、组件、产品线、中断）|您的供应链词汇|
+| 2 |实体属性和标识符 |丰富的风险计算属性 |
+| 3 |关系和级联建模|影响传播图 |
+| 4 |风险评估和缓解行动|决策自动化|
 
-By the end, you'll have a 7-entity ontology with:
-- **40 properties** capturing reliability scores, inventory levels, costs, timelines
-- **7 relationships** modeling the disruption cascade
-- **Fabric IQ compatibility** for data agent grounding and real-time alerting
+到最后，您将拥有一个包含 7 个实体的本体：
+- **40 个属性**，捕获可靠性分数、库存水平、成本、时间表
+- **7 个关系** 对中断级联进行建模
+- **Fabric IQ 兼容性**，用于数据代理接地和实时警报
 
-## Key concepts
+## 关键概念
 
-- **Disruption events** — the trigger (natural disaster, cyber attack, financial failure)
-- **Impact propagation** — how disruptions cascade through dependencies
-- **Risk assessment** — calculating revenue at risk and time to impact
-- **Mitigation actions** — concrete steps to reduce or eliminate impact
-- **Alternative suppliers** — pre-qualified backups with capacity and cost trade-offs
+- **中断事件** — 触发器（自然灾害、网络攻击、财务失败）
+- **影响传播** — 中断如何通过依赖关系级联
+- **风险评估** — 计算风险收入和产生影响的时间
+- **缓解措施** — 减少或消除影响的具体步骤
+- **替代供应商** — 通过容量和成本权衡进行预审备份
 
-Let's start by understanding the core entities and relationships that make resilience decisions possible.
+让我们首先了解使弹性决策成为可能的核心实体和关系。

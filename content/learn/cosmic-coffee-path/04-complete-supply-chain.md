@@ -6,13 +6,13 @@ order: 4
 embed: official/cosmic-coffee-step-3
 ---
 
-## Completing the picture
+## 补全供应链全貌
 
-Fourth Coffee doesn't just sell coffee — it sources beans from suppliers around the world, receives shipments at its stores, and tracks the entire supply chain. Adding **Supplier** and **Shipment** closes the loop.
+Fourth Coffee 不只销售咖啡，还从全球供应商采购咖啡豆、在门店接收货运，并跟踪整个供应链。添加 **Supplier（供应商）**和 **Shipment（货运）**即可闭合供应链。
 
-## Supplier
+## Supplier 实体
 
-| Property | Type | Identifier? |
+| 属性 | 类型 | 标识符？ |
 |---|---|---|
 | `supplierId` | string | ✓ |
 | `name` | string | |
@@ -20,11 +20,11 @@ Fourth Coffee doesn't just sell coffee — it sources beans from suppliers aroun
 | `certification` | enum (Fair Trade, Rainforest Alliance, Organic, Direct Trade, None) | |
 | `rating` | decimal | |
 
-The `certification` property is an enum that captures sustainability credentials. The `rating` is a decimal (1–5) for quality scoring.
+`certification` 属性使用枚举来记录可持续发展认证。`rating` 为 1–5 的小数，用于质量评分。
 
-## Shipment
+## Shipment 实体
 
-| Property | Type | Identifier? |
+| 属性 | 类型 | 标识符？ |
 |---|---|---|
 | `shipmentId` | string | ✓ |
 | `dispatchDate` | date | |
@@ -32,44 +32,44 @@ The `certification` property is an enum that captures sustainability credentials
 | `status` | enum (In Transit, Delivered, Delayed) | |
 | `weight` | decimal (kg) | |
 
-Shipment acts as a **hub entity** — it connects Supplier to Store through Product, bridging the sourcing and retail sides of the business.
+Shipment 是一个**枢纽实体**：它通过 Product 将 Supplier 与 Store 连接起来，贯通采购和零售两端。
 
-## New relationships
+## 新增关系
 
-Four new relationships complete the supply chain:
+以下四种关系用于补全供应链：
 
-- **sourcedFrom** — `Product` → `Supplier` (many-to-one)
-  Each product's beans come from one supplier.
+- **sourcedFrom**——`Product` → `Supplier`（多对一）
+  每种产品的咖啡豆来自一家供应商。
 
-- **sentBy** — `Shipment` → `Supplier` (many-to-one)
-  Each shipment originates from one supplier.
+- **sentBy**——`Shipment` → `Supplier`（多对一）
+  每批货运都来自一家供应商。
 
-- **deliveredTo** — `Shipment` → `Store` (many-to-one)
-  Each shipment arrives at one store.
+- **deliveredTo**——`Shipment` → `Store`（多对一）
+  每批货运都送达一家门店。
 
-- **carries** — `Shipment` → `Product` (many-to-many)
-  A shipment can carry multiple products, and a product can be in multiple shipments.
+- **carries**——`Shipment` → `Product`（多对多）
+  一批货运可以运送多种产品，同一种产品也可以出现在多批货运中。
 
-> **Hub entity pattern:** Shipment connects three different entities (Supplier, Store, Product). Hub entities are powerful because they bridge otherwise disconnected parts of the graph.
+> **枢纽实体模式：**Shipment 连接了 Supplier、Store 和 Product 三种实体。枢纽实体能把原本不相连的图结构连接起来，因此非常实用。
 
-## The complete graph
+## 完整关系图
 
 <ontology-embed id="official/cosmic-coffee-step-3" diff="official/cosmic-coffee-step-2" height="500px"></ontology-embed>
 
-*The complete Fourth Coffee ontology: 6 entity types, 7 relationships. Shipment acts as a hub connecting Supplier, Store, and Product.*
+*完整的 Fourth Coffee 本体包含 6 种实体类型和 7 种关系。Shipment 作为枢纽，连接 Supplier、Store 和 Product。*
 
-## What the complete model enables
+## 完整模型支持的查询
 
-| Question | Graph path |
+| 问题 | 图路径 |
 |---|---|
-| Which suppliers provide organic beans? | Product (isOrganic=true) → Supplier |
-| Which stores received delayed shipments? | Shipment (status=Delayed) → Store |
-| What's the rating of our top supplier? | Product → Supplier (sort by rating) |
-| Which certified suppliers ship to our largest stores? | Supplier → Shipment → Store (sort by capacity) |
+| 哪些供应商提供有机咖啡豆？ | Product（isOrganic=true）→ Supplier |
+| 哪些门店收到延误货运？ | Shipment（status=Delayed）→ Store |
+| 主要供应商的评分是多少？ | Product → Supplier（按 rating 排序） |
+| 哪些已认证供应商向容量最大的门店供货？ | Supplier → Shipment → Store（按 capacity 排序） |
 
-## GQL query example
+## GQL 查询示例
 
-Find suppliers with Fair Trade certification that ship to stores in California:
+查找获得公平贸易认证且向加利福尼亚州门店供货的供应商：
 
 ```gql
 MATCH (sup:Supplier)<-[:sentBy]-(s:Shipment)-[:deliveredTo]->(st:Store)
@@ -77,29 +77,29 @@ WHERE sup.certification = 'Fair Trade' AND st.state = 'CA'
 RETURN sup.name, st.name, s.status
 ```
 
-## What we built
+## 本课程构建过程
 
-| Step | Entities added | Cumulative | Key concept |
+| 步骤 | 新增实体 | 累计实体数 | 核心概念 |
 |---|---|---|---|
-| 1 | Customer, Order, Product | 3 | Entity types, identifiers, cardinality |
-| 2 | Store | 4 | Location modelling, many-to-one |
-| 3 | Supplier, Shipment | 6 | Supply chain, hub entities |
+| 1 | Customer、Order、Product | 3 | 实体类型、标识符、基数 |
+| 2 | Store | 4 | 地点建模、多对一关系 |
+| 3 | Supplier、Shipment | 6 | 供应链、枢纽实体 |
 
-## Key takeaways
+## 要点回顾
 
-1. **Start small** — three entities are enough to create value
-2. **Hub entities** like Shipment bridge different business domains
-3. **Enum properties** enforce data quality at the model level
-4. **The graph grows incrementally** — each step adds new query capabilities
-5. **GQL queries** map directly to ontology structure — no impedance mismatch
+1. **从小处开始**——三种实体就足以体现价值
+2. Shipment 这样的**枢纽实体**可以连接不同业务领域
+3. **枚举属性**可以在模型层面约束数据质量
+4. **逐步扩展关系图**——每一步都会增加新的查询能力
+5. **GQL 查询**可直接映射到本体结构，避免模型与查询之间出现偏差
 
 ```quiz
-Q: Why is Shipment considered a "hub entity" in this ontology?
-- It has the most properties of any entity
-- It connects three different entities: Supplier, Store, and Product [correct]
-- It is the most frequently queried entity
-- It was the last entity added to the model
-> Shipment is a hub because it has relationships to Supplier (sentBy), Store (deliveredTo), and Product (carries) — bridging the sourcing, logistics, and retail domains in a single entity.
+Q: 为什么 Shipment 在这个本体中被称为“枢纽实体”？
+- 它拥有所有实体中最多的属性
+- 它连接 Supplier、Store 和 Product 三种实体 [correct]
+- 它是查询频率最高的实体
+- 它是最后加入模型的实体
+> Shipment 分别通过 sentBy、deliveredTo 和 carries 关系连接 Supplier、Store 和 Product，将采购、物流和零售领域汇聚到同一个实体。
 ```
 
-You've completed the Fourth Coffee learning path! Load any step from the [catalogue](#/catalogue) to explore it interactively.
+你已完成 Fourth Coffee 学习路径！从[本体目录](#/catalogue)加载任意步骤，即可交互式探索本体。

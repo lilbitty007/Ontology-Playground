@@ -5,53 +5,53 @@ description: "Add Assignment as a junction entity to model staffing history acro
 order: 3
 ---
 
-## The staffing history problem
+## 人员配置历史记录问题
 
-An employee can move between departments or positions over time. A department can host many employees. A position can be filled by different people over time.
+员工可以随着时间的推移在部门或职位之间流动。一个部门可以容纳许多员工。随着时间的推移，一个职位可以由不同的人填补。
 
-This is not a simple one-to-one structure.
+这不是一个简单的一对一结构。
 
-## Assignment as a junction entity
+## 作为联结实体的分配
 
-Create **Assignment** to connect:
+创建用于连接的**分配**：
 
-- `Employee` -> `Assignment` (one-to-many)
-- `Assignment` -> `Department` (many-to-one)
-- `Assignment` -> `Position` (many-to-one)
+- `Employee` -> `Assignment`（一对多）
+- `Assignment` -> `Department`（多对一）
+- `Assignment` -> `Position`（多对一）
 
-Assignment holds the context of the relationship.
+赋值保存关系的上下文。
 
-### Assignment properties
+### 赋值属性
 
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `assignmentId` | string | ✓ |
-| `startDate` | date | |
-| `endDate` | date | |
-| `isPrimary` | boolean | |
+| `assignmentId` |字符串| ✓ |
+| `startDate` |日期 | |
+| `endDate` |日期 | |
+| `isPrimary` |布尔 | |
 
-With `startDate` and `endDate`, you can answer historical questions like:
+使用 `startDate` 和 `endDate`，您可以回答以下历史问题：
 
-- "Who was in Finance during Q2?"
-- "Which employees changed departments this year?"
+-“第二季度谁在财务部门？”
+- “今年哪些员工换了部门？”
 
-## Design pattern in action
+## 实际设计模式
 
-This is the same general pattern used in many domains:
+这与许多领域中使用的通用模式相同：
 
-- Student-Course via Enrollment
-- Customer-Product via Order line items
-- Employee-Department-Position via Assignment
+- 通过注册的学生课程
+- 通过订单行项目的客户产品
+- 通过分配的员工部门职位
 
-Use junction entities when relationships need their own attributes.
+当关系需要自己的属性时，使用联结实体。
 
 ```quiz
-Q: What is the main reason Assignment should be its own entity?
-- It improves icon choices in the graph
-- It carries relationship-specific attributes like startDate and endDate [correct]
-- It removes the need for identifiers
-- It prevents many-to-one relationships
-> Assignment stores the context of staffing over time. Those properties belong to the relationship, not to Employee, Department, or Position alone.
+Q:Assignment 应该有自己的实体，主要原因是什么？
+- 它改进了图表中的图标选择
+- 它携带特定于关系的属性，例如 startDate 和 endDate [correct]
+- 它消除了对标识符的需要
+- 它防止多对一关系
+> 分配存储随时间推移的人员配置上下文。这些属性属于关系，而不是仅属于员工、部门或职位。
 ```
 
-Next, we add performance reviews to complete the HR analytics model.
+接下来，我们添加绩效评估以完成 HR 分析模型。

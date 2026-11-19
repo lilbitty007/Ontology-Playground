@@ -6,56 +6,56 @@ order: 3
 embed: official/finance-step-2
 ---
 
-## Tracking activity
+## 跟踪活动
 
-An account without transaction history is just a static balance. Adding **Transaction** captures the flow of money — every purchase, deposit, transfer, and fee.
+没有交易历史记录的账户只是静态余额。添加**交易**捕获资金流——每次购买、存款、转账和费用。
 
-This enables questions like:
-- "What did this customer spend at restaurants last month?"
-- "Which accounts have unusual transaction patterns?"
-- "What's the average transaction amount per account type?"
+这可以提出如下问题：
+- “这位顾客上个月在餐馆花了多少钱？”
+- “哪些账户有不寻常的交易模式？”
+- “每种账户类型的平均交易金额是多少？”
 
-## Transaction entity
+## 交易实体
 
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `transactionId` | string | ✓ |
-| `amount` | decimal (USD) | |
-| `type` | string | |
-| `timestamp` | datetime | |
-| `merchant` | string | |
+| `transactionId` |字符串| ✓ |
+| `amount` |小数（美元）| |
+| `type` |字符串| |
+| `timestamp` |日期时间 | |
+| `merchant` |字符串| |
 
-The `timestamp` is a datetime (not just a date) because financial transactions need precision — a purchase at 2:30 PM is different from one at 2:31 PM for fraud detection.
+`timestamp` 是一个日期时间（不仅仅是日期），因为金融交易需要精确性 — 为了进行欺诈检测，下午 2:30 的购买与下午 2:31 的购买不同。
 
-The `merchant` property captures where the transaction occurred — useful for spending category analysis.
+`merchant` 属性捕获交易发生的位置 - 对于支出类别分析非常有用。
 
-## New relationship
+## 新关系
 
-- **has_transaction** — `Account` → `Transaction` (one-to-many)
-  Each account has many transactions over time, but each transaction belongs to one account.
+- **has_transaction** — `Account` → `Transaction`（一对多）
+每个账户随着时间的推移有很多笔交易，但每笔交易属于一个账户。
 
-This extends the ownership chain: `Customer → Account → Transaction`.
+这扩展了所有权链：`Customer → Account → Transaction`。
 
-## The growing graph
+## 增长图
 
 <ontology-embed id="official/finance-step-2" diff="official/finance-step-1" height="400px"></ontology-embed>
 
-*Transaction adds the activity layer. The ownership chain grows: Customer → Account → Transaction.*
+*Transaction 添加活动层。所有权链不断增长：客户 → 账户 → 交易。*
 
-## What we learned
+## 我们了解到的内容
 
-- **Datetime precision** matters for financial and compliance scenarios
-- **Ownership chains** (Customer → Account → Transaction) enable drill-down queries
-- The `merchant` property opens up spending analysis without adding a Merchant entity
-- Each new entity deepens the questions you can answer
+- **日期时间精度**对于财务和合规场景至关重要
+- **所有权链**（客户 → 账户 → 交易）启用深入查询
+- `merchant` 属性可在不添加商家实体的情况下进行支出分析
+- 每个新实体都会加深您可以回答的问题
 
 ```quiz
-Q: Why does Transaction use a datetime type for timestamp instead of a date?
-- Datetime is the default property type for all time-based fields
-- Financial transactions require time-of-day precision for fraud detection and audit trails [correct]
-- Date types are deprecated in modern ontologies
-- Datetime uses less storage than date
-> Financial compliance and fraud detection require precise timestamps. Two transactions on the same date but minutes apart could indicate a fraud pattern. Datetime captures both date and time, providing the precision needed.
+Q:为什么 Transaction 使用 datetime 类型作为时间戳而不是日期？
+- 日期时间是所有基于时间的字段的默认属性类型
+- 金融交易需要每日时间精度以进行欺诈检测和审计跟踪 [correct]
+- 现代本体中不推荐使用日期类型
+- 日期时间使用的存储空间少于日期
+> 财务合规性和欺诈检测需要精确的时间戳。同一日期但相隔几分钟的两笔交易可能表明存在欺诈模式。 Datetime 捕获日期和时间，提供所需的精度。
 ```
 
-Next, we'll add Loan and Investment to complete the banking product suite.
+接下来，我们将添加贷款和投资以完成银行产品套件。

@@ -5,39 +5,39 @@ description: "Meet the Smart Manufacturing system — an IoT-enabled factory tha
 order: 1
 ---
 
-## The scenario
+## 场景
 
-You are designing the data model for a **smart manufacturing facility**. The factory manages:
+您正在为**智能制造工厂**设计数据模型。工厂管理：
 
-- **Machines** on the factory floor with maintenance schedules and operational status
-- **Sensors** collecting real-time data — temperature, vibration, pressure readings
-- **Work Orders** tracking production jobs with priorities and deadlines
-- **Parts** representing components being manufactured with specifications and tolerances
-- **Quality Checks** recording inspection results, pass/fail status, and defect codes
+- **工厂车间**机器，包含维护计划和运行状态
+- **传感器**收集实时数据 - 温度、振动、压力读数
+- **工单**跟踪生产作业的优先级和截止日期
+- **零件**代表按照规格和要求制造的组件公差
+- **质量检查** 记录检验结果、通过/失败状态和缺陷代码
 
-Data flows from IoT sensors, MES (Manufacturing Execution Systems), ERP platforms, and quality management databases.
+来自 IoT 传感器、MES（制造执行系统）、ERP 平台和质量管理数据库的数据流。
 
-## Why an ontology?
+## 为什么是本体？
 
-A production question like **"Which machines with abnormal sensor readings produced parts that failed quality checks last week?"** crosses IoT telemetry, production schedules, part tracking, and inspection records.
+像**“哪些传感器读数异常的机器生产上周未通过质量检查的零件？”这样的生产问题涉及物联网遥测、生产计划、零件跟踪和检查记录。
 
-With an ontology, this maps to: `Machine → Sensor (reading > threshold)` and `Machine → Work-Order → Part → Quality-Check (passed=false)`.
+通过本体，这映射到：`Machine → Sensor (reading > threshold)` 和 `Machine → Work-Order → Part → Quality-Check (passed=false)`。
 
-## What we'll build
+## 我们将构建什么
 
-| Step | Entities | What you'll learn |
+|步骤|实体|你将学到什么 |
 |---|---|---|
-| 1 | Machine, Sensor | IoT relationships, telemetry hierarchies |
-| 2 | + Work-Order, Part | Production tracking, manufacturing chains |
-| 3 | + Quality-Check | Inspection loops, closing the production cycle |
+| 1 |机器、传感器|物联网关系、遥测层次结构 |
+| 2 | + 工作订单，零件 |生产跟踪、制造链|
+| 3 | + 质量检查 |检验循环，闭合生产周期|
 
-By the end, you'll have a 5-entity, 5-relationship ontology covering sensor monitoring through quality assurance.
+最后，您将拥有一个包含 5 个实体、5 个关系的本体，涵盖传感器监控和质量保证。
 
-## Key concepts
+## 关键概念
 
-- **IoT hierarchies** — machines own sensors, readings flow upward
-- **Production chains** — work orders produce parts
-- **Quality loops** — inspections feed back into production decisions
-- **Operational status** — real-time state tracking (running, idle, maintenance)
+- **物联网层次结构** — 机器拥有传感器，读数向上流动
+- **生产链** — 工作订单生产零件
+- **质量循环** — 检查反馈到生产决策
+- **运行状态** — 实时状态跟踪（运行、空闲、维护）
 
-Let's start with the factory floor.
+让我们从工厂车间开始。

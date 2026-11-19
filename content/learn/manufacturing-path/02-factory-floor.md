@@ -6,68 +6,68 @@ order: 2
 embed: official/manufacturing-step-1
 ---
 
-## The IoT foundation
+## 物联网基础
 
-Every smart factory starts with two concepts:
+每个智能工厂都从两个概念开始：
 
-- **Machine** — what equipment is on the factory floor?
-- **Sensor** — what data is it generating?
+- **机器** - 工厂车间有什么设备？
+- **传感器** — 它生成什么数据？
 
-Machines and sensors form the telemetry backbone. Before tracking production or quality, you need to know what's running and what it's reporting.
+机器和传感器构成遥测骨干。在跟踪生产或质量之前，您需要了解正在运行的内容及其报告的内容。
 
-## Defining the entities
+## 定义实体
 
-### Machine
+### 机器
 
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `machineId` | string | ✓ |
-| `name` | string | |
-| `type` | string | |
-| `status` | string | |
-| `installDate` | date | |
+| `machineId` |字符串| ✓ |
+| `name` |字符串| |
+| `type` |字符串| |
+| `status` |字符串| |
+| `installDate` |日期 | |
 
-The `status` property tracks operational state — `running`, `idle`, `maintenance`, or `offline`. This enables real-time dashboards and maintenance scheduling.
+`status` 属性跟踪操作状态 — `running`、`idle`、`maintenance` 或 `offline`。这使得实时仪表板和维护计划成为可能。
 
-### Sensor
+### 传感器
 
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `sensorId` | string | ✓ |
-| `type` | string | |
-| `unit` | string | |
-| `lastReading` | float | |
-| `threshold` | float | |
+| `sensorId` |字符串| ✓ |
+| `type` |字符串| |
+| `unit` |字符串| |
+| `lastReading` |浮动| |
+| `threshold` |浮动| |
 
-The `threshold` property defines the alert boundary. When `lastReading` exceeds `threshold`, the system triggers an alarm. This pattern is fundamental to predictive maintenance.
+`threshold` 属性定义警报边界。当`lastReading`超过`threshold`时，系统触发报警。这种模式是预测性维护的基础。
 
-## Relationships
+## 关系
 
-- **monitors** — `Sensor` → `Machine` (many-to-one)
-  Multiple sensors monitor the same machine — one for temperature, another for vibration, etc.
+- **监视器** — `Sensor` → `Machine`（多对一）
+多个传感器监视同一台机器 - 一个用于温度，另一个用于振动等。
 
-> **Ownership hierarchy:** In IoT ontologies, sensors belong to machines. The direction matters: sensors monitor machines, not the other way around. This parent-child hierarchy is how IoT platforms organize telemetry data.
+> **所有权层次结构：** 在物联网本体中，传感器属于机器。方向很重要：传感器监控机器，而不是相反。这种父子层次结构是物联网平台组织遥测数据的方式。
 
-## The graph so far
+## 到目前为止的图表
 
 <ontology-embed id="official/manufacturing-step-1" height="300px"></ontology-embed>
 
-*A simple but meaningful start: machines monitored by sensors.*
+*一个简单但有意义的开始：机器*
 
-## What we learned
+## 我们学到了什么
 
-- **IoT hierarchies** use parent-child relationships (Sensor → Machine)
-- **Status properties** enable real-time operational tracking
-- **Threshold properties** power predictive maintenance alerts
-- Even two entities can form a useful telemetry backbone
+- **物联网层次结构**使用父子关系（传感器→机器）
+- **状态属性**启用实时操作跟踪
+- **阈值属性**功率预测维护警报
+- 即使两个实体也可以形成有用的遥测骨干
 
 ```quiz
-Q: Why does the Sensor entity have both lastReading and threshold properties?
-- To store backup values in case one is wrong
-- The threshold defines the alert boundary — when lastReading exceeds it, the system triggers an alarm for predictive maintenance [correct]
-- Both values are required by all IoT standards
-- The threshold is used to calculate the sensor's accuracy
-> The threshold pattern is fundamental to predictive maintenance. By comparing the current reading against a known safe boundary, the system can automatically detect anomalies and alert operators before equipment failure occurs.
+Q:为什么Sensor实体同时具有lastReading和threshold属性？
+- 存储备份值，以防万一出现错误
+- 阈值定义警报边界 - 当上次读数超过它时，系统会触发预测性维护警报 [correct]
+- 所有物联网标准都需要这两个值
+- 阈值用于计算传感器的精度
+> 阈值模式是预测的基础维护。通过将当前读数与已知的安全边界进行比较，系统可以自动检测异常情况并在设备故障发生之前向操作员发出警报。
 ```
 
-Next, we'll add production tracking with Work Orders and Parts.
+接下来，我们将添加工作订单和零件的生产跟踪。

@@ -7,72 +7,72 @@ embed: official/fibo-risk-step-1
 reviewStatus: under-human-review
 ---
 
-## Why classify industries?
+## 为什么要进行行业分类？
 
-Banks need to understand their exposure across economic sectors. If 40% of a portfolio's loans are to construction companies, a housing downturn could be devastating. The **NAICS** (North American Industry Classification System) provides a standard taxonomy that FIBO builds upon.
+银行需要了解其在各个经济部门的风险敞口。如果投资组合中 40% 的贷款发放给了建筑公司，那么房地产市场低迷可能会造成毁灭性的后果。 **NAICS**（北美行业分类系统）提供了 FIBO 所依据的标准分类法。
 
-In this step we model a three-level hierarchy: Sector → Subsector → IndustryGroup, enriched with risk-relevant attributes.
+在此步骤中，我们对三级层次结构进行建模：部门 → 子部门 → 行业组，并富含风险相关属性。
 
-## Entity types
+## 实体类型
 
-### Sector
+### 部门
 
-The broadest classification — think "Manufacturing", "Finance", "Healthcare".
+最广泛的分类 - 想想“制造”、“金融”、“医疗保健”。
 
-| Property | Type | Notes |
+|属性 |类型 |笔记|
 |---|---|---|
-| `sectorCode` | string | Identifier (e.g., "31-33") |
-| `sectorName` | string | Display name |
-| `description` | string | What this sector covers |
+| `sectorCode` |字符串|标识符（例如“31-33”）|
+| `sectorName` |字符串|显示名称 |
+| `description` |字符串|该部门涵盖哪些内容 |
 
-### Subsector
+### 子部门
 
-A subdivision within a sector — "Food Manufacturing" within "Manufacturing".
+部门内的细分 — “制造”内的“食品制造”。
 
-| Property | Type | Notes |
+|属性 |类型 |笔记|
 |---|---|---|
-| `subsectorCode` | string | Identifier (e.g., "311") |
-| `subsectorName` | string | Display name |
+| `subsectorCode` |字符串|标识符（例如“311”）|
+| `subsectorName` |字符串|显示名称 |
 
 ### IndustryGroup
 
-The most granular level, with risk attributes that matter for portfolio analysis.
+最精细的级别，具有对投资组合分析至关重要的风险属性。
 
-| Property | Type | Notes |
+|属性 |类型 |笔记|
 |---|---|---|
-| `naicsCode` | string | Identifier — official NAICS code |
-| `name` | string | Industry name |
-| `cyclicality` | string | How sensitive to economic cycles (e.g., "high", "low", "counter-cyclical") |
-| `climateSensitivity` | string | Exposure to climate events (e.g., "high", "moderate", "low") |
-| `essentialServices` | boolean | Whether the industry provides essential services (more resilient) |
-| `description` | string | Industry description |
+| `naicsCode` |字符串|标识符 — 官方 NAICS 代码 |
+| `name` |字符串|行业名称 |
+| `cyclicality` |字符串|对经济周期有多敏感（例如“高”、“低”、“反周期”）|
+| `climateSensitivity` |字符串|暴露于气候事件（例如“高”、“中”、“低”）|
+| `essentialServices` |布尔 |该行业是否提供基本服务（更具弹性）|
+| `description` |字符串|行业描述|
 
-## Relationships
+## 关系
 
-- **partOfSector**: `Subsector` → `Sector` (`many-to-one`) — every subsector belongs to exactly one sector
-- **belongsToSubsector**: `IndustryGroup` → `Subsector` (`many-to-one`) — every industry group belongs to a subsector
+- **partOfSector**: `Subsector` → `Sector` (`many-to-one`) — 每个子扇区都属于一个扇区
+- **belongsToSubsector**：`IndustryGroup` → `Subsector` (`many-to-one`) — 每个行业组都属于一个子行业
 
-This creates a strict hierarchy: `Sector` ← `Subsector` ← `IndustryGroup`
+这将创建一个严格的层次结构： `Sector` ← `Subsector` ← `IndustryGroup`
 
-## The design pattern: classification hierarchy
+## 设计模式：分类层次结构
 
-This is one of the most common ontology patterns — a **strict tree hierarchy** where each child has exactly one parent. It enables:
+这是最常见的本体模式之一 - **严格的树层次结构**，其中每个子元素只有一个父元素。它支持：
 
-- **Roll-up aggregation**: Sum all loans to IndustryGroups within a Subsector to get subsector exposure
-- **Drill-down analysis**: Start at Sector level, drill into Subsectors, then into specific IndustryGroups
-- **Risk attribute inheritance**: If a Sector is "cyclical", all its children inherit that risk context
+- **汇总汇总**：对子行业内的行业组的所有贷款进行求和以获得子行业风险
+- **向下钻取分析**：从行业级别开始，深入到子行业，然后深入到特定的行业组
+- **风险属性继承**：如果一个行业是“周期性”，其所有子项都会继承该风险上下文
 
-## Step 1 graph
+## 步骤 1 图
 
 <ontology-embed id="official/fibo-risk-step-1" height="340px"></ontology-embed>
 
-*Three entities forming a classification tree — the foundational pattern for industry concentration analysis.*
+*三个实体形成分类树——行业集中度分析的基础模式。*
 
 ```quiz
-Q: Why does IndustryGroup include a climateSensitivity property?
-- To track the industry's carbon emissions
-- To enable portfolio risk queries that filter industries by their exposure to climate events like hurricanes or wildfires [correct]
-- To comply with ESG reporting requirements
-- To calculate insurance premiums for loans
-> The climateSensitivity property lets risk analysts identify which parts of the loan portfolio are exposed to climate-related events. Combined with geographic data (next step), this enables powerful cross-domain concentration queries.
+Q:为什么 IndustryGroup 包含气候敏感度属性？
+- 跟踪行业的碳排放
+- 启用投资组合风险查询，根据飓风或野火等气候事件的风险来筛选行业 [correct]
+- 遵守 ESG 报告要求
+- 计算贷款的保险费
+> 气候敏感度属性可让风险分析师识别哪些部分贷款组合面临气候相关事件的影响。与地理数据（下一步）相结合，这可以实现强大的跨域集中查询。
 ```

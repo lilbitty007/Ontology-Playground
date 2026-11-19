@@ -6,68 +6,68 @@ order: 2
 embed: official/finance-step-1
 ---
 
-## The banking foundation
+## 银行基础
 
-Every financial institution starts with two core concepts:
+每个金融机构都从两个核心概念开始：
 
-- **Customer** — who holds the accounts?
-- **Account** — where is money stored and managed?
+- **客户** - 谁持有账户？
+- **帐户** — 资金在哪里存储和管理？
 
-This pair forms the foundation of any banking ontology. Every other financial product connects through them.
+这对构成了任何银行本体的基础。所有其他金融产品都通过它们连接。
 
-## Defining the entities
+## 定义实体
 
-### Customer
+### 客户
 
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `customerId` | string | ✓ |
-| `name` | string | |
-| `ssn` | string | |
-| `creditScore` | integer | |
-| `riskProfile` | string | |
+| `customerId` |字符串| ✓ |
+| `name` |字符串| |
+| `ssn` |字符串| |
+| `creditScore` |整数 | |
+| `riskProfile` |字符串| |
 
-The `creditScore` is an integer (300–850) used for lending decisions. The `riskProfile` property captures the bank's assessment for compliance and monitoring.
+`creditScore` 是用于贷款决策的整数 (300–850)。 `riskProfile` 属性捕获银行对合规性和监控的评估。
 
-> **Sensitive data note:** Properties like `ssn` appear in the ontology as metadata — they describe what data *exists*, not the actual values. The ontology is a schema, not a database.
+> **敏感数据注意：** `ssn` 等属性作为元数据出现在本体中 - 它们描述*存在*的数据，而不是实际值。本体是一个模式，而不是一个数据库。
 
-### Account
+### 帐户
 
-| Property | Type | Identifier? |
+|属性 |类型 |标识符？ |
 |---|---|---|
-| `accountNumber` | string | ✓ |
-| `type` | string | |
-| `balance` | decimal (USD) | |
-| `interestRate` | decimal (%) | |
-| `openDate` | date | |
+| `accountNumber` |字符串| ✓ |
+| `type` |字符串| |
+| `balance` |小数（美元）| |
+| `interestRate` |小数 (%) | |
+| `openDate` |日期 | |
 
-The `type` property distinguishes between checking, savings, and brokerage accounts. The `interestRate` uses a percentage unit.
+`type` 属性区分支票帐户、储蓄帐户和经纪帐户。 `interestRate` 使用百分比单位。
 
-## Ownership relationship
+## 所有权关系
 
-- **owns** — `Customer` → `Account` (one-to-many)
-  A customer can own multiple accounts (checking, savings, brokerage), but each account belongs to one customer.
+- **拥有** — `Customer` → `Account`（一对多）
+一个客户可以拥有多个账户（支票、储蓄、经纪），但每个账户都属于给一位客户。
 
-## The graph so far
+## 到目前为止的图表
 
 <ontology-embed id="official/finance-step-1" height="300px"></ontology-embed>
 
-*Customer and Account connected by the ownership relationship. Simple but foundational.*
+*通过所有权连接的客户和帐户关系。简单但基础。*
 
-## What we learned
+## 我们学到了什么
 
-- **Integer properties** work well for scores and ratings (creditScore)
-- **Percentage units** (%) indicate rate-based properties
-- The **owns** relationship creates the fundamental ownership chain
-- Ontologies describe the *shape* of data, not the data itself — sensitive fields like SSN are metadata
+- **整数属性**适用于分数和评级 (creditScore)
+- **百分比单位** (%) 表示基于利率的属性
+- **拥有**关系创建了基本的所有权链
+- 本体描述了数据的“形状”，而不是数据本身 - 像 SSN 这样的敏感字段是元数据
 
 ```quiz
-Q: Why is creditScore modeled as an integer rather than a string?
-- Strings are harder to store in databases
-- Integer type enables numeric comparisons and range queries (e.g., creditScore > 700) [correct]
-- Credit scores are always exactly three digits
-- Integers take less storage space
-> By using an integer type, the ontology signals that creditScore supports numeric operations — comparisons, ranges, averages, and thresholds. A string property wouldn't convey this capability to query engines.
+Q:为什么 CreditScore 建模为整数而不是字符串？
+- 字符串更难存储在数据库中
+- 整数类型支持数字比较和范围查询（例如，creditScore > 700）[correct]
+- 信用分数始终恰好是三位数字
+- 整数占用更少的存储空间
+> 通过使用整数类型，本体表示 CreditScore 支持数字运算 - 比较、范围、平均值和阈值。字符串属性不会向查询引擎传达此功能。
 ```
 
-Next, we'll add Transaction to track account activity.
+接下来，我们将添加事务来跟踪帐户活动。
