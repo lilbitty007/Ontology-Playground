@@ -1,3 +1,4 @@
+import { ontologyLabel } from '../lib/ontologyLabels';
 import { motion } from 'framer-motion';
 import { X, FileText, Copy, Check } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
@@ -28,13 +29,13 @@ export function OntologySummaryModal({ onClose }: OntologySummaryModalProps) {
     lines.push('## 实体');
     lines.push('');
     currentOntology.entityTypes.forEach(entity => {
-      lines.push(`### ${entity.icon} ${entity.name}`);
+      lines.push(`### ${entity.icon} ${ontologyLabel(entity.name, 'entity')}`);
       lines.push(`${entity.description}`);
       lines.push('');
       lines.push('**属性：**');
       entity.properties.forEach(prop => {
         const identifier = prop.isIdentifier ? '（标识符）' : '';
-        lines.push(`- **${prop.name}** (${prop.type})${identifier}: ${prop.description}`);
+        lines.push(`- **${ontologyLabel(prop.name, 'property')}** (${prop.type})${identifier}: ${prop.description}`);
       });
       lines.push('');
     });
@@ -45,8 +46,8 @@ export function OntologySummaryModal({ onClose }: OntologySummaryModalProps) {
     currentOntology.relationships.forEach(rel => {
       const fromEntity = currentOntology.entityTypes.find(e => e.id === rel.from);
       const toEntity = currentOntology.entityTypes.find(e => e.id === rel.to);
-      lines.push(`### ${rel.name}`);
-      lines.push(`**${fromEntity?.name || rel.from}** → **${toEntity?.name || rel.to}** (${rel.cardinality})`);
+      lines.push(`### ${ontologyLabel(rel.name, 'relationship')}`);
+      lines.push(`**${fromEntity ? ontologyLabel(fromEntity.name, 'entity') : rel.from}** → **${toEntity ? ontologyLabel(toEntity.name, 'entity') : rel.to}** (${rel.cardinality})`);
       lines.push(`${rel.description}`);
       lines.push('');
     });
@@ -111,14 +112,14 @@ export function OntologySummaryModal({ onClose }: OntologySummaryModalProps) {
                       {entity.icon}
                     </span>
                     <div>
-                      <strong>{entity.name}</strong>
+                      <strong>{ontologyLabel(entity.name, 'entity')}</strong>
                       <p>{entity.description}</p>
                     </div>
                   </div>
                   <div className="entity-properties">
                     {entity.properties.map(prop => (
                       <div key={prop.name} className="property-row">
-                        <span className="prop-name">{prop.name}</span>
+                        <span className="prop-name">{ontologyLabel(prop.name, 'property')}</span>
                         <span className="prop-type">{prop.type}</span>
                         {prop.isIdentifier && <span className="prop-id-badge">ID</span>}
                       </div>
@@ -143,12 +144,12 @@ export function OntologySummaryModal({ onClose }: OntologySummaryModalProps) {
                 return (
                   <div key={rel.id} className="summary-relationship-card">
                     <div className="relationship-flow-row">
-                      <span className="rel-entity">{fromEntity?.icon} {fromEntity?.name}</span>
+                      <span className="rel-entity">{fromEntity?.icon} {fromEntity && ontologyLabel(fromEntity.name, 'entity')}</span>
                       <span className="rel-arrow">
-                        <span className="rel-label">{rel.name}</span>
+                        <span className="rel-label">{ontologyLabel(rel.name, 'relationship')}</span>
                         →
                       </span>
-                      <span className="rel-entity">{toEntity?.icon} {toEntity?.name}</span>
+                      <span className="rel-entity">{toEntity?.icon} {toEntity && ontologyLabel(toEntity.name, 'entity')}</span>
                     </div>
                     <div className="relationship-meta">
                       <span className="cardinality-badge">{rel.cardinality}</span>

@@ -134,7 +134,7 @@ describe('syncGraphElements', () => {
     });
 
     expect(move).toHaveBeenCalledWith({ source: 'member', target: 'book' });
-    expect(cy.getElementById('rel-1').data('label')).toBe('subClassOf');
+    expect(cy.getElementById('rel-1').data('label')).toBe('subClassOf（是其子类）');
     expect(cy.getElementById('rel-1').data('kind')).toBe('subclass');
   });
 

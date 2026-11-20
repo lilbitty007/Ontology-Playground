@@ -1,3 +1,4 @@
+import { ontologyLabel } from '../../lib/ontologyLabels';
 import type { Core } from 'cytoscape';
 
 export interface PreviewOntology {
@@ -29,7 +30,7 @@ export function syncGraphElements(cy: Core, ontology: PreviewOntology) {
   const newNodes: { data: Record<string, string> }[] = [];
   for (const entity of ontology.entityTypes) {
     if (!currentNodeIds.has(entity.id)) {
-      newNodes.push({ data: { id: entity.id, label: `${entity.icon} ${entity.name}`, color: entity.color } });
+      newNodes.push({ data: { id: entity.id, label: `${entity.icon} ${ontologyLabel(entity.name, 'entity')}`, color: entity.color } });
     }
   }
 
@@ -41,7 +42,7 @@ export function syncGraphElements(cy: Core, ontology: PreviewOntology) {
           id: rel.id,
           source: rel.from,
           target: rel.to,
-          label: rel.name,
+          label: ontologyLabel(rel.name, 'relationship'),
           kind: rel.kind ?? 'association',
         },
       });
@@ -68,7 +69,7 @@ export function syncGraphElements(cy: Core, ontology: PreviewOntology) {
   for (const entity of ontology.entityTypes) {
     const node = cy.getElementById(entity.id);
     if (node.length) {
-      node.data('label', `${entity.icon} ${entity.name}`);
+      node.data('label', `${entity.icon} ${ontologyLabel(entity.name, 'entity')}`);
       node.data('color', entity.color);
     }
   }
@@ -79,7 +80,7 @@ export function syncGraphElements(cy: Core, ontology: PreviewOntology) {
     const updatedEdge = edge.data('source') !== rel.from || edge.data('target') !== rel.to
       ? edge.move({ source: rel.from, target: rel.to })
       : edge;
-    updatedEdge.data('label', rel.name);
+    updatedEdge.data('label', ontologyLabel(rel.name, 'relationship'));
     updatedEdge.data('kind', rel.kind ?? 'association');
   }
 }

@@ -1,3 +1,4 @@
+import { ontologyTermTranslation } from './ontologyLabels';
 import type {
   EntityType,
   Ontology,
@@ -291,12 +292,14 @@ function matchingEntities(
     .map((entity, index) => {
       const id = entity.id.toLocaleLowerCase();
       const name = entity.name.toLocaleLowerCase();
+      const translation = ontologyTermTranslation(entity.name, 'entity');
+      const terms = translation ? [id, name, translation.toLocaleLowerCase()] : [id, name];
       const description = entity.description.toLocaleLowerCase();
-      const rank = id === query || name === query
+      const rank = terms.includes(query)
         ? 0
-        : id.startsWith(query) || name.startsWith(query)
+        : terms.some(term => term.startsWith(query))
           ? 1
-          : id.includes(query) || name.includes(query)
+          : terms.some(term => term.includes(query))
             ? 2
             : description.includes(query)
               ? 3

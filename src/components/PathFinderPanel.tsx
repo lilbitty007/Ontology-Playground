@@ -1,3 +1,4 @@
+import { ontologyLabel } from '../lib/ontologyLabels';
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { GitFork, ChevronDown, ChevronUp, ArrowRight, Search, X } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
@@ -37,12 +38,12 @@ export function PathFinderPanel() {
       const entity = entities.find(e => e.id === node.entityId);
       return {
         entityId: node.entityId,
-        entityName: entity?.name ?? node.entityId,
+        entityName: entity ? ontologyLabel(entity.name, 'entity') : node.entityId,
         entityIcon: entity?.icon ?? '📦',
         relationship: node.via
           ? {
               id: node.via.rel.id,
-              name: node.via.rel.name,
+              name: ontologyLabel(node.via.rel.name, 'relationship'),
               cardinality: node.via.rel.cardinality,
             }
           : undefined,
@@ -104,7 +105,7 @@ export function PathFinderPanel() {
               >
                 <option value="">选择实体…</option>
                 {entities.map(e => (
-                  <option key={e.id} value={e.id}>{e.icon} {e.name}</option>
+                  <option key={e.id} value={e.id}>{e.icon} {ontologyLabel(e.name, 'entity')}</option>
                 ))}
               </select>
             </div>
@@ -120,7 +121,7 @@ export function PathFinderPanel() {
               >
                 <option value="">选择实体…</option>
                 {entities.map(e => (
-                  <option key={e.id} value={e.id}>{e.icon} {e.name}</option>
+                  <option key={e.id} value={e.id}>{e.icon} {ontologyLabel(e.name, 'entity')}</option>
                 ))}
               </select>
             </div>

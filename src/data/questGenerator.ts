@@ -1,5 +1,6 @@
 // Dynamic Quest Generator - Creates quests based on the loaded ontology
 
+import { ontologyLabel } from '../lib/ontologyLabels';
 import type { Ontology } from './ontology';
 import type { Quest, QuestStep } from './quests';
 
@@ -16,7 +17,7 @@ export function generateQuestsForOntology(ontology: Ontology): Quest[] {
   if (entities.length >= 2) {
     const explorationSteps: QuestStep[] = entities.slice(0, Math.min(4, entities.length)).map((entity, index) => ({
       id: `step-1-${index + 1}`,
-      instruction: `点击 ${entity.name} 实体，查看它的属性`,
+      instruction: `点击 ${ontologyLabel(entity.name, 'entity')} 实体，查看它的属性`,
       targetType: 'entity' as const,
       targetId: entity.id,
       hint: `在图谱中找到 ${entity.icon} 图标`
@@ -50,7 +51,7 @@ export function generateQuestsForOntology(ontology: Ontology): Quest[] {
       if (sourceEntity && !usedEntities.has(sourceEntity.id)) {
         relSteps.push({
           id: `step-2-${relSteps.length + 1}`,
-        instruction: `从 ${sourceEntity.name} 实体开始`,
+          instruction: `从 ${ontologyLabel(sourceEntity.name, 'entity')} 实体开始`,
           targetType: 'entity',
           targetId: sourceEntity.id,
         hint: `找到 ${sourceEntity.icon} 图标`
@@ -60,10 +61,10 @@ export function generateQuestsForOntology(ontology: Ontology): Quest[] {
 
       relSteps.push({
         id: `step-2-${relSteps.length + 1}`,
-        instruction: `沿着“${rel.name}”关系${targetEntity ? `前往 ${targetEntity.name}` : ''}`,
+        instruction: `沿着“${ontologyLabel(rel.name, 'relationship')}”关系${targetEntity ? `前往 ${ontologyLabel(targetEntity.name, 'entity')}` : ''}`,
         targetType: 'relationship',
         targetId: rel.id,
-        hint: `点击标注“${rel.name}”的连线`
+        hint: `点击标注“${ontologyLabel(rel.name, 'relationship')}”的连线`
       });
     }
 
@@ -115,20 +116,20 @@ export function generateQuestsForOntology(ontology: Ontology): Quest[] {
     const hubSteps: QuestStep[] = [
       {
         id: "step-3-1",
-        instruction: `找到 ${hub.name} 实体——它是本体中连接最多的实体！`,
+        instruction: `找到 ${ontologyLabel(hub.name, 'entity')} 实体——它是本体中连接最多的实体！`,
         targetType: 'entity',
         targetId: hub.id,
-        hint: `${hub.name} 有 ${connectionCount.get(hub.id) ?? 0} 个连接`
+        hint: `${ontologyLabel(hub.name, 'entity')} 有 ${connectionCount.get(hub.id) ?? 0} 个连接`
       }
     ];
 
     connectedRels.forEach((rel, i) => {
       hubSteps.push({
         id: `step-3-${i + 2}`,
-        instruction: `探索“${rel.name}”关系`,
+        instruction: `探索“${ontologyLabel(rel.name, 'relationship')}”关系`,
         targetType: 'relationship',
         targetId: rel.id,
-        hint: `${rel.from === hub.id ? '此关系从' : '此关系连接到'} ${hub.name}`
+        hint: `${rel.from === hub.id ? '此关系从' : '此关系连接到'} ${ontologyLabel(hub.name, 'entity')}`
       });
     });
 
@@ -158,7 +159,7 @@ export function generateQuestsForOntology(ontology: Ontology): Quest[] {
     for (const entity of entitiesWithManyProps) {
       propSteps.push({
         id: `step-4-${propSteps.length + 1}`,
-        instruction: `选择 ${entity.name} 实体并查看它的 ${entity.properties.length} 个属性`,
+        instruction: `选择 ${ontologyLabel(entity.name, 'entity')} 实体并查看它的 ${entity.properties.length} 个属性`,
         targetType: 'entity',
         targetId: entity.id,
         hint: `在检查器中查看属性详情`
@@ -168,7 +169,7 @@ export function generateQuestsForOntology(ontology: Ontology): Quest[] {
       if (identifierProp) {
         propSteps.push({
           id: `step-4-${propSteps.length + 1}`,
-          instruction: `在 ${entity.name} 中找到标识符属性“${identifierProp.name}”`,
+          instruction: `在 ${ontologyLabel(entity.name, 'entity')} 中找到标识符属性“${ontologyLabel(identifierProp.name, 'property')}”`,
           targetType: 'property',
           targetId: identifierProp.name,
           hint: `找到标记该标识符的钥匙图标 🔑`
@@ -196,7 +197,7 @@ export function generateQuestsForOntology(ontology: Ontology): Quest[] {
   const querySteps: QuestStep[] = [
     {
       id: "step-5-1",
-      instruction: `试着提问：“${sampleEntities[0]?.name || '某个实体'} 是什么？”`,
+      instruction: `试着提问：“${sampleEntities[0] ? ontologyLabel(sampleEntities[0].name, 'entity') : '某个实体'} 是什么？”`,
       targetType: 'query',
       hint: "在自然语言查询区输入问题"
     }
@@ -205,7 +206,7 @@ export function generateQuestsForOntology(ontology: Ontology): Quest[] {
   if (sampleEntities.length >= 2) {
     querySteps.push({
       id: "step-5-2",
-      instruction: `再问：“${sampleEntities[0].name} 与 ${sampleEntities[1].name} 有什么关系？”`,
+      instruction: `再问：“${ontologyLabel(sampleEntities[0].name, 'entity')} 与 ${ontologyLabel(sampleEntities[1].name, 'entity')} 有什么关系？”`,
       targetType: 'query',
       hint: "探索实体之间的关系"
     });
@@ -218,10 +219,10 @@ export function generateQuestsForOntology(ontology: Ontology): Quest[] {
     querySteps.push({
       id: "step-5-3",
       instruction: fromEntity && toEntity
-        ? `试试路径查询：“${fromEntity.name} 如何连接到 ${toEntity.name}？”`
-        : `试着查询“${rel.name}”关系的路径`,
+        ? `试试路径查询：“${ontologyLabel(fromEntity.name, 'entity')} 如何连接到 ${ontologyLabel(toEntity.name, 'entity')}？”`
+        : `试着查询“${ontologyLabel(rel.name, 'relationship')}”关系的路径`,
       targetType: 'query',
-      hint: `查询将沿着“${rel.name}”关系路径进行`
+      hint: `查询将沿着“${ontologyLabel(rel.name, 'relationship')}”关系路径进行`
     });
   }
 
@@ -268,35 +269,35 @@ export function generateQuestsForOntology(ontology: Ontology): Quest[] {
       const chainSteps: QuestStep[] = [
         {
           id: "step-6-1",
-        instruction: `从 ${chain.entities[0].name} 开始探索`,
+        instruction: `从 ${ontologyLabel(chain.entities[0].name, 'entity')} 开始探索`,
           targetType: 'entity',
           targetId: chain.entities[0].id,
           hint: `找到 ${chain.entities[0].icon} 图标`
         },
         {
           id: "step-6-2",
-          instruction: `沿着“${chain.rels[0].name}”关系前往 ${chain.entities[1].name}`,
+          instruction: `沿着“${ontologyLabel(chain.rels[0].name, 'relationship')}”关系前往 ${ontologyLabel(chain.entities[1].name, 'entity')}`,
           targetType: 'relationship',
           targetId: chain.rels[0].id,
           hint: "点击连接它们的线"
         },
         {
           id: "step-6-3",
-          instruction: `探索 ${chain.entities[1].name} 实体`,
+          instruction: `探索 ${ontologyLabel(chain.entities[1].name, 'entity')} 实体`,
           targetType: 'entity',
           targetId: chain.entities[1].id,
           hint: "这是探索路径的中间节点"
         },
         {
           id: "step-6-4",
-          instruction: `继续沿着“${chain.rels[1].name}”关系前往 ${chain.entities[2].name}`,
+          instruction: `继续沿着“${ontologyLabel(chain.rels[1].name, 'relationship')}”关系前往 ${ontologyLabel(chain.entities[2].name, 'entity')}`,
           targetType: 'relationship',
           targetId: chain.rels[1].id,
           hint: "再探索一条关系就完成了！"
         },
         {
           id: "step-6-5",
-          instruction: `到达终点！探索 ${chain.entities[2].name}`,
+          instruction: `到达终点！探索 ${ontologyLabel(chain.entities[2].name, 'entity')}`,
           targetType: 'entity',
           targetId: chain.entities[2].id,
           hint: `路径探索完成！${chain.entities[2].icon}`
@@ -306,7 +307,7 @@ export function generateQuestsForOntology(ontology: Ontology): Quest[] {
       quests.push({
         id: "quest-6",
         title: "完整旅程",
-        description: `沿着关系从 ${chain.entities[0].name} 一路探索到 ${chain.entities[2].name}。`,
+        description: `沿着关系从 ${ontologyLabel(chain.entities[0].name, 'entity')} 一路探索到 ${ontologyLabel(chain.entities[2].name, 'entity')}。`,
         difficulty: "advanced",
         category: "traversal",
         steps: chainSteps,

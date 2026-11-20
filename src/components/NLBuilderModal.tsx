@@ -1,3 +1,4 @@
+import { ontologyLabel } from '../lib/ontologyLabels';
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { X, Sparkles, Send, Loader2, Check, AlertCircle, Edit3, Mic, MicOff } from 'lucide-react';
@@ -603,7 +604,7 @@ export function NLBuilderModal({ onClose }: NLBuilderModalProps) {
                         {generatedOntology.entityTypes.map((entity) => (
                           <div key={entity.id} className="preview-item entity">
                             <span className="entity-icon">{entity.icon}</span>
-                            <span className="entity-name">{entity.name}</span>
+                            <span className="entity-name">{ontologyLabel(entity.name, 'entity')}</span>
                             <span className="entity-props">{entity.properties.length} 个属性</span>
                           </div>
                         ))}
@@ -616,7 +617,7 @@ export function NLBuilderModal({ onClose }: NLBuilderModalProps) {
                         {generatedOntology.relationships.map((rel) => (
                           <div key={rel.id} className="preview-item relationship">
                             <span className="rel-from">{rel.from}</span>
-                            <span className="rel-name">→ {rel.name} →</span>
+                            <span className="rel-name">→ {ontologyLabel(rel.name, 'relationship')} →</span>
                             <span className="rel-to">{rel.to}</span>
                           </div>
                         ))}

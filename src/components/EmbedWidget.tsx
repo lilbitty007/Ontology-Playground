@@ -1,3 +1,4 @@
+import { ontologyLabel } from '../lib/ontologyLabels';
 /**
  * Self-contained embeddable ontology viewer.
  *
@@ -490,7 +491,7 @@ function EmbedGraph({ ontology, theme, selected, setSelected }: EmbedGraphProps)
     }
     return {
       id: entity.id,
-      name: entity.name,
+      name: ontologyLabel(entity.name, 'entity'),
       hiddenNeighborCount:
         graphView.hiddenNeighborCounts.get(entity.id) ?? 0,
       isExpanded: expandedNodeIds.has(entity.id),
@@ -530,7 +531,7 @@ function EmbedGraph({ ontology, theme, selected, setSelected }: EmbedGraphProps)
       return {
         data: {
           id: entity.id,
-          label: `${entity.icon} ${entity.name}${hiddenNeighborCount > 0 ? ` · +${hiddenNeighborCount}` : ''}`,
+          label: `${entity.icon} ${ontologyLabel(entity.name, 'entity')}${hiddenNeighborCount > 0 ? ` · +${hiddenNeighborCount}` : ''}`,
           color: entity.color,
           hiddenNeighborCount,
           isRoot: rootIds.has(entity.id) ? 1 : 0,
@@ -547,7 +548,7 @@ function EmbedGraph({ ontology, theme, selected, setSelected }: EmbedGraphProps)
           id: relationship.id,
           source: relationship.from,
           target: relationship.to,
-          label: relationship.name,
+          label: ontologyLabel(relationship.name, 'relationship'),
           kind: relationship.kind ?? 'association',
         },
       }));
@@ -1301,7 +1302,7 @@ function EmbedInspector({ selected, theme, ontology, onClose }: InspectorProps) 
     return (
       <div style={panelStyle}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-          <span style={{ fontWeight: 600, fontSize: 14 }}>{e.icon} {e.name}</span>
+          <span style={{ fontWeight: 600, fontSize: 14 }}>{e.icon} {ontologyLabel(e.name, 'entity')}</span>
           <button onClick={onClose} style={{ background: 'none', border: 'none', color: theme.textTertiary, cursor: 'pointer', fontSize: 16 }}>✕</button>
         </div>
         {e.description && <p style={{ color: theme.textSecondary, margin: '0 0 8px' }}>{e.description}</p>}
@@ -1312,7 +1313,7 @@ function EmbedInspector({ selected, theme, ontology, onClose }: InspectorProps) 
               color: p.isIdentifier ? theme.accent : theme.textSecondary, fontSize: 11,
               fontWeight: p.isIdentifier ? 600 : 400,
             }}>
-              {p.isIdentifier ? '🔑 ' : ''}{p.name}: {p.type}
+              {p.isIdentifier ? '🔑 ' : ''}{ontologyLabel(p.name, 'property')}: {p.type}
             </span>
           ))}
         </div>
@@ -1327,11 +1328,11 @@ function EmbedInspector({ selected, theme, ontology, onClose }: InspectorProps) 
     return (
       <div style={panelStyle}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-          <span style={{ fontWeight: 600, fontSize: 14 }}>{r.name}</span>
+          <span style={{ fontWeight: 600, fontSize: 14 }}>{ontologyLabel(r.name, 'relationship')}</span>
           <button onClick={onClose} style={{ background: 'none', border: 'none', color: theme.textTertiary, cursor: 'pointer', fontSize: 16 }}>✕</button>
         </div>
         <p style={{ color: theme.textSecondary, margin: '0 0 6px' }}>
-          {fromEntity?.icon} {fromEntity?.name || r.from} → {toEntity?.icon} {toEntity?.name || r.to}
+          {fromEntity?.icon} {fromEntity ? ontologyLabel(fromEntity.name, 'entity') : r.from} → {toEntity?.icon} {toEntity ? ontologyLabel(toEntity.name, 'entity') : r.to}
         </p>
         <span style={{ padding: '2px 8px', background: theme.bgTertiary, borderRadius: 4, color: theme.textTertiary, fontSize: 11 }}>
           {r.cardinality}

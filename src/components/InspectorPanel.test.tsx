@@ -23,15 +23,26 @@ describe('InspectorPanel quest progression', () => {
     render(<InspectorPanel />);
 
     expect(useAppStore.getState().currentStepIndex).toBe(1);
+    expect(screen.getByRole('heading', { name: 'Customer（客户）' })).toBeTruthy();
 
-    const propertiesHeader = screen.getByText(/Properties \(\d+\)/i);
+    const propertiesHeader = screen.getByText(/属性（\d+）/);
     const propertiesSection = propertiesHeader.closest('.inspector-section');
     expect(propertiesSection).toBeTruthy();
 
-    const propertyInList = within(propertiesSection as HTMLElement).getByText('name');
+    const propertyInList = within(propertiesSection as HTMLElement).getByText('name（名称）');
     fireEvent.click(propertyInList);
 
     expect(useAppStore.getState().currentStepIndex).toBe(2);
+  });
+
+  it('renders a translated relationship and its attributes', () => {
+    useAppStore.getState().selectRelationship('order_contains_product');
+
+    render(<InspectorPanel />);
+
+    expect(screen.getByRole('heading', { name: 'contains（包含）' })).toBeTruthy();
+    expect(screen.getByText('quantity（数量）')).toBeTruthy();
+    expect(screen.getByText('customizations（定制选项）')).toBeTruthy();
   });
 
   it('advances the property quest step when clicking the data binding mapping row', () => {
@@ -41,7 +52,7 @@ describe('InspectorPanel quest progression', () => {
 
     expect(useAppStore.getState().currentStepIndex).toBe(1);
 
-    const bindingsHeader = screen.getByText('Data Bindings');
+    const bindingsHeader = screen.getByText('数据绑定');
     const bindingsSection = bindingsHeader.closest('.inspector-section');
     expect(bindingsSection).toBeTruthy();
 

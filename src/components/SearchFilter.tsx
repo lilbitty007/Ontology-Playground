@@ -1,3 +1,4 @@
+import { ontologyLabel } from '../lib/ontologyLabels';
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, X, ChevronDown, ChevronUp } from 'lucide-react';
@@ -22,26 +23,33 @@ export function SearchFilter() {
     selectRelationship
   } = useAppStore();
 
+  const entityLabels = useMemo(() => new Map(currentOntology.entityTypes.map(entity => [
+    entity.id, ontologyLabel(entity.name, 'entity'),
+  ])), [currentOntology.entityTypes]);
+
   const filteredResults = useMemo(() => {
     if (!searchQuery.trim()) return { entities: [], relationships: [] };
 
-    const query = searchQuery.toLowerCase();
+    const query = searchQuery.trim().toLowerCase();
     
     const entities = currentOntology.entityTypes.filter(entity => 
-      entity.name.toLowerCase().includes(query) ||
+      ontologyLabel(entity.name, 'entity').toLowerCase().includes(query) ||
       entity.description?.toLowerCase().includes(query) ||
-      entity.properties.some(p => p.name.toLowerCase().includes(query))
+      entity.properties.some(p => ontologyLabel(p.name, 'property').toLowerCase().includes(query))
     );
 
     const relationships = currentOntology.relationships.filter(rel =>
-      rel.name.toLowerCase().includes(query) ||
+      ontologyLabel(rel.name, 'relationship').toLowerCase().includes(query) ||
+      rel.attributes?.some(attr => ontologyLabel(attr.name, 'property').toLowerCase().includes(query)) ||
       rel.cardinality.toLowerCase().includes(query) ||
       rel.from.toLowerCase().includes(query) ||
-      rel.to.toLowerCase().includes(query)
+      rel.to.toLowerCase().includes(query) ||
+      entityLabels.get(rel.from)?.toLowerCase().includes(query) ||
+      entityLabels.get(rel.to)?.toLowerCase().includes(query)
     );
 
     return { entities, relationships };
-  }, [searchQuery, currentOntology]);
+  }, [searchQuery, currentOntology, entityLabels]);
 
   const hasQuery = searchQuery.trim().length > 0;
   const entityResults = hasQuery ? filteredResults.entities : currentOntology.entityTypes;
@@ -242,7 +250,7 @@ export function SearchFilter() {
                     }}
                   />
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 11, fontWeight: 500, color: 'var(--text-primary)' }}>{entity.name}</div>
+                    <div style={{ fontSize: 11, fontWeight: 500, color: 'var(--text-primary)' }}>{ontologyLabel(entity.name, 'entity')}</div>
                     <div style={{ fontSize: 9, color: 'var(--text-secondary)' }}>
                       {entity.properties.length} 个属性
                     </div>
@@ -270,9 +278,9 @@ export function SearchFilter() {
                 >
                   <div style={{ fontSize: 10 }}>↔</div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 11, fontWeight: 500, color: 'var(--text-primary)' }}>{rel.name}</div>
+                    <div style={{ fontSize: 11, fontWeight: 500, color: 'var(--text-primary)' }}>{ontologyLabel(rel.name, 'relationship')}</div>
                     <div style={{ fontSize: 9, color: 'var(--text-secondary)' }}>
-                      {rel.from} → {rel.to}
+                      {entityLabels.get(rel.from) ?? rel.from} → {entityLabels.get(rel.to) ?? rel.to}
                     </div>
                   </div>
                 </motion.div>

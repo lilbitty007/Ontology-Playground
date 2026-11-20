@@ -1,3 +1,4 @@
+import { ontologyLabel } from '../lib/ontologyLabels';
 import { motion } from 'framer-motion';
 import { X, Database, Table, BarChart3, Cloud } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
@@ -93,7 +94,7 @@ export function DataSourcesModal({ onClose }: DataSourcesModalProps) {
                       {entity.icon}
                     </div>
                     <div>
-                      <div style={{ fontSize: 16, fontWeight: 600 }}>{entity.name}</div>
+                      <div style={{ fontSize: 16, fontWeight: 600 }}>{ontologyLabel(entity.name, 'entity')}</div>
                       <div style={{ fontSize: 12, color: 'var(--text-tertiary)' }}>
                         已映射 {entity.properties.length} 个属性
                       </div>

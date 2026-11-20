@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { processQuery } from './queryEngine';
-import type { Ontology } from './ontology';
+import { cosmicCoffeeOntology, type Ontology } from './ontology';
 
 const testOntology: Ontology = {
   name: 'Incident Management Ontology',
@@ -58,6 +58,13 @@ describe('processQuery', () => {
     expect(response.result).toContain('**Problem**');
     expect(response.result).toContain('Known error or root cause for recurring incidents.');
     expect(response.highlightEntities).toEqual(['problem']);
+  });
+
+  it('finds a property by its Chinese name and retains canonical highlights', () => {
+    const response = processQuery('查看商品的价格属性', cosmicCoffeeOntology);
+
+    expect(response.result).toContain('Product（商品）.price（价格）');
+    expect(response.highlightEntities).toEqual(['product']);
   });
 
   it('does not duplicate ontology wording in fallback text', () => {

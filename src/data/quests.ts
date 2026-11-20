@@ -32,21 +32,21 @@ export const quests: Quest[] = [
     steps: [
       {
         id: "step-1-1",
-        instruction: "点击 Customer 实体，了解顾客信息",
+        instruction: "点击 Customer（客户） 实体，了解顾客信息",
         targetType: "entity",
         targetId: "customer",
         hint: "在图谱中找到 👤 图标",
       },
       {
         id: "step-1-2",
-        instruction: "接着探索 Product 实体",
+        instruction: "接着探索 Product（商品） 实体",
         targetType: "entity",
         targetId: "product",
         hint: "找到 ☕ 咖啡杯图标",
       },
       {
         id: "step-1-3",
-        instruction: "最后查看 Store 实体",
+        instruction: "最后查看 Store（门店） 实体",
         targetType: "entity",
         targetId: "store",
         hint: "找到 🏪 门店图标",
@@ -67,31 +67,31 @@ export const quests: Quest[] = [
     steps: [
       {
         id: "step-2-1",
-        instruction: "从 Supplier 实体开始，这里是咖啡豆的来源",
+        instruction: "从 Supplier（供应商） 实体开始，这里是咖啡豆的来源",
         targetType: "entity",
         targetId: "supplier",
         hint: "找到 🚚 卡车图标",
       },
       {
         id: "step-2-2",
-        instruction: "沿着 sourcedFrom 关系前往 Product",
+        instruction: "沿着 sourcedFrom（采购自） 关系前往 Product（商品）",
         targetType: "relationship",
         targetId: "product_sourced_from_supplier",
-        hint: "点击连接 Supplier 和 Product 的线",
+        hint: "点击连接 Supplier（供应商） 和 Product（商品） 的线",
       },
       {
         id: "step-2-3",
-        instruction: "探索 contains 关系，了解产品如何出现在订单中",
+        instruction: "探索 contains（包含） 关系，了解产品如何出现在订单中",
         targetType: "relationship",
         targetId: "order_contains_product",
-        hint: "查看 Order 与 Product 之间的连接",
+        hint: "查看 Order（订单） 与 Product（商品） 之间的连接",
       },
       {
         id: "step-2-4",
-        instruction: "最后查看 places 关系，了解是谁下了订单",
+        instruction: "最后查看 places（下单） 关系，了解是谁下了订单",
         targetType: "relationship",
         targetId: "customer_places_order",
-        hint: "找到从 Customer 指向 Order 的关系",
+        hint: "找到从 Customer（客户） 指向 Order（订单） 的关系",
       }
     ],
     reward: {
@@ -109,21 +109,21 @@ export const quests: Quest[] = [
     steps: [
       {
         id: "step-3-1",
-        instruction: "点击 Shipment 实体",
+        instruction: "点击 Shipment（货运） 实体",
         targetType: "entity",
         targetId: "shipment",
         hint: "找到 📦 包裹图标",
       },
       {
         id: "step-3-2",
-        instruction: "探索指向 Supplier 的 sentBy 关系",
+        instruction: "探索指向 Supplier（供应商） 的 sentBy（由其发货） 关系",
         targetType: "relationship",
         targetId: "shipment_from_supplier",
         hint: "查看货运的来源",
       },
       {
         id: "step-3-3",
-        instruction: "沿着 deliveredTo 关系前往 Store",
+        instruction: "沿着 deliveredTo（配送至） 关系前往 Store（门店）",
         targetType: "relationship",
         targetId: "shipment_to_store",
         hint: "查看货运的目的地",
@@ -158,7 +158,7 @@ export const quests: Quest[] = [
         id: "step-4-3",
         instruction: "试试路径查询：“Arif Ramadhan 下了哪些订单？”",
         targetType: "query",
-        hint: "查询会沿着 Customer → Order 关系查找",
+        hint: "查询会沿着 Customer（客户） → Order（订单） 关系查找",
       }
     ],
     reward: {
@@ -176,24 +176,24 @@ export const quests: Quest[] = [
     steps: [
       {
         id: "step-5-1",
-        instruction: "选择 Customer 实体并查看其数据绑定",
+        instruction: "选择 Customer（客户） 实体并查看其数据绑定",
         targetType: "entity",
         targetId: "customer",
         hint: "在检查器中找到“数据绑定”部分",
       },
       {
         id: "step-5-2",
-        instruction: "查看 Customer 属性如何映射到来源列",
+        instruction: "查看 Customer（客户） 属性如何映射到来源列",
         targetType: "property",
         targetId: "name",
-        hint: "留意 name 如何映射到来源中的 full_name",
+        hint: "留意 name（名称） 如何映射到来源中的 full_name",
       },
       {
         id: "step-5-3",
-        instruction: "检查 Product 实体的数据绑定，并记下来源和表名",
+        instruction: "检查 Product（商品） 实体的数据绑定，并记下来源和表名",
         targetType: "entity",
         targetId: "product",
-        hint: "查看 Product 下方的数据绑定卡片",
+        hint: "查看 Product（商品） 下方的数据绑定卡片",
       }
     ],
     reward: {

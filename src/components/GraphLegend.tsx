@@ -1,3 +1,4 @@
+import { ontologyLabel } from '../lib/ontologyLabels';
 import { useEffect, useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import type { EntityType } from '../data/ontology';
@@ -83,7 +84,7 @@ export function GraphLegend({
           {entityTypes.map(entity => (
             <div key={entity.id} className="legend-item">
               <div className="legend-dot" style={{ backgroundColor: entity.color }} />
-              <span>{entity.icon} {entity.name}</span>
+              <span>{entity.icon} {ontologyLabel(entity.name, 'entity')}</span>
             </div>
           ))}
           {hiddenCount > 0 && (

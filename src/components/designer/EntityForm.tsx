@@ -1,3 +1,4 @@
+import { ontologyLabel } from '../../lib/ontologyLabels';
 import { useState, useEffect, useRef } from 'react';
 import { Plus, Trash2, ChevronDown, ChevronRight, GripVertical, Key } from 'lucide-react';
 import { useDesignerStore, ENTITY_COLORS, ENTITY_ICONS, fabricIQNameError } from '../../store/designerStore';
@@ -119,7 +120,7 @@ export function EntityForm() {
               >
                 {entity.icon}
               </span>
-              <span className="designer-entity-name">{entity.name || '未命名'}</span>
+              <span className="designer-entity-name">{ontologyLabel(entity.name, 'entity') || '未命名'}</span>
               <span className="designer-entity-badge">{entity.properties.length} 个属性</span>
               <button
                 className="designer-delete-btn"

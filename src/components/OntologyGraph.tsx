@@ -1,3 +1,4 @@
+import { ontologyLabel } from '../lib/ontologyLabels';
 import {
   useCallback,
   useEffect,
@@ -389,7 +390,7 @@ export function OntologyGraph() {
     if (!entity) return null;
     return {
       id: entity.id,
-      name: entity.name,
+      name: ontologyLabel(entity.name, 'entity'),
       hiddenNeighborCount:
         graphView.hiddenNeighborCounts.get(entity.id) ?? 0,
       isExpanded: expandedNodeIds.has(entity.id),
@@ -490,7 +491,7 @@ export function OntologyGraph() {
       return {
         data: {
           id: entity.id,
-          label: `${entity.icon} ${entity.name}${hiddenNeighborCount > 0 ? ` · +${hiddenNeighborCount}` : ''}`,
+          label: `${entity.icon} ${ontologyLabel(entity.name, 'entity')}${hiddenNeighborCount > 0 ? ` · +${hiddenNeighborCount}` : ''}`,
           name: entity.name,
           icon: entity.icon,
           color: entity.color,
@@ -511,7 +512,7 @@ export function OntologyGraph() {
           id: rel.id,
           source: rel.from,
           target: rel.to,
-          label: rel.name,
+          label: ontologyLabel(rel.name, 'relationship'),
           cardinality: rel.cardinality,
           description: rel.description,
           kind: rel.kind ?? 'association',
@@ -743,7 +744,7 @@ export function OntologyGraph() {
             'text-rotation': 'autorotate',
             'text-margin-y': -10,
             'text-wrap': 'ellipsis',
-            'text-max-width': '120px',
+            'text-max-width': '200px',
             'text-background-color': graphThemeColors.current.edgeLabelBg,
             'text-background-opacity': 1,
             'text-background-padding': '2px',

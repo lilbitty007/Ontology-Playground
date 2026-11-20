@@ -1,3 +1,4 @@
+import { ontologyLabel, ontologyTermTranslation } from '../lib/ontologyLabels';
 import type { Ontology } from './ontology';
 import { nlQueryResponses } from './quests';
 
@@ -60,19 +61,14 @@ const ENTITY_NAMES_ZH: Record<string, string[]> = {
 
 function entityAliases(entity: Ontology['entityTypes'][number]): string[] {
   const key = entity.id.toLowerCase().replace(/[-_\s]/g, '');
+  const translation = ontologyTermTranslation(entity.name, 'entity');
   return [...new Set([
     entity.name.toLowerCase(),
     entity.name.toLowerCase().replace(/s$/, ''),
+    ...(translation ? [translation, ontologyLabel(entity.name, 'entity').toLowerCase()] : []),
     ...(ENTITY_NAMES_ZH[key] ?? []),
     ...(ENTITY_NAMES_ZH[entity.name.toLowerCase().replace(/[^a-z]/g, '')] ?? []),
   ])];
-}
-
-function entityDisplayName(entity: Ontology['entityTypes'][number]): string {
-  const key = entity.id.toLowerCase().replace(/[-_\s]/g, '');
-  return ENTITY_NAMES_ZH[key]?.[0]
-    ?? ENTITY_NAMES_ZH[entity.name.toLowerCase().replace(/[^a-z]/g, '')]?.[0]
-    ?? entity.name;
 }
 
 // Generate dynamic query suggestions based on the current ontology
@@ -84,11 +80,11 @@ export function generateQuerySuggestions(ontology: Ontology): string[] {
   // Entity-based queries
   if (entities.length > 0) {
     const firstEntity = entities[0];
-    suggestions.push(`显示所有 ${entityDisplayName(firstEntity)}`);
+    suggestions.push(`显示所有 ${ontologyLabel(firstEntity.name, 'entity')}`);
     
     if (entities.length > 1) {
       const secondEntity = entities[1];
-      suggestions.push(`列出所有 ${entityDisplayName(secondEntity)}`);
+      suggestions.push(`列出所有 ${ontologyLabel(secondEntity.name, 'entity')}`);
     }
   }
 
@@ -96,7 +92,7 @@ export function generateQuerySuggestions(ontology: Ontology): string[] {
   entities.forEach(entity => {
     entity.properties.forEach(prop => {
       if (prop.type === 'string' && !prop.isIdentifier && prop.name !== 'name') {
-      suggestions.push(`查看 ${entityDisplayName(entity)} 的 ${prop.name} 属性`);
+        suggestions.push(`查看 ${ontologyLabel(entity.name, 'entity')} 的 ${ontologyLabel(prop.name, 'property')} 属性`);
       }
     });
   });
@@ -107,7 +103,7 @@ export function generateQuerySuggestions(ontology: Ontology): string[] {
     const fromEntity = entities.find(e => e.id === rel.from);
     const toEntity = entities.find(e => e.id === rel.to);
     if (fromEntity && toEntity) {
-      suggestions.push(`${entityDisplayName(fromEntity)} 如何连接到 ${entityDisplayName(toEntity)}？`);
+      suggestions.push(`${ontologyLabel(fromEntity.name, 'entity')} 如何连接到 ${ontologyLabel(toEntity.name, 'entity')}？`);
     }
   }
 
@@ -196,15 +192,15 @@ export function processQuery(query: string, ontology: Ontology): QueryResponse {
       ) {
         const propList = entity.properties
           .slice(0, 4)
-          .map(p => `• **${p.name}** (${p.type})${p.isIdentifier ? ' 🔑' : ''}`)
+          .map(p => `• **${ontologyLabel(p.name, 'property')}** (${p.type})${p.isIdentifier ? ' 🔑' : ''}`)
           .join('\n');
 
         return {
           query,
-          result: `**${entity.name}** ${entity.icon}\n${entity.description}\n\n**属性：**\n${propList}`,
+          result: `**${ontologyLabel(entity.name, 'entity')}** ${entity.icon}\n${entity.description}\n\n**属性：**\n${propList}`,
           highlightEntities: [entity.id],
           highlightRelationships: [],
-          interpretation: `已识别：关于 ${entity.name} 的定义查询`
+          interpretation: `已识别：关于 ${ontologyLabel(entity.name, 'entity')} 的定义查询`
         };
       }
     }
@@ -239,15 +235,15 @@ export function processQuery(query: string, ontology: Ontology): QueryResponse {
     ) {
       const propList = entity.properties
         .slice(0, 4)
-        .map(p => `• **${p.name}** (${p.type})${p.isIdentifier ? ' 🔑' : ''}`)
+        .map(p => `• **${ontologyLabel(p.name, 'property')}** (${p.type})${p.isIdentifier ? ' 🔑' : ''}`)
         .join('\n');
       
       return {
         query,
-        result: `**${entity.name}** ${entity.icon}\n${entity.description}\n\n**属性：**\n${propList}\n\n_在实际部署中，这里会查询数据平台中的 ${entity.name} 记录。_`,
+        result: `**${ontologyLabel(entity.name, 'entity')}** ${entity.icon}\n${entity.description}\n\n**属性：**\n${propList}\n\n_在实际部署中，这里会查询数据平台中的 ${ontologyLabel(entity.name, 'entity')} 记录。_`,
         highlightEntities: [entity.id],
         highlightRelationships: [],
-        interpretation: `已识别：查询 ${entity.name} 实体`
+        interpretation: `已识别：查询 ${ontologyLabel(entity.name, 'entity')} 实体`
       };
     }
   }
@@ -255,19 +251,21 @@ export function processQuery(query: string, ontology: Ontology): QueryResponse {
   // Relationship/connection queries
   for (const rel of relationships) {
     const relationNameNormalized = rel.name.toLowerCase().trim().replace(/\s+/g, ' ');
+    const translatedName = ontologyTermTranslation(rel.name, 'relationship');
     const fromEntity = entities.find(e => e.id === rel.from);
     const toEntity = entities.find(e => e.id === rel.to);
 
     if (
-      normalizedNoPunctuation.includes(relationNameNormalized) &&
+      (normalizedNoPunctuation.includes(relationNameNormalized)
+        || (translatedName && normalizedNoPunctuation.includes(`${translatedName}关系`))) &&
       (normalizedNoPunctuation.includes('connection') || normalizedNoPunctuation.includes('connections') || normalizedNoPunctuation.includes('relationship') || normalizedNoPunctuation.includes('关系') || normalizedNoPunctuation.includes('连接'))
     ) {
       return {
         query,
-        result: `**${rel.name}** 将 **${fromEntity?.name ?? rel.from}** 连接到 **${toEntity?.name ?? rel.to}**（${rel.cardinality}）。${rel.description ? `\n\n${rel.description}` : ''}`,
+        result: `**${ontologyLabel(rel.name, 'relationship')}** 将 **${fromEntity ? ontologyLabel(fromEntity.name, 'entity') : rel.from}** 连接到 **${toEntity ? ontologyLabel(toEntity.name, 'entity') : rel.to}**（${rel.cardinality}）。${rel.description ? `\n\n${rel.description}` : ''}`,
         highlightEntities: [rel.from, rel.to],
         highlightRelationships: [rel.id],
-        interpretation: `已识别：查询关系 ${rel.name}`
+        interpretation: `已识别：查询关系 ${ontologyLabel(rel.name, 'relationship')}`
       };
     }
   }
@@ -300,15 +298,15 @@ export function processQuery(query: string, ontology: Ontology): QueryResponse {
           const otherEntityId = isOutgoing ? rel.to : rel.from;
           const otherEntity = entities.find(e => e.id === otherEntityId);
           const direction = isOutgoing ? '→' : '←';
-          return `• **${rel.name}** ${direction} ${otherEntity?.icon} ${otherEntity?.name} (${rel.cardinality})`;
+          return `• **${ontologyLabel(rel.name, 'relationship')}** ${direction} ${otherEntity?.icon} ${otherEntity ? ontologyLabel(otherEntity.name, 'entity') : otherEntityId} (${rel.cardinality})`;
         }).join('\n');
 
         return {
           query,
-          result: `**${entity.name}** ${entity.icon} 共有 ${relatedRels.length} 个关联关系：\n\n${relList}`,
+          result: `**${ontologyLabel(entity.name, 'entity')}** ${entity.icon} 共有 ${relatedRels.length} 个关联关系：\n\n${relList}`,
           highlightEntities: [entity.id, ...relatedRels.map(r => r.from === entity.id ? r.to : r.from)],
           highlightRelationships: relatedRels.map(r => r.id),
-        interpretation: `已识别：查询 ${entity.name} 的关系`
+        interpretation: `已识别：查询 ${ontologyLabel(entity.name, 'entity')} 的关系`
         };
       }
     }
@@ -316,15 +314,17 @@ export function processQuery(query: string, ontology: Ontology): QueryResponse {
 
   // Property-based queries
   for (const entity of entities) {
+    if (!entityAliases(entity).some(alias => normalizedQuery.includes(alias))) continue;
     for (const prop of entity.properties) {
+      const translatedName = ontologyTermTranslation(prop.name, 'property');
       if (normalizedQuery.includes(prop.name.toLowerCase())
-        && entityAliases(entity).some(alias => normalizedQuery.includes(alias))) {
+        || (translatedName && normalizedQuery.includes(translatedName))) {
         return {
           query,
-          result: `**${entity.name}.${prop.name}**\n\n• 类型：${prop.type}\n${prop.unit ? `• 单位：${prop.unit}` : ''}\n${prop.isIdentifier ? '• 这是标识符属性 🔑' : ''}\n${prop.description ? `• ${prop.description}` : ''}\n\n_在实际应用中，可以按此属性筛选 ${entity.name}。_`,
+          result: `**${ontologyLabel(entity.name, 'entity')}.${ontologyLabel(prop.name, 'property')}**\n\n• 类型：${prop.type}\n${prop.unit ? `• 单位：${prop.unit}` : ''}\n${prop.isIdentifier ? '• 这是标识符属性 🔑' : ''}\n${prop.description ? `• ${prop.description}` : ''}\n\n_在实际应用中，可以按此属性筛选 ${ontologyLabel(entity.name, 'entity')}。_`,
           highlightEntities: [entity.id],
           highlightRelationships: [],
-          interpretation: `已识别：查询 ${entity.name}.${prop.name} 属性`
+          interpretation: `已识别：查询 ${ontologyLabel(entity.name, 'entity')}.${ontologyLabel(prop.name, 'property')} 属性`
         };
       }
     }
@@ -336,10 +336,10 @@ export function processQuery(query: string, ontology: Ontology): QueryResponse {
       if (entityAliases(entity).some(alias => normalizedQuery.includes(alias))) {
         return {
           query,
-          result: `本体定义了 **${entity.name}** 实体类型。\n\n_在实际应用中，此查询会统计数据平台中的 ${entity.name} 记录。_\n\n示例："SELECT COUNT(*) FROM ${entity.name.toLowerCase()}s"`,
+          result: `本体定义了 **${ontologyLabel(entity.name, 'entity')}** 实体类型。\n\n_在实际应用中，此查询会统计数据平台中的 ${ontologyLabel(entity.name, 'entity')} 记录。_\n\n示例："SELECT COUNT(*) FROM ${entity.name.toLowerCase()}s"`,
           highlightEntities: [entity.id],
           highlightRelationships: [],
-          interpretation: `已识别：统计 ${entity.name} 的数量`
+          interpretation: `已识别：统计 ${ontologyLabel(entity.name, 'entity')} 的数量`
         };
       }
     }
@@ -347,7 +347,7 @@ export function processQuery(query: string, ontology: Ontology): QueryResponse {
 
   // Schema overview query
   if (normalizedQuery.includes('entities') || normalizedQuery.includes('schema') || normalizedQuery.includes('overview') || normalizedQuery.includes('实体') || normalizedQuery.includes('概览') || normalizedQuery.includes('模式')) {
-    const entityList = entities.map(e => `• ${e.icon} **${e.name}** — ${e.description.slice(0, 50)}…`).join('\n');
+    const entityList = entities.map(e => `• ${e.icon} **${ontologyLabel(e.name, 'entity')}** — ${e.description.slice(0, 50)}…`).join('\n');
     return {
       query,
       result: `**${ontology.name}** 本体概览\n\n${entityList}\n\n**合计：** ${entities.length} 个实体，${relationships.length} 个关系`,

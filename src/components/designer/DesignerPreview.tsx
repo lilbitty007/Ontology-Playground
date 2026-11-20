@@ -1,3 +1,4 @@
+import { ontologyLabel } from '../../lib/ontologyLabels';
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import cytoscape from 'cytoscape';
 import fcose from 'cytoscape-fcose';
@@ -104,14 +105,14 @@ function GraphPreview({ ontology, theme, onSelectEntity, onSelectRelationship }:
 
   const buildElements = useCallback(() => {
     const nodes = ontology.entityTypes.map((e) => ({
-      data: { id: e.id, label: `${e.icon} ${e.name}`, color: e.color },
+      data: { id: e.id, label: `${e.icon} ${ontologyLabel(e.name, 'entity')}`, color: e.color },
     }));
     const edges = ontology.relationships.map((r) => ({
       data: {
         id: r.id,
         source: r.from,
         target: r.to,
-        label: r.name,
+        label: ontologyLabel(r.name, 'relationship'),
         kind: r.kind ?? 'association',
       },
     }));

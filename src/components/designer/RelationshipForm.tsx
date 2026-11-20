@@ -1,3 +1,4 @@
+import { ontologyLabel } from '../../lib/ontologyLabels';
 import { Plus, Trash2 } from 'lucide-react';
 import { useDesignerStore } from '../../store/designerStore';
 import type { Relationship } from '../../data/ontology';
@@ -106,10 +107,10 @@ export function RelationshipForm() {
             onClick={() => selectRelationship(rel.id)}
           >
             <div className="designer-rel-header">
-              <span className="designer-rel-flow">
-                {fromEntity?.icon ?? '?'} {fromEntity?.name ?? '???'}
+              <span className="designer-rel-flow" title={ontologyLabel(rel.name, 'relationship')}>
+                {fromEntity?.icon ?? '?'} {fromEntity ? ontologyLabel(fromEntity.name, 'entity') : '???'}
                 <span className="designer-rel-arrow"> → </span>
-                {toEntity?.icon ?? '?'} {toEntity?.name ?? '???'}
+                {toEntity?.icon ?? '?'} {toEntity ? ontologyLabel(toEntity.name, 'entity') : '???'}
               </span>
               <button
                 className="designer-delete-btn"
@@ -162,7 +163,7 @@ export function RelationshipForm() {
                           disabled={sourceBacked
                             && !rdfDocument?.projection.entities[e.id]}
                         >
-                          {e.icon} {e.name}
+                          {e.icon} {ontologyLabel(e.name, 'entity')}
                         </option>
                       ))}
                     </select>
@@ -181,7 +182,7 @@ export function RelationshipForm() {
                           disabled={sourceBacked
                             && !rdfDocument?.projection.entities[e.id]}
                         >
-                          {e.icon} {e.name}
+                          {e.icon} {ontologyLabel(e.name, 'entity')}
                         </option>
                       ))}
                     </select>
